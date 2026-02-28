@@ -17,25 +17,26 @@ type MyRouterContext = {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({
+    meta: [
+      {
+        charSet: "utf-8",
+      },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1",
+      },
+      {
+        title: "TanStack Start Starter",
+      },
+    ],
     links: [
       {
         href: appCss,
         rel: "stylesheet",
       },
     ],
-    meta: [
-      {
-        charSet: "utf-8",
-      },
-      {
-        content: "width=device-width, initial-scale=1",
-        name: "viewport",
-      },
-      {
-        title: "TanStack Start Starter",
-      },
-    ],
   }),
+
   shellComponent: RootDocument,
 })
 

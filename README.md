@@ -1,4 +1,4 @@
-Welcome to your new TanStack Start app! 
+Welcome to your new TanStack Start app!
 
 # Getting Started
 
@@ -59,7 +59,7 @@ pnpm check
 ### Usage
 
 ```ts
-import { env } from "#/env";
+import { env } from "@/env";
 
 console.log(env.VITE_APP_TITLE);
 ```
@@ -188,11 +188,11 @@ const getServerTime = createServerFn({
 // Use in a component
 function MyComponent() {
   const [time, setTime] = useState('')
-  
+
   useEffect(() => {
     getServerTime().then(setTime)
   }, [])
-  
+
   return <div>Server time: {time}</div>
 }
 ```
