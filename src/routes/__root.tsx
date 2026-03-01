@@ -6,9 +6,9 @@ import {
   Scripts,
 } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
-import { ThemeProvider } from "@/components/theme-provider"
-import TanStackQueryDevtools from "../integrations/tanstack-query/devtools"
-import TanStackQueryProvider from "../integrations/tanstack-query/root-provider"
+import { ThemeProvider } from "@/components/providers/theme-provider"
+import TanStackQueryDevtools from "../components/providers/devtools"
+import TanStackQueryProvider from "../components/providers/root-provider"
 import appCss from "../styles.css?url"
 
 type MyRouterContext = {
