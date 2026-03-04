@@ -3,13 +3,13 @@ import {
   type QueryClient,
   queryOptions,
 } from "@tanstack/react-query"
-import type { PublicError } from "@/server/errors"
-import type { RpcResponse } from "@/server/rpc"
-import { unwrapRpcResponse } from "@/server/rpc"
+import { unwrapOrThrow } from "@/config/helpers/rpc-client"
 import type {
   CreateTodoInput,
+  ListTodosInput,
   RenameTodoInput,
   Todo,
+  TodoPage,
   TodoIdInput,
 } from "./todos-contract"
 import { todoQueryKeys } from "./todos-contract"
@@ -21,31 +21,24 @@ import {
   renameTodoRpc,
 } from "./todos-rpc"
 
-export class RpcClientError extends Error {
-  readonly payload: PublicError
+const DEFAULT_TODOS_PAGE_SIZE = 50
 
-  constructor(payload: PublicError) {
-    super(payload.message)
-    this.name = "RpcClientError"
-    this.payload = payload
+function normalizeListInput(input?: Partial<ListTodosInput>): ListTodosInput {
+  return {
+    cursor: input?.cursor,
+    limit: input?.limit ?? DEFAULT_TODOS_PAGE_SIZE,
   }
 }
 
-function unwrapOrThrow<TData>(response: RpcResponse<TData>): TData {
-  const result = unwrapRpcResponse(response)
+export const todosQueryOptions = (input?: Partial<ListTodosInput>) => {
+  const resolvedInput = normalizeListInput(input)
 
-  if (result.isErr()) {
-    throw new RpcClientError(result.error)
-  }
-
-  return result.value
-}
-
-export const todosQueryOptions = () =>
-  queryOptions({
-    queryKey: todoQueryKeys.all,
-    queryFn: async () => unwrapOrThrow<Todo[]>(await listTodosRpc()),
+  return queryOptions({
+    queryKey: todoQueryKeys.list(resolvedInput),
+    queryFn: async () =>
+      unwrapOrThrow<TodoPage>(await listTodosRpc({ data: resolvedInput })),
   })
+}
 
 export const todoQueryOptions = (input: TodoIdInput) =>
   queryOptions({

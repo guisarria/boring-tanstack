@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start"
 import { getCookie, getRequestHeaders } from "@tanstack/react-start/server"
+import { unauthorizedError } from "@/config/helpers/errors"
 import { auth } from "./auth"
 
 const readSession = async () => {
@@ -12,11 +13,9 @@ const readSession = async () => {
   }
 }
 
-export const sessionAction = createServerFn({ method: "GET" }).handler(
-  async () => {
-    return await readSession()
-  }
-)
+const getSessionHandler = createServerFn({ method: "GET" }).handler(readSession)
+
+export const sessionAction = getSessionHandler
 
 export const sessionsAction = createServerFn({ method: "GET" }).handler(
   async () => {
@@ -36,11 +35,7 @@ export const sessionsAction = createServerFn({ method: "GET" }).handler(
   }
 )
 
-export const getSession = createServerFn({ method: "GET" }).handler(
-  async () => {
-    return await readSession()
-  }
-)
+export const getSession = getSessionHandler
 
 export const ensureSession = createServerFn({ method: "GET" }).handler(
   async () => {
@@ -48,7 +43,7 @@ export const ensureSession = createServerFn({ method: "GET" }).handler(
     const session = await auth.api.getSession({ headers })
 
     if (!session) {
-      throw new Error("Unauthorized")
+      throw unauthorizedError("Sign in required")
     }
 
     return session

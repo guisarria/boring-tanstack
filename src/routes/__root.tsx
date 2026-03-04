@@ -1,21 +1,18 @@
 import { TanStackDevtools } from "@tanstack/react-devtools"
-import type { QueryClient } from "@tanstack/react-query"
 import {
   createRootRouteWithContext,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
+import TanStackQueryProvider, {
+  type AppRouterContext,
+} from "@/components/providers/root-provider"
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import TanStackQueryDevtools from "../components/providers/devtools"
-import TanStackQueryProvider from "../components/providers/root-provider"
 import appCss from "../styles.css?url"
 
-type MyRouterContext = {
-  queryClient: QueryClient
-}
-
-export const Route = createRootRouteWithContext<MyRouterContext>()({
+export const Route = createRootRouteWithContext<AppRouterContext>()({
   head: () => ({
     links: [
       {
@@ -40,6 +37,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const { queryClient } = Route.useRouteContext()
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -52,7 +51,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           disableTransitionOnChange
           enableSystem
         >
-          <TanStackQueryProvider>
+          <TanStackQueryProvider queryClient={queryClient}>
             {children}
             <TanStackDevtools
               config={{
