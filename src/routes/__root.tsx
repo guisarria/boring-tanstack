@@ -9,6 +9,7 @@ import TanStackQueryProvider, {
   type AppRouterContext,
 } from "@/components/providers/root-provider"
 import { ThemeProvider } from "@/components/providers/theme-provider"
+import { ThemeToggle } from "@/components/theme-toggle"
 import TanStackQueryDevtools from "../components/providers/devtools"
 import appCss from "../styles.css?url"
 
@@ -44,7 +45,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="wrap-anywhere font-sans antialiased selection:bg-[rgba(79,184,178,0.24)]">
+      <body className="flex h-screen w-full flex-col items-center font-sans antialiased">
         <ThemeProvider
           attribute={"class"}
           defaultTheme="system"
@@ -52,6 +53,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           enableSystem
         >
           <TanStackQueryProvider queryClient={queryClient}>
+            <div className="container flex items-center justify-between py-4">
+              <h1 className="font-semibold text-xl">Boring TanStack</h1>
+              <ThemeToggle />
+            </div>
             {children}
             <TanStackDevtools
               config={{

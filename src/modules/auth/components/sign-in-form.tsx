@@ -1,16 +1,21 @@
+import { Link } from "@tanstack/react-router"
 import { useTransition } from "react"
 import { toast } from "sonner"
 import z from "zod"
 import { useAppForm } from "@/components/forms/form-context"
+import { buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { FieldSeparator, FieldSet } from "@/components/ui/field"
+import { cn } from "@/lib/utils"
 import { authClient } from "../auth-client"
+import { SocialAuthButtons } from "./social-auth-buttons"
 
 const signInSchema = z.object({
   email: z.email("Please enter a valid email address."),
@@ -90,10 +95,25 @@ export function SignInForm() {
                 Continue with Email
               </form.SubmitButton>
               <FieldSeparator />
+              <SocialAuthButtons />
             </FieldSet>
           </form>
         </form.AppForm>
       </CardContent>
+      <CardFooter>
+        <div className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
+          <p>Don&apos; t have an account?</p>
+          <Link
+            className={cn(
+              buttonVariants({ variant: "link", size: "xs" }),
+              "px-0"
+            )}
+            to="/sign-up"
+          >
+            Sign up
+          </Link>
+        </div>
+      </CardFooter>
     </Card>
   )
 }
