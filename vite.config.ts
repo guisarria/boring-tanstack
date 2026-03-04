@@ -9,11 +9,7 @@ import tsconfigPaths from "vite-tsconfig-paths"
 const config = defineConfig({
   plugins: [
     devtools(),
-    nitro({
-      rollupConfig: {
-        external: [/^@sentry\//, "pg"],
-      },
-    }),
+    nitro(),
     tsconfigPaths({ projects: ["./tsconfig.json"] }),
     tailwindcss(),
     tanstackStart(),

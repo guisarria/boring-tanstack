@@ -16,7 +16,7 @@ const signInSchema = z.object({
   email: z.email("Please enter a valid email address."),
   password: z.string().min(1, "Password is required."),
 })
-type SignInFormValues = z.infer<typeof signInSchema>
+type SignIn = z.infer<typeof signInSchema>
 
 export function SignInForm() {
   const [isPending, startTransition] = useTransition()
@@ -25,7 +25,7 @@ export function SignInForm() {
     defaultValues: {
       email: "",
       password: "",
-    } satisfies SignInFormValues,
+    } satisfies SignIn,
     validators: {
       onSubmit: signInSchema,
     },

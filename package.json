@@ -10,7 +10,7 @@
     "format": "biome format",
     "lint": "biome lint",
     "type-check": "tsc --noEmit",
-    "auth:generate": "pnpm dlx @better-auth/cli@latest generate --config ./src/features/auth/auth.ts --y --output ./src/db/schema/auth.schema.ts",
+    "auth:generate": "pnpm dlx @better-auth/cli@latest generate --config ./src/modules/auth/auth.ts --y ",
     "check": "ultracite check",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",

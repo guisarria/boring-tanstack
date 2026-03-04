@@ -12,13 +12,12 @@ import {
 import { FieldSeparator, FieldSet } from "@/components/ui/field"
 import { authClient } from "../auth-client"
 
-const signInSchema = z.object({
+const signUpSchema = z.object({
   name: z.string().min(1, "Password is required."),
-
   email: z.email("Please enter a valid email address."),
   password: z.string().min(1, "Password is required."),
 })
-type SignInFormValues = z.infer<typeof signInSchema>
+type SignUp = z.infer<typeof signUpSchema>
 
 export function SignUpForm() {
   const [isPending, startTransition] = useTransition()
@@ -28,9 +27,9 @@ export function SignUpForm() {
       email: "",
       password: "",
       name: "",
-    } satisfies SignInFormValues,
+    } satisfies SignUp,
     validators: {
-      onSubmit: signInSchema,
+      onSubmit: signUpSchema,
     },
     onSubmit: ({ value }) => {
       startTransition(async () => {
