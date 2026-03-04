@@ -40,6 +40,7 @@
     "drizzle-kit": "^0.31.8",
     "drizzle-orm": "^0.45.0",
     "lucide-react": "^0.545.0",
+    "neverthrow": "^8.2.0",
     "nitro": "npm:nitro-nightly@latest",
     "pg": "^8.16.3",
     "react": "^19.2.0",
