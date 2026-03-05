@@ -1,4 +1,4 @@
-import { Link, useRouteContext } from "@tanstack/react-router"
+import { Link, useNavigate, useRouteContext, useRouter } from "@tanstack/react-router"
 import { HomeIcon, LogOutIcon, ShieldIcon, UserIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -97,10 +97,13 @@ function UserDropdown({
 
 export function Header() {
   const { user } = useRouteContext({ from: "__root__" })
+  const router = useRouter()
+  const navigate = useNavigate()
 
   const handleSignOut = async () => {
     await authClient.signOut()
-    window.location.href = "/"
+    router.invalidate()
+    navigate({ to: "/" })
   }
 
   return (

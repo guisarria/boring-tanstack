@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router"
+import { Link, useNavigate, useSearch } from "@tanstack/react-router"
 import { useTransition } from "react"
 import { toast } from "sonner"
 import { useAppForm } from "@/components/forms/form-context"
@@ -20,6 +20,7 @@ import { SocialAuthButtons } from "./social-auth-buttons"
 export function SignInForm() {
   const [isPending, startTransition] = useTransition()
   const navigate = useNavigate()
+  const { redirect } = useSearch({ from: "/(auth)/sign-in/" })
 
   const form = useAppForm({
     defaultValues: {
@@ -38,7 +39,7 @@ export function SignInForm() {
             onSuccess: () => {
               toast.success("Logged in successfully")
               navigate({
-                to: "/dashboard",
+                to: redirect ?? "/dashboard",
               })
             },
             onError: ({ error }) => {

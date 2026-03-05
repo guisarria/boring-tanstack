@@ -1,3 +1,4 @@
+import { useNavigate, useRouter } from "@tanstack/react-router"
 import { LogOutIcon } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -5,12 +6,16 @@ import { cn } from "@/lib/utils"
 import { authClient } from "../auth-client"
 
 export function SignOutButton({ className }: { className?: string }) {
+  const router = useRouter()
+  const navigate = useNavigate()
+
   const handleSignOut = async () => {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
           toast.success("Signed out")
-          window.location.href = "/"
+          router.invalidate()
+          navigate({ to: "/" })
         },
       },
     })
