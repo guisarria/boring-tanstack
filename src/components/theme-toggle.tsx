@@ -8,6 +8,7 @@ export function ThemeToggle() {
 
   return (
     <Button
+      className="text-muted-foreground"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       size="icon-sm"
       variant="outline"

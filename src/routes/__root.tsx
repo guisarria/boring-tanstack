@@ -5,12 +5,14 @@ import {
   Scripts,
 } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
+import { DefaultNotFound } from "@/components/default-not-found"
+import { Header } from "@/components/header"
 import TanStackQueryProvider, {
   type AppRouterContext,
 } from "@/components/providers/root-provider"
 import { ThemeProvider } from "@/components/providers/theme-provider"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { Toaster } from "@/components/ui/sonner"
+import { getSession } from "@/modules/auth/auth.functions"
 import TanStackQueryDevtools from "../components/providers/devtools"
 import appCss from "../styles.css?url"
 
@@ -36,6 +38,11 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
     ],
   }),
   shellComponent: RootDocument,
+  beforeLoad: async () => {
+    const session = await getSession()
+    return { user: session?.user ?? null }
+  },
+  notFoundComponent: DefaultNotFound,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -54,10 +61,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             disableTransitionOnChange
             enableSystem
           >
-            <div className="container flex items-center justify-between py-4">
-              <h1 className="font-semibold text-xl">Boring TanStack</h1>
-              <ThemeToggle />
-            </div>
+            <Header />
             {children}
             <Toaster richColors />
           </ThemeProvider>
