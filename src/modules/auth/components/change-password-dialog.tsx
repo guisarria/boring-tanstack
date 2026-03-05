@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { Loader } from "@/components/ui/loader"
+import { Spinner } from "@/components/ui/spinner"
 import { authClient } from "../auth-client"
 import { changePasswordSchema } from "../validations/change-password"
 
@@ -133,7 +133,7 @@ function ChangePassword() {
                     disabled={!canSubmit || isSubmitting}
                     type="submit"
                   >
-                    {isSubmitting ? <Loader /> : "Change Password"}
+                    {isSubmitting ? <Spinner /> : "Change Password"}
                   </Button>
                 )}
               </form.Subscribe>

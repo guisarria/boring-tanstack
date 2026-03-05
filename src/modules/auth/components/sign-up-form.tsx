@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router"
+import { Link, useNavigate } from "@tanstack/react-router"
 import { useTransition } from "react"
 import { toast } from "sonner"
 import { PasswordFieldGroup } from "@/components/forms/fields/password-field-group"
@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { FieldSeparator, FieldSet } from "@/components/ui/field"
+import { Field, FieldGroup, FieldSeparator } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
 import { authClient } from "../auth-client"
 import { type SignUp, signUpSchema } from "../validations/sign-up"
@@ -20,6 +20,7 @@ import { SocialAuthButtons } from "./social-auth-buttons"
 
 export function SignUpForm() {
   const [isPending, startTransition] = useTransition()
+  const navigate = useNavigate()
 
   const form = useAppForm({
     defaultValues: {
@@ -41,6 +42,9 @@ export function SignUpForm() {
           fetchOptions: {
             onSuccess: () => {
               toast.success("Sign up successfully")
+              navigate({
+                to: "/dashboard",
+              })
             },
             onError: ({ error }) => {
               toast.error(error.message)
@@ -52,7 +56,7 @@ export function SignUpForm() {
   })
 
   return (
-    <Card className="w-full max-w-lg">
+    <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle>Let's create your account</CardTitle>
         <CardDescription>
@@ -69,7 +73,7 @@ export function SignUpForm() {
               form.handleSubmit()
             }}
           >
-            <FieldSet>
+            <FieldGroup>
               <SocialAuthButtons />
               <FieldSeparator />
               <form.AppField name="name">
@@ -94,10 +98,12 @@ export function SignUpForm() {
                 }}
                 form={form}
               />
-              <form.SubmitButton isPending={isPending}>
-                Continue with Email
-              </form.SubmitButton>
-            </FieldSet>
+              <Field>
+                <form.SubmitButton isPending={isPending}>
+                  Continue with Email
+                </form.SubmitButton>
+              </Field>
+            </FieldGroup>
           </form>
         </form.AppForm>
       </CardContent>

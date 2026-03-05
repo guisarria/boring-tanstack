@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { FieldSeparator, FieldSet } from "@/components/ui/field"
+import { FieldGroup, FieldSeparator } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
 import { authClient } from "../auth-client"
 import { type SignIn, signInSchema } from "../validations/sign-in"
@@ -51,7 +51,7 @@ export function SignInForm() {
   })
 
   return (
-    <Card className="w-full max-w-lg">
+    <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle>Sign in</CardTitle>
         <CardDescription>
@@ -67,7 +67,7 @@ export function SignInForm() {
               form.handleSubmit()
             }}
           >
-            <FieldSet>
+            <FieldGroup>
               <form.AppField name="email">
                 {(field) => (
                   <field.InputField
@@ -89,9 +89,11 @@ export function SignInForm() {
               <form.SubmitButton isPending={isPending}>
                 Continue with Email
               </form.SubmitButton>
-              <FieldSeparator />
+              <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
+                Or continue with
+              </FieldSeparator>
               <SocialAuthButtons />
-            </FieldSet>
+            </FieldGroup>
           </form>
         </form.AppForm>
       </CardContent>

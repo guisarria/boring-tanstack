@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import { cn } from "@/lib/utils"
-import { Loader } from "./loader"
+import { Spinner } from "./spinner"
 
 export function LoadingSwap({
   isLoading,
@@ -29,7 +29,7 @@ export function LoadingSwap({
           className
         )}
       >
-        <Loader className="grid"/>
+        <Spinner className="grid"/>
       </div>
     </div>
   )
