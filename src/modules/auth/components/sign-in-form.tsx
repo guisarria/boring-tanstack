@@ -1,6 +1,4 @@
-"use client"
-
-import { Link } from "@tanstack/react-router"
+import { Link, useNavigate } from "@tanstack/react-router"
 import { useTransition } from "react"
 import { toast } from "sonner"
 import { useAppForm } from "@/components/forms/form-context"
@@ -21,6 +19,7 @@ import { SocialAuthButtons } from "./social-auth-buttons"
 
 export function SignInForm() {
   const [isPending, startTransition] = useTransition()
+  const navigate = useNavigate()
 
   const form = useAppForm({
     defaultValues: {
@@ -35,10 +34,12 @@ export function SignInForm() {
         await authClient.signIn.email({
           email: value.email,
           password: value.password,
-          callbackURL: "/dashboard",
           fetchOptions: {
             onSuccess: () => {
               toast.success("Logged in successfully")
+              navigate({
+                to: "/dashboard",
+              })
             },
             onError: ({ error }) => {
               toast.error(error.message)

@@ -1,5 +1,3 @@
-"use client"
-
 import { Link } from "@tanstack/react-router"
 import { useTransition } from "react"
 import { toast } from "sonner"

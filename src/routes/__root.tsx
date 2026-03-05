@@ -47,33 +47,34 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="flex h-screen w-full flex-col items-center font-sans antialiased">
-        <ThemeProvider
-          attribute={"class"}
-          defaultTheme="system"
-          disableTransitionOnChange
-          enableSystem
-        >
-          <TanStackQueryProvider queryClient={queryClient}>
+        <TanStackQueryProvider queryClient={queryClient}>
+          <ThemeProvider
+            attribute={"class"}
+            defaultTheme="system"
+            disableTransitionOnChange
+            enableSystem
+          >
             <div className="container flex items-center justify-between py-4">
               <h1 className="font-semibold text-xl">Boring TanStack</h1>
               <ThemeToggle />
             </div>
             {children}
             <Toaster richColors />
-            <TanStackDevtools
-              config={{
-                position: "bottom-right",
-              }}
-              plugins={[
-                {
-                  name: "Tanstack Router",
-                  render: <TanStackRouterDevtoolsPanel />,
-                },
-                TanStackQueryDevtools,
-              ]}
-            />
-          </TanStackQueryProvider>
-        </ThemeProvider>
+          </ThemeProvider>
+
+          <TanStackDevtools
+            config={{
+              position: "bottom-right",
+            }}
+            plugins={[
+              {
+                name: "Tanstack Router",
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+              TanStackQueryDevtools,
+            ]}
+          />
+        </TanStackQueryProvider>
         <Scripts />
       </body>
     </html>

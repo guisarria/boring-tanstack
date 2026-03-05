@@ -20,5 +20,7 @@ export default function TanStackQueryProvider({
   children,
   queryClient,
 }: TanStackQueryProviderProps) {
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  return (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  )
 }
