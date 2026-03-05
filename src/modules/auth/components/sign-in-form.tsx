@@ -1,7 +1,8 @@
+"use client"
+
 import { Link } from "@tanstack/react-router"
 import { useTransition } from "react"
 import { toast } from "sonner"
-import z from "zod"
 import { useAppForm } from "@/components/forms/form-context"
 import { buttonVariants } from "@/components/ui/button"
 import {
@@ -15,13 +16,8 @@ import {
 import { FieldSeparator, FieldSet } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
 import { authClient } from "../auth-client"
+import { type SignIn, signInSchema } from "../validations/sign-in"
 import { SocialAuthButtons } from "./social-auth-buttons"
-
-const signInSchema = z.object({
-  email: z.email("Please enter a valid email address."),
-  password: z.string().min(1, "Password is required."),
-})
-type SignIn = z.infer<typeof signInSchema>
 
 export function SignInForm() {
   const [isPending, startTransition] = useTransition()
@@ -36,21 +32,19 @@ export function SignInForm() {
     },
     onSubmit: ({ value }) => {
       startTransition(async () => {
-        await authClient.signIn.email(
-          {
-            email: value.email,
-            password: value.password,
+        await authClient.signIn.email({
+          email: value.email,
+          password: value.password,
+          callbackURL: "/dashboard",
+          fetchOptions: {
+            onSuccess: () => {
+              toast.success("Logged in successfully")
+            },
+            onError: ({ error }) => {
+              toast.error(error.message)
+            },
           },
-          {
-            onSuccess() {
-              toast.success("Successfully signed in")
-              this.onSuccess?.()
-            },
-            onError(context) {
-              toast.error(context.error.message)
-            },
-          }
-        )
+        })
       })
     },
   })

@@ -10,6 +10,7 @@ import TanStackQueryProvider, {
 } from "@/components/providers/root-provider"
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { Toaster } from "@/components/ui/sonner"
 import TanStackQueryDevtools from "../components/providers/devtools"
 import appCss from "../styles.css?url"
 
@@ -58,6 +59,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               <ThemeToggle />
             </div>
             {children}
+            <Toaster richColors />
             <TanStackDevtools
               config={{
                 position: "bottom-right",

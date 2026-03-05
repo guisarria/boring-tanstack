@@ -43,7 +43,7 @@ export function requireSessionResult(headers: Headers) {
     toProviderFailure
   ).andThen((response) => {
     if (!response) {
-      return errAsync<AuthSession, AuthServiceError>({
+      return errAsync<NonNullable<AuthSession>, AuthServiceError>({
         code: "UNAUTHORIZED",
         message: "Unauthorized",
       })

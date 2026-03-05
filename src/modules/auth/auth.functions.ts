@@ -15,42 +15,50 @@ function toHttpError(error: AuthServiceError): Response {
   return new Response("Internal Server Error", { status: 500 })
 }
 
-export const getSession = createServerFn({ method: "GET" }).handler(
-  async () => {
-    const headers = getRequestHeaders()
-    const result = await getSessionResult(headers)
+async function resolveSession() {
+  const headers = getRequestHeaders()
+  const result = await getSessionResult(headers)
 
-    if (result.isErr()) {
-      throw toHttpError(result.error)
-    }
-
-    return result.value
+  if (result.isErr()) {
+    throw toHttpError(result.error)
   }
+
+  return result.value
+}
+
+async function resolveSessions() {
+  const headers = getRequestHeaders()
+  const sessionToken = getCookie("better-auth.session_token")
+  const result = await listSessionsResult(headers, sessionToken)
+
+  if (result.isErr()) {
+    throw toHttpError(result.error)
+  }
+
+  return result.value
+}
+
+async function resolveRequiredSession() {
+  const headers = getRequestHeaders()
+  const result = await requireSessionResult(headers)
+
+  if (result.isErr()) {
+    throw toHttpError(result.error)
+  }
+
+  return result.value
+}
+
+export const sessionAction = createServerFn({ method: "GET" }).handler(
+  resolveSession
 )
 
-export const resolveSessions = createServerFn({ method: "GET" }).handler(
-  async () => {
-    const headers = getRequestHeaders()
-    const sessionToken = getCookie("better-auth.session_token")
-    const result = await listSessionsResult(headers, sessionToken)
-
-    if (result.isErr()) {
-      throw toHttpError(result.error)
-    }
-
-    return result.value
-  }
+export const sessionsAction = createServerFn({ method: "GET" }).handler(
+  resolveSessions
 )
 
-export const resolveRequiredSession = createServerFn({ method: "GET" }).handler(
-  async () => {
-    const headers = getRequestHeaders()
-    const result = await requireSessionResult(headers)
+export const getSession = sessionAction
 
-    if (result.isErr()) {
-      throw toHttpError(result.error)
-    }
-
-    return result.value
-  }
+export const ensureSession = createServerFn({ method: "GET" }).handler(
+  resolveRequiredSession
 )
