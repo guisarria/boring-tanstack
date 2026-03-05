@@ -6,7 +6,6 @@ import {
 } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { DefaultNotFound } from "@/components/default-not-found"
-import { Header } from "@/components/header"
 import TanStackQueryProvider, {
   type AppRouterContext,
 } from "@/components/providers/root-provider"
@@ -61,7 +60,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             disableTransitionOnChange
             enableSystem
           >
-            <Header />
             {children}
             <Toaster richColors />
           </ThemeProvider>

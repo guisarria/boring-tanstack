@@ -10,86 +10,93 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthedRouteImport } from './routes/_authed'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as marketingRouteRouteImport } from './routes/(marketing)/route'
+import { Route as marketingIndexRouteImport } from './routes/(marketing)/index'
 import { Route as AuthedDashboardIndexRouteImport } from './routes/_authed/dashboard/index'
-import { Route as authSignUpIndexRouteImport } from './routes/(auth)/sign-up/index'
-import { Route as authSignInIndexRouteImport } from './routes/(auth)/sign-in/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as marketingauthSignUpIndexRouteImport } from './routes/(marketing)/(auth)/sign-up/index'
+import { Route as marketingauthSignInIndexRouteImport } from './routes/(marketing)/(auth)/sign-in/index'
 
 const AuthedRoute = AuthedRouteImport.update({
   id: '/_authed',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const marketingRouteRoute = marketingRouteRouteImport.update({
+  id: '/(marketing)',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const marketingIndexRoute = marketingIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => marketingRouteRoute,
 } as any)
 const AuthedDashboardIndexRoute = AuthedDashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
   getParentRoute: () => AuthedRoute,
 } as any)
-const authSignUpIndexRoute = authSignUpIndexRouteImport.update({
-  id: '/(auth)/sign-up/',
-  path: '/sign-up/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const authSignInIndexRoute = authSignInIndexRouteImport.update({
-  id: '/(auth)/sign-in/',
-  path: '/sign-in/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const marketingauthSignUpIndexRoute =
+  marketingauthSignUpIndexRouteImport.update({
+    id: '/(auth)/sign-up/',
+    path: '/sign-up/',
+    getParentRoute: () => marketingRouteRoute,
+  } as any)
+const marketingauthSignInIndexRoute =
+  marketingauthSignInIndexRouteImport.update({
+    id: '/(auth)/sign-in/',
+    path: '/sign-in/',
+    getParentRoute: () => marketingRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof marketingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/sign-in/': typeof authSignInIndexRoute
-  '/sign-up/': typeof authSignUpIndexRoute
   '/dashboard/': typeof AuthedDashboardIndexRoute
+  '/sign-in/': typeof marketingauthSignInIndexRoute
+  '/sign-up/': typeof marketingauthSignUpIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof marketingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/sign-in': typeof authSignInIndexRoute
-  '/sign-up': typeof authSignUpIndexRoute
   '/dashboard': typeof AuthedDashboardIndexRoute
+  '/sign-in': typeof marketingauthSignInIndexRoute
+  '/sign-up': typeof marketingauthSignUpIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/(marketing)': typeof marketingRouteRouteWithChildren
   '/_authed': typeof AuthedRouteWithChildren
+  '/(marketing)/': typeof marketingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/(auth)/sign-in/': typeof authSignInIndexRoute
-  '/(auth)/sign-up/': typeof authSignUpIndexRoute
   '/_authed/dashboard/': typeof AuthedDashboardIndexRoute
+  '/(marketing)/(auth)/sign-in/': typeof marketingauthSignInIndexRoute
+  '/(marketing)/(auth)/sign-up/': typeof marketingauthSignUpIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/auth/$' | '/sign-in/' | '/sign-up/' | '/dashboard/'
+  fullPaths: '/' | '/api/auth/$' | '/dashboard/' | '/sign-in/' | '/sign-up/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/auth/$' | '/sign-in' | '/sign-up' | '/dashboard'
+  to: '/' | '/api/auth/$' | '/dashboard' | '/sign-in' | '/sign-up'
   id:
     | '__root__'
-    | '/'
+    | '/(marketing)'
     | '/_authed'
+    | '/(marketing)/'
     | '/api/auth/$'
-    | '/(auth)/sign-in/'
-    | '/(auth)/sign-up/'
     | '/_authed/dashboard/'
+    | '/(marketing)/(auth)/sign-in/'
+    | '/(marketing)/(auth)/sign-up/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  marketingRouteRoute: typeof marketingRouteRouteWithChildren
   AuthedRoute: typeof AuthedRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  authSignInIndexRoute: typeof authSignInIndexRoute
-  authSignUpIndexRoute: typeof authSignUpIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -101,12 +108,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/(marketing)': {
+      id: '/(marketing)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof marketingRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(marketing)/': {
+      id: '/(marketing)/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof marketingIndexRouteImport
+      parentRoute: typeof marketingRouteRoute
     }
     '/_authed/dashboard/': {
       id: '/_authed/dashboard/'
@@ -115,20 +129,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedDashboardIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
-    '/(auth)/sign-up/': {
-      id: '/(auth)/sign-up/'
-      path: '/sign-up'
-      fullPath: '/sign-up/'
-      preLoaderRoute: typeof authSignUpIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(auth)/sign-in/': {
-      id: '/(auth)/sign-in/'
-      path: '/sign-in'
-      fullPath: '/sign-in/'
-      preLoaderRoute: typeof authSignInIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -136,8 +136,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(marketing)/(auth)/sign-up/': {
+      id: '/(marketing)/(auth)/sign-up/'
+      path: '/sign-up'
+      fullPath: '/sign-up/'
+      preLoaderRoute: typeof marketingauthSignUpIndexRouteImport
+      parentRoute: typeof marketingRouteRoute
+    }
+    '/(marketing)/(auth)/sign-in/': {
+      id: '/(marketing)/(auth)/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in/'
+      preLoaderRoute: typeof marketingauthSignInIndexRouteImport
+      parentRoute: typeof marketingRouteRoute
+    }
   }
 }
+
+interface marketingRouteRouteChildren {
+  marketingIndexRoute: typeof marketingIndexRoute
+  marketingauthSignInIndexRoute: typeof marketingauthSignInIndexRoute
+  marketingauthSignUpIndexRoute: typeof marketingauthSignUpIndexRoute
+}
+
+const marketingRouteRouteChildren: marketingRouteRouteChildren = {
+  marketingIndexRoute: marketingIndexRoute,
+  marketingauthSignInIndexRoute: marketingauthSignInIndexRoute,
+  marketingauthSignUpIndexRoute: marketingauthSignUpIndexRoute,
+}
+
+const marketingRouteRouteWithChildren = marketingRouteRoute._addFileChildren(
+  marketingRouteRouteChildren,
+)
 
 interface AuthedRouteChildren {
   AuthedDashboardIndexRoute: typeof AuthedDashboardIndexRoute
@@ -151,11 +181,9 @@ const AuthedRouteWithChildren =
   AuthedRoute._addFileChildren(AuthedRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  marketingRouteRoute: marketingRouteRouteWithChildren,
   AuthedRoute: AuthedRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  authSignInIndexRoute: authSignInIndexRoute,
-  authSignUpIndexRoute: authSignUpIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

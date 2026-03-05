@@ -1,4 +1,9 @@
-import { Link, useNavigate, useRouteContext, useRouter } from "@tanstack/react-router"
+import {
+  Link,
+  useNavigate,
+  useRouteContext,
+  useRouter,
+} from "@tanstack/react-router"
 import { HomeIcon, LogOutIcon, ShieldIcon, UserIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -13,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { boringtemplateIcon } from "@/components/ui/icons"
 import { authClient } from "@/modules/auth/auth-client"
-import { ThemeToggle } from "./theme-toggle"
+import { ThemeToggle } from "../../../components/theme-toggle"
 
 function getInitials(name: string) {
   return name

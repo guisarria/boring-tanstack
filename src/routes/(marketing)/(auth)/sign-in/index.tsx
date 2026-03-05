@@ -6,7 +6,7 @@ const searchSchema = z.object({
   redirect: z.string().optional(),
 })
 
-export const Route = createFileRoute("/(auth)/sign-in/")({
+export const Route = createFileRoute("/(marketing)/(auth)/sign-in/")({
   validateSearch: searchSchema,
   beforeLoad: ({ context, search }) => {
     if (context.user) {
