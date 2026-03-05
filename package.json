@@ -38,7 +38,6 @@
     "better-auth": "^1.5.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "drizzle-kit": "^0.31.9",
     "drizzle-orm": "^0.45.1",
     "lucide-react": "^0.545.0",
     "neverthrow": "^8.2.0",
@@ -68,6 +67,7 @@
     "@vitejs/plugin-react": "^5.1.4",
     "babel-plugin-react-compiler": "^1.0.0",
     "dotenv": "^16.6.1",
+    "drizzle-kit": "^0.31.9",
     "jsdom": "^27.4.0",
     "remark-gfm": "^4.0.1",
     "tsx": "^4.21.0",
@@ -75,7 +75,6 @@
     "ultracite": "7.2.4",
     "vite": "^7.3.1",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.2.4",
-    "zod": "^4.3.5"
+    "vitest": "^3.2.4"
   }
 }

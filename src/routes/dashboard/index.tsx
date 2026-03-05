@@ -8,10 +8,10 @@ export const Route = createFileRoute("/dashboard/")({
 })
 
 function RouteComponent() {
-  const session = Route.useLoaderData()
+  const { user } = Route.useLoaderData()
   return (
     <>
-      <div>Hello {session.user.name}!</div>
+      <div>Hello {user.name}!</div>
       <SignOutButton />
     </>
   )

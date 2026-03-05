@@ -10,6 +10,7 @@ export function SignOutButton({ className }: { className?: string }) {
       fetchOptions: {
         onSuccess: () => {
           toast.success("Signed out")
+          window.location.href = "/"
         },
       },
     })
