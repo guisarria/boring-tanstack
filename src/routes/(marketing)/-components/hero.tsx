@@ -18,9 +18,7 @@ function CLITerminal() {
 
   return (
     <Card
-      className={cn(
-        "relative overflow-hidden rounded-xl border border-border bg-muted"
-      )}
+      className={cn("rounded-lg border border-border bg-muted")}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -78,8 +76,8 @@ function Hero({
   secondaryCTA = { label: "View Docs", href: "/docs" },
 }: HeroProps) {
   return (
-    <section className="container mx-auto px-4 py-16 lg:py-24">
-      <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-8">
+    <section className="flex w-full py-16 lg:py-24">
+      <div className="flex w-full items-center justify-between">
         <div className="flex flex-col gap-6">
           <h1 className="font-bold text-4xl text-foreground tracking-tight sm:text-5xl lg:text-6xl">
             {title}
@@ -104,9 +102,7 @@ function Hero({
           </div>
         </div>
 
-        <div>
-          <CLITerminal />
-        </div>
+        <CLITerminal />
       </div>
     </section>
   )

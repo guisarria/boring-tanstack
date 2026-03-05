@@ -5,7 +5,7 @@ export const Route = createFileRoute("/(marketing)/")({ component: Index })
 
 function Index() {
   return (
-    <div className="min-h-screen">
+    <div className="container flex w-full items-center justify-between">
       <Hero />
     </div>
   )

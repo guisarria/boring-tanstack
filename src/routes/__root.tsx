@@ -52,7 +52,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="flex h-screen w-full flex-col items-center font-sans antialiased">
+      <body className="flex flex-col items-center bg-background font-sans antialiased">
         <TanStackQueryProvider queryClient={queryClient}>
           <ThemeProvider
             attribute={"class"}

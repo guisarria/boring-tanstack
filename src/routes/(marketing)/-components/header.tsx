@@ -40,7 +40,7 @@ function UserDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button className="rounded-full" size="icon-sm" variant="ghost">
+          <Button className="rounded-full" size="icon" variant="ghost">
             <Avatar className="size-7">
               <AvatarImage alt={user.name} src={user.image ?? undefined} />
               <AvatarFallback className="border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50">
@@ -125,10 +125,10 @@ export function Header() {
             <UserDropdown onSignOut={handleSignOut} user={user} />
           ) : (
             <>
-              <Button size="sm" variant="outline">
+              <Button variant="outline">
                 <Link to="/sign-in">Sign In</Link>
               </Button>
-              <Button size="sm">
+              <Button>
                 <Link to="/sign-up">Sign Up</Link>
               </Button>
             </>

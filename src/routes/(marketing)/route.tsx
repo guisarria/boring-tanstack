@@ -7,9 +7,9 @@ export const Route = createFileRoute("/(marketing)")({
 
 function RouteComponent() {
   return (
-    <div className="h-screen w-full">
+    <>
       <Header />
       <Outlet />
-    </div>
+    </>
   )
 }
