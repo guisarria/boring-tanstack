@@ -1,7 +1,6 @@
-import { Link, useRouteContext } from "@tanstack/react-router"
+import { useNavigate, useRouteContext, useRouter } from "@tanstack/react-router"
 import {
   Bot,
-  Command,
   Frame,
   InboxIcon,
   type LucideIcon,
@@ -18,6 +17,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { authClient } from "@/modules/auth/auth-client"
+import { UserDropdown } from "@/modules/auth/components/user-dropdown"
 import type { FileRoutesByTo } from "@/routeTree.gen"
 import { NavMain } from "./sidebar-nav-main"
 import { NavProjects } from "./sidebar-nav-projects"
@@ -78,20 +79,27 @@ const data: {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const router = useRouter()
+  const navigate = useNavigate()
+
+  const handleSignOut = async () => {
+    await authClient.signOut()
+    router.invalidate()
+    navigate({ to: "/" })
+  }
   const { user } = useRouteContext({ from: "__root__" })
   return (
     <Sidebar className="bg-background" variant="inset" {...props}>
       <SidebarHeader className="bg-background">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton render={<Link to="/" />}>
-              <div className="flex aspect-square size-6 items-center justify-center rounded-sm bg-sidebar-primary text-sidebar-primary-foreground">
-                <Command className="size-4" />
-              </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user?.name}</span>
-              </div>
-            </SidebarMenuButton>
+            <SidebarMenuButton
+              render={
+                user ? (
+                  <UserDropdown label onSignOut={handleSignOut} user={user} />
+                ) : undefined
+              }
+            />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

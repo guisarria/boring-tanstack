@@ -1,110 +1,11 @@
 import { Link, useNavigate, useRouter } from "@tanstack/react-router"
-import { HomeIcon, LogOutIcon, ShieldIcon, UserIcon } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button, buttonVariants } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
 import { boringtemplateIcon } from "@/components/ui/icons"
 import { authClient } from "@/modules/auth/auth-client"
+import { UserDropdown } from "@/modules/auth/components/user-dropdown"
+import type { User } from "@/modules/auth/schema"
 import { ThemeToggle } from "../../../components/theme-toggle"
 import { Route } from "../route"
-
-function getInitials(name: string) {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2)
-}
-
-function UserDropdown({
-  user,
-  onSignOut,
-}: {
-  user: { name: string; email: string; image?: string | null }
-  onSignOut: () => void
-}) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Avatar className="flex items-center after:border-transparent">
-            <AvatarImage
-              alt={user.name}
-              className={buttonVariants({
-                variant: "outline",
-                size: "icon-lg",
-              })}
-              src={user.image ?? undefined}
-            />
-            <AvatarFallback
-              className={buttonVariants({
-                variant: "outline",
-                size: "icon-lg",
-              })}
-            >
-              {getInitials(user.name)}
-            </AvatarFallback>
-          </Avatar>
-        }
-      />
-      <DropdownMenuContent align="end">
-        <DropdownMenuGroup>
-          <DropdownMenuLabel className="font-normal">
-            <div className="flex flex-col space-y-1">
-              <p className="font-medium text-sm leading-none">{user.name}</p>
-              <p className="text-muted-foreground text-xs leading-none">
-                {user.email}
-              </p>
-            </div>
-          </DropdownMenuLabel>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem
-            render={
-              <Link to="/dashboard">
-                <HomeIcon />
-                Dashboard
-              </Link>
-            }
-          />
-          <DropdownMenuItem
-            render={
-              <Link to="/dashboard">
-                <UserIcon />
-                Account
-              </Link>
-            }
-          />
-          <DropdownMenuItem
-            render={
-              <Link to="/dashboard">
-                <ShieldIcon />
-                Security
-              </Link>
-            }
-          />
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem onClick={onSignOut}>
-            <LogOutIcon />
-            Sign out
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
 
 export function Header() {
   const { user } = Route.useRouteContext()
@@ -128,7 +29,10 @@ export function Header() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           {user ? (
-            <UserDropdown onSignOut={handleSignOut} user={user} />
+            <UserDropdown
+              onSignOut={handleSignOut}
+              user={user as Pick<User, "name" | "email" | "image">}
+            />
           ) : (
             <>
               <Button variant="outline">
