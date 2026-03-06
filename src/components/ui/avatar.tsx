@@ -1,5 +1,6 @@
 import * as React from "react"
 import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar"
+import { Image } from "@unpic/react"
 
 import { cn } from "@/lib/utils"
 
@@ -23,7 +24,20 @@ function Avatar({
   )
 }
 
-function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
+type UnpicAvatarProps = Omit<
+  React.ComponentProps<"img">,
+  "src" | "width" | "height" | "srcSet" | "style"
+> &
+  Partial<Pick<React.ComponentProps<typeof Image>, "src" | "layout" | "width" | "height" | "aspectRatio">>
+
+function UnpicAvatar({ src = "", layout, ...props }: UnpicAvatarProps) {
+  const imageProps = { src, layout, ...props } as React.ComponentProps<typeof Image>
+  return <Image {...imageProps} />
+}
+
+type AvatarImageProps = Omit<AvatarPrimitive.Image.Props, keyof UnpicAvatarProps> & UnpicAvatarProps
+
+function AvatarImage({ className, layout, width, height, aspectRatio, ...props }: AvatarImageProps) {
   return (
     <AvatarPrimitive.Image
       data-slot="avatar-image"
@@ -31,6 +45,7 @@ function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
         "aspect-square size-full rounded-full object-cover",
         className
       )}
+      render={<UnpicAvatar layout={layout} width={width} height={height} aspectRatio={aspectRatio} />}
       {...props}
     />
   )

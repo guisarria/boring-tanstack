@@ -1,4 +1,9 @@
-import { Link, useLocation } from "@tanstack/react-router"
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router"
 import { HomeIcon, LogOutIcon, ShieldIcon, UserIcon } from "lucide-react"
 import { Activity } from "react"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -14,11 +19,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
+import { authClient } from "../auth-client"
 import type { User } from "../schema"
 
 type UserDropdownProps = {
   label?: boolean
-  onSignOut: () => void
   user: Pick<User, "name" | "email" | "image">
   className?: string
 }
@@ -32,14 +37,17 @@ function getInitials(name: string) {
     .slice(0, 2)
 }
 
-export function UserDropdown({
-  user,
-  onSignOut,
-  label,
-  className,
-}: UserDropdownProps) {
+export function UserDropdown({ user, label, className }: UserDropdownProps) {
   const location = useLocation()
+  const router = useRouter()
+  const navigate = useNavigate()
+
   const currentPathname = location.pathname
+  const handleSignOut = async () => {
+    await authClient.signOut()
+    router.invalidate()
+    navigate({ to: "/" })
+  }
 
   return (
     <DropdownMenu>
@@ -49,7 +57,11 @@ export function UserDropdown({
           className
         )}
         render={
-          <Button size="default" variant="ghost">
+          <Button
+            className="flex items-center justify-center"
+            size="default"
+            variant="ghost"
+          >
             <Avatar className="flex items-center after:border-transparent">
               <AvatarImage
                 alt={user.name}
@@ -59,16 +71,21 @@ export function UserDropdown({
                     size: "icon",
                   })
                 )}
-                src={user.image ?? undefined}
+                height={404}
+                layout="constrained"
+                src={user.image ?? ""}
+                width={404}
               />
-              <AvatarFallback
-                className={buttonVariants({
-                  variant: "outline",
-                  size: "icon",
-                })}
-              >
-                {getInitials(user.name)}
-              </AvatarFallback>
+              <Activity mode={user.image ? "hidden" : "visible"}>
+                <AvatarFallback
+                  className={buttonVariants({
+                    variant: "outline",
+                    size: "icon",
+                  })}
+                >
+                  {getInitials(user.name)}
+                </AvatarFallback>
+              </Activity>
             </Avatar>
             <Activity mode={label ? "visible" : "hidden"}>
               <span className="font-semibold text-lg">{user.name}</span>
@@ -136,7 +153,7 @@ export function UserDropdown({
             }
           />
 
-          <DropdownMenuItem onClick={onSignOut}>
+          <DropdownMenuItem onClick={handleSignOut}>
             <LogOutIcon />
             Sign out
           </DropdownMenuItem>

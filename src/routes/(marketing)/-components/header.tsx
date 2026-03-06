@@ -1,7 +1,6 @@
-import { Link, useNavigate, useRouter } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import { boringtemplateIcon } from "@/components/ui/icons"
-import { authClient } from "@/modules/auth/auth-client"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
 import type { User } from "@/modules/auth/schema"
 import { ThemeToggle } from "../../../components/theme-toggle"
@@ -9,14 +8,6 @@ import { Route } from "../route"
 
 export function Header() {
   const { user } = Route.useRouteContext()
-  const router = useRouter()
-  const navigate = useNavigate()
-
-  const handleSignOut = async () => {
-    await authClient.signOut()
-    router.invalidate()
-    navigate({ to: "/" })
-  }
 
   return (
     <header className="w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
@@ -31,7 +22,6 @@ export function Header() {
           {user ? (
             <UserDropdown
               className="hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent"
-              onSignOut={handleSignOut}
               user={user as Pick<User, "name" | "email" | "image">}
             />
           ) : (

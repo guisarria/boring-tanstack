@@ -77,6 +77,7 @@ function Hero({
   secondaryCTA = { label: "View Docs", href: "/docs" },
 }: HeroProps) {
   const { user } = Route.useRouteContext()
+
   return (
     <section className="flex w-full py-16 lg:py-24">
       <div className="flex w-full items-center justify-between">
