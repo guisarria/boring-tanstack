@@ -2,7 +2,6 @@ import { Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import { boringtemplateIcon } from "@/components/ui/icons"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
-import type { User } from "@/modules/auth/schema"
 import { ThemeToggle } from "../../../components/theme-toggle"
 import { Route } from "../route"
 
@@ -20,10 +19,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           {user ? (
-            <UserDropdown
-              className="hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent"
-              user={user as Pick<User, "name" | "email" | "image">}
-            />
+            <UserDropdown className="hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent" />
           ) : (
             <>
               <Button variant="outline">

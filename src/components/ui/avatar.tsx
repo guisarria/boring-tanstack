@@ -28,7 +28,7 @@ type UnpicAvatarProps = Omit<
   React.ComponentProps<"img">,
   "src" | "width" | "height" | "srcSet" | "style"
 > &
-  Partial<Pick<React.ComponentProps<typeof Image>, "src" | "layout" | "width" | "height" | "aspectRatio">>
+  Partial<Pick<React.ComponentProps<typeof Image>, "src" | "layout" | "width" | "height" >>
 
 function UnpicAvatar({ src = "", layout, ...props }: UnpicAvatarProps) {
   const imageProps = { src, layout, ...props } as React.ComponentProps<typeof Image>
@@ -37,7 +37,7 @@ function UnpicAvatar({ src = "", layout, ...props }: UnpicAvatarProps) {
 
 type AvatarImageProps = Omit<AvatarPrimitive.Image.Props, keyof UnpicAvatarProps> & UnpicAvatarProps
 
-function AvatarImage({ className, layout, width, height, aspectRatio, ...props }: AvatarImageProps) {
+function AvatarImage({ className, layout, width, height,  ...props }: AvatarImageProps) {
   return (
     <AvatarPrimitive.Image
       data-slot="avatar-image"
@@ -45,7 +45,7 @@ function AvatarImage({ className, layout, width, height, aspectRatio, ...props }
         "aspect-square size-full rounded-full object-cover",
         className
       )}
-      render={<UnpicAvatar layout={layout} width={width} height={height} aspectRatio={aspectRatio} />}
+      render={<UnpicAvatar layout={layout} width={width} height={height}  />}
       {...props}
     />
   )

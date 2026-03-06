@@ -89,15 +89,15 @@ function Hero({
             {description}
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Button
-              className="flex gap-x-2"
-              render={
-                <Link to={user ? "/dashboard" : primaryCTA.href}>
-                  {primaryCTA.label}
-                  <ChevronRight />
-                </Link>
-              }
-            />
+            <Button>
+              <Link
+                className="flex items-center gap-x-2"
+                to={user ? "/dashboard" : primaryCTA.href}
+              >
+                {primaryCTA.label}
+                <ChevronRight />
+              </Link>
+            </Button>
             <Button variant="outline">
               <Link to={secondaryCTA.href}>{secondaryCTA.label}</Link>
             </Button>

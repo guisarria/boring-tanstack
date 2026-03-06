@@ -6,12 +6,12 @@ import { useTheme } from "./providers/theme-provider"
 
 export function ThemeToggle({
   variant = "outline",
-  size,
+  size = "icon",
   className,
   label = false,
 }: {
   variant?: "outline" | "ghost" | "default" | "destructive"
-  size?: "default" | "lg" | "sm" | "icon-sm" | "icon"
+  size?: "default" | "lg" | "sm" | "icon-sm" | "icon" | "icon-lg"
   className?: string
   label?: boolean
 }) {
