@@ -1,11 +1,11 @@
 import { useNavigate, useRouteContext, useRouter } from "@tanstack/react-router"
 import {
-  Bot,
   Frame,
   InboxIcon,
   type LucideIcon,
   MapIcon,
   PieChart,
+  ScanIcon,
   Settings2,
 } from "lucide-react"
 import type * as React from "react"
@@ -49,9 +49,9 @@ const data: {
       icon: InboxIcon,
     },
     {
-      title: "Models",
-      url: "/dashboard/models",
-      icon: Bot,
+      title: "My Issues",
+      url: "/dashboard/my-issues",
+      icon: ScanIcon,
     },
     {
       title: "Settings",

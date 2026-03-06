@@ -15,7 +15,7 @@ import { Route as marketingIndexRouteImport } from './routes/(marketing)/index'
 import { Route as AuthedDashboardRouteRouteImport } from './routes/_authed/dashboard/route'
 import { Route as AuthedDashboardIndexRouteImport } from './routes/_authed/dashboard/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as AuthedDashboardModelsRouteImport } from './routes/_authed/dashboard/models'
+import { Route as AuthedDashboardMyIssuesRouteImport } from './routes/_authed/dashboard/my-issues'
 import { Route as AuthedDashboardInboxRouteImport } from './routes/_authed/dashboard/inbox'
 import { Route as marketingauthSignUpIndexRouteImport } from './routes/(marketing)/(auth)/sign-up/index'
 import { Route as marketingauthSignInIndexRouteImport } from './routes/(marketing)/(auth)/sign-in/index'
@@ -48,9 +48,9 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthedDashboardModelsRoute = AuthedDashboardModelsRouteImport.update({
-  id: '/models',
-  path: '/models',
+const AuthedDashboardMyIssuesRoute = AuthedDashboardMyIssuesRouteImport.update({
+  id: '/my-issues',
+  path: '/my-issues',
   getParentRoute: () => AuthedDashboardRouteRoute,
 } as any)
 const AuthedDashboardInboxRoute = AuthedDashboardInboxRouteImport.update({
@@ -75,7 +75,7 @@ export interface FileRoutesByFullPath {
   '/': typeof marketingIndexRoute
   '/dashboard': typeof AuthedDashboardRouteRouteWithChildren
   '/dashboard/inbox': typeof AuthedDashboardInboxRoute
-  '/dashboard/models': typeof AuthedDashboardModelsRoute
+  '/dashboard/my-issues': typeof AuthedDashboardMyIssuesRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/': typeof AuthedDashboardIndexRoute
   '/sign-in/': typeof marketingauthSignInIndexRoute
@@ -84,7 +84,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof marketingIndexRoute
   '/dashboard/inbox': typeof AuthedDashboardInboxRoute
-  '/dashboard/models': typeof AuthedDashboardModelsRoute
+  '/dashboard/my-issues': typeof AuthedDashboardMyIssuesRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard': typeof AuthedDashboardIndexRoute
   '/sign-in': typeof marketingauthSignInIndexRoute
@@ -97,7 +97,7 @@ export interface FileRoutesById {
   '/_authed/dashboard': typeof AuthedDashboardRouteRouteWithChildren
   '/(marketing)/': typeof marketingIndexRoute
   '/_authed/dashboard/inbox': typeof AuthedDashboardInboxRoute
-  '/_authed/dashboard/models': typeof AuthedDashboardModelsRoute
+  '/_authed/dashboard/my-issues': typeof AuthedDashboardMyIssuesRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_authed/dashboard/': typeof AuthedDashboardIndexRoute
   '/(marketing)/(auth)/sign-in/': typeof marketingauthSignInIndexRoute
@@ -109,7 +109,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dashboard/inbox'
-    | '/dashboard/models'
+    | '/dashboard/my-issues'
     | '/api/auth/$'
     | '/dashboard/'
     | '/sign-in/'
@@ -118,7 +118,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard/inbox'
-    | '/dashboard/models'
+    | '/dashboard/my-issues'
     | '/api/auth/$'
     | '/dashboard'
     | '/sign-in'
@@ -130,7 +130,7 @@ export interface FileRouteTypes {
     | '/_authed/dashboard'
     | '/(marketing)/'
     | '/_authed/dashboard/inbox'
-    | '/_authed/dashboard/models'
+    | '/_authed/dashboard/my-issues'
     | '/api/auth/$'
     | '/_authed/dashboard/'
     | '/(marketing)/(auth)/sign-in/'
@@ -187,11 +187,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authed/dashboard/models': {
-      id: '/_authed/dashboard/models'
-      path: '/models'
-      fullPath: '/dashboard/models'
-      preLoaderRoute: typeof AuthedDashboardModelsRouteImport
+    '/_authed/dashboard/my-issues': {
+      id: '/_authed/dashboard/my-issues'
+      path: '/my-issues'
+      fullPath: '/dashboard/my-issues'
+      preLoaderRoute: typeof AuthedDashboardMyIssuesRouteImport
       parentRoute: typeof AuthedDashboardRouteRoute
     }
     '/_authed/dashboard/inbox': {
@@ -236,13 +236,13 @@ const marketingRouteRouteWithChildren = marketingRouteRoute._addFileChildren(
 
 interface AuthedDashboardRouteRouteChildren {
   AuthedDashboardInboxRoute: typeof AuthedDashboardInboxRoute
-  AuthedDashboardModelsRoute: typeof AuthedDashboardModelsRoute
+  AuthedDashboardMyIssuesRoute: typeof AuthedDashboardMyIssuesRoute
   AuthedDashboardIndexRoute: typeof AuthedDashboardIndexRoute
 }
 
 const AuthedDashboardRouteRouteChildren: AuthedDashboardRouteRouteChildren = {
   AuthedDashboardInboxRoute: AuthedDashboardInboxRoute,
-  AuthedDashboardModelsRoute: AuthedDashboardModelsRoute,
+  AuthedDashboardMyIssuesRoute: AuthedDashboardMyIssuesRoute,
   AuthedDashboardIndexRoute: AuthedDashboardIndexRoute,
 }
 
