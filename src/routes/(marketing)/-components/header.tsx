@@ -30,6 +30,7 @@ export function Header() {
           <ThemeToggle />
           {user ? (
             <UserDropdown
+              className="hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent"
               onSignOut={handleSignOut}
               user={user as Pick<User, "name" | "email" | "image">}
             />

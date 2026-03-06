@@ -20,6 +20,7 @@ type UserDropdownProps = {
   label?: boolean
   onSignOut: () => void
   user: Pick<User, "name" | "email" | "image">
+  className?: string
 }
 
 function getInitials(name: string) {
@@ -31,26 +32,31 @@ function getInitials(name: string) {
     .slice(0, 2)
 }
 
-export function UserDropdown({ user, onSignOut, label }: UserDropdownProps) {
+export function UserDropdown({
+  user,
+  onSignOut,
+  label,
+  className,
+}: UserDropdownProps) {
   const location = useLocation()
   const currentPathname = location.pathname
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
+        className={cn(
+          "flex items-center justify-start gap-x-4 py-6",
+          className
+        )}
         render={
-          <Button
-            className="flex items-center justify-start gap-x-4 py-6"
-            size="lg"
-            variant="ghost"
-          >
+          <Button size="default" variant="ghost">
             <Avatar className="flex items-center after:border-transparent">
               <AvatarImage
                 alt={user.name}
                 className={cn(
                   buttonVariants({
                     variant: "outline",
-                    size: "icon-lg",
+                    size: "icon",
                   })
                 )}
                 src={user.image ?? undefined}
@@ -58,7 +64,7 @@ export function UserDropdown({ user, onSignOut, label }: UserDropdownProps) {
               <AvatarFallback
                 className={buttonVariants({
                   variant: "outline",
-                  size: "icon-lg",
+                  size: "icon",
                 })}
               >
                 {getInitials(user.name)}
