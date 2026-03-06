@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router"
+import { Link, useLocation } from "@tanstack/react-router"
 import { HomeIcon, LogOutIcon, ShieldIcon, UserIcon } from "lucide-react"
 import { Activity } from "react"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -16,6 +16,12 @@ import {
 import { cn } from "@/lib/utils"
 import type { User } from "../schema"
 
+type UserDropdownProps = {
+  label?: boolean
+  onSignOut: () => void
+  user: Pick<User, "name" | "email" | "image">
+}
+
 function getInitials(name: string) {
   return name
     .split(" ")
@@ -25,21 +31,16 @@ function getInitials(name: string) {
     .slice(0, 2)
 }
 
-export function UserDropdown({
-  user,
-  onSignOut,
-  label,
-}: {
-  user: Pick<User, "name" | "email" | "image">
-  onSignOut: () => void
-  label?: boolean
-}) {
+export function UserDropdown({ user, onSignOut, label }: UserDropdownProps) {
+  const location = useLocation()
+  const currentPathname = location.pathname
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
           <Button
-            className="flex w-full items-center justify-start gap-x-4 py-6"
+            className="flex items-center justify-start gap-x-4 py-6"
             size="lg"
             variant="ghost"
           >
@@ -106,6 +107,16 @@ export function UserDropdown({
               </Link>
             }
           />
+          <Activity mode={currentPathname === "/" ? "hidden" : "visible"}>
+            <DropdownMenuItem
+              render={
+                <Link to="/">
+                  <ShieldIcon />
+                  Home
+                </Link>
+              }
+            />
+          </Activity>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

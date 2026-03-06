@@ -20,7 +20,7 @@ import { SocialAuthButtons } from "./social-auth-buttons"
 export function SignInForm() {
   const [isPending, startTransition] = useTransition()
   const navigate = useNavigate()
-  const { redirect } = useSearch({ from: "/(marketing)/(auth)/sign-in/" })
+  const { redirect } = useSearch({ from: "/(auth)/sign-in/" })
 
   const form = useAppForm({
     defaultValues: {
@@ -99,15 +99,22 @@ export function SignInForm() {
         </form.AppForm>
       </CardContent>
       <CardFooter>
-        <div className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
-          <p>Don&apos; t have an account?</p>
+        <span className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
+          Don&apos; t have an account?
           <Link
             className={cn(buttonVariants({ variant: "link" }), "px-0")}
             to="/sign-up"
           >
             Sign up
           </Link>
-        </div>
+          or
+          <Link
+            className={cn(buttonVariants({ variant: "link" }), "px-0")}
+            to="/"
+          >
+            Learn more
+          </Link>
+        </span>
       </CardFooter>
     </Card>
   )
