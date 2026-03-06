@@ -102,10 +102,7 @@ export function SignInForm() {
         <div className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
           <p>Don&apos; t have an account?</p>
           <Link
-            className={cn(
-              buttonVariants({ variant: "link", size: "xs" }),
-              "px-0"
-            )}
+            className={cn(buttonVariants({ variant: "link" }), "px-0")}
             to="/sign-up"
           >
             Sign up

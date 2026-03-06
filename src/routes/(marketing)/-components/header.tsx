@@ -1,12 +1,7 @@
-import {
-  Link,
-  useNavigate,
-  useRouteContext,
-  useRouter,
-} from "@tanstack/react-router"
+import { Link, useNavigate, useRouter } from "@tanstack/react-router"
 import { HomeIcon, LogOutIcon, ShieldIcon, UserIcon } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +14,7 @@ import {
 import { boringtemplateIcon } from "@/components/ui/icons"
 import { authClient } from "@/modules/auth/auth-client"
 import { ThemeToggle } from "../../../components/theme-toggle"
+import { Route } from "../route"
 
 function getInitials(name: string) {
   return name
@@ -40,14 +36,24 @@ function UserDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button className="rounded-full" size="icon" variant="ghost">
-            <Avatar className="size-7">
-              <AvatarImage alt={user.name} src={user.image ?? undefined} />
-              <AvatarFallback className="border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50">
-                {getInitials(user.name)}
-              </AvatarFallback>
-            </Avatar>
-          </Button>
+          <Avatar className="flex items-center after:border-transparent">
+            <AvatarImage
+              alt={user.name}
+              className={buttonVariants({
+                variant: "outline",
+                size: "icon-lg",
+              })}
+              src={user.image ?? undefined}
+            />
+            <AvatarFallback
+              className={buttonVariants({
+                variant: "outline",
+                size: "icon-lg",
+              })}
+            >
+              {getInitials(user.name)}
+            </AvatarFallback>
+          </Avatar>
         }
       />
       <DropdownMenuContent align="end">
@@ -101,7 +107,7 @@ function UserDropdown({
 }
 
 export function Header() {
-  const { user } = useRouteContext({ from: "__root__" })
+  const { user } = Route.useRouteContext()
   const router = useRouter()
   const navigate = useNavigate()
 

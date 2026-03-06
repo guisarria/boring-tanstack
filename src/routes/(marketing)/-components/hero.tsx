@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
+import { Route } from "../route"
 
 function CLITerminal() {
   const [isHovered, setIsHovered] = useState(false)
@@ -75,6 +76,7 @@ function Hero({
   primaryCTA = { label: "Get Started", href: "/sign-up" },
   secondaryCTA = { label: "View Docs", href: "/docs" },
 }: HeroProps) {
+  const { user } = Route.useRouteContext()
   return (
     <section className="flex w-full py-16 lg:py-24">
       <div className="flex w-full items-center justify-between">
@@ -89,14 +91,13 @@ function Hero({
             <Button
               className="flex gap-x-2"
               render={
-                <Link to={primaryCTA.href}>
+                <Link to={user ? "/dashboard" : primaryCTA.href}>
                   {primaryCTA.label}
                   <ChevronRight />
                 </Link>
               }
-              size="lg"
             />
-            <Button size="lg" variant="outline">
+            <Button variant="outline">
               <Link to={secondaryCTA.href}>{secondaryCTA.label}</Link>
             </Button>
           </div>

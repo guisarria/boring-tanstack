@@ -7,9 +7,9 @@ export const Route = createFileRoute("/(marketing)")({
 
 function RouteComponent() {
   return (
-    <>
+    <div className="flex h-screen w-full flex-col items-center">
       <Header />
       <Outlet />
-    </>
+    </div>
   )
 }
