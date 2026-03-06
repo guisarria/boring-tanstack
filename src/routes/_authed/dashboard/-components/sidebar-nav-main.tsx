@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router"
+import { Link, useLocation } from "@tanstack/react-router"
 import { ChevronRight, type LucideIcon } from "lucide-react"
 import {
   Collapsible,
@@ -16,21 +16,26 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import type { FileRoutesByTo } from "@/routeTree.gen"
+
+type AppRoutePaths = keyof FileRoutesByTo
 
 export function NavMain({
   items,
 }: {
   items: {
     title: string
-    url: string
+    url: AppRoutePaths
     icon: LucideIcon
     isActive?: boolean
     items?: {
       title: string
-      url: string
+      url: AppRoutePaths
     }[]
   }[]
 }) {
+  const location = useLocation()
+  const currentPathname = location.pathname
   return (
     <SidebarGroup className="text-foreground/90">
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -42,6 +47,7 @@ export function NavMain({
             render={<SidebarMenuItem />}
           >
             <SidebarMenuButton
+              isActive={currentPathname === item.url}
               render={<Link to={item.url} />}
               tooltip={item.title}
             >

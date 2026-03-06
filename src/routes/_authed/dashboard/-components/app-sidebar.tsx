@@ -1,13 +1,13 @@
 import { Link, useRouteContext } from "@tanstack/react-router"
 import {
-  BookOpen,
   Bot,
   Command,
   Frame,
+  InboxIcon,
+  type LucideIcon,
   MapIcon,
   PieChart,
   Settings2,
-  SquareTerminal,
 } from "lucide-react"
 import type * as React from "react"
 import {
@@ -18,25 +18,39 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import type { FileRoutesByTo } from "@/routeTree.gen"
 import { NavMain } from "./sidebar-nav-main"
 import { NavProjects } from "./sidebar-nav-projects"
 
-const data = {
+type AppRoutePaths = keyof FileRoutesByTo
+
+const data: {
+  navMain: {
+    title: string
+    url: AppRoutePaths
+    icon: LucideIcon
+    isActive?: boolean
+    items?: {
+      title: string
+      url: AppRoutePaths
+    }[]
+  }[]
+  projects: {
+    name: string
+    url: AppRoutePaths
+    icon: LucideIcon
+  }[]
+} = {
   navMain: [
     {
-      title: "Playground",
-      url: "/",
-      icon: SquareTerminal,
+      title: "Inbox",
+      url: "/dashboard/inbox",
+      icon: InboxIcon,
     },
     {
       title: "Models",
-      url: "/",
+      url: "/dashboard/models",
       icon: Bot,
-    },
-    {
-      title: "Documentation",
-      url: "/",
-      icon: BookOpen,
     },
     {
       title: "Settings",
