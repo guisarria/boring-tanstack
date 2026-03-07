@@ -1,9 +1,4 @@
-import { EyeClosed } from "lucide-react"
 import type { ComponentProps } from "react"
-
-export const boringtemplateIcon = ({ size }: { size?: number }) => (
-  <EyeClosed className="text-cyan-200" size={size} />
-)
 
 export function NextJsIcon(props: ComponentProps<"svg">) {
   return (
