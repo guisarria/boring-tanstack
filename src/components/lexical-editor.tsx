@@ -225,7 +225,6 @@ export const LexicalEditor = forwardRef<
   { value, onChange, placeholder, className, onPaste },
   ref
 ) {
-  // biome-ignore lint/correctness/useExhaustiveDependencies: value is intentionally only captured on initial render
   const initialConfig = useMemo<InitialConfigType>(
     () => ({
       namespace: DEFAULT_NAMESPACE,
@@ -240,7 +239,7 @@ export const LexicalEditor = forwardRef<
         throw error
       },
     }),
-    []
+    [value]
   )
 
   return (

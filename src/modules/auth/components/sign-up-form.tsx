@@ -109,7 +109,7 @@ export function SignUpForm() {
       </CardContent>
 
       <CardFooter>
-        <div className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
+        <div className="flex w-full items-center justify-center gap-x-1 text-center text-muted-foreground text-sm">
           <p>Already have an account?</p>
           <Link
             className={cn(buttonVariants({ variant: "link" }), "px-0 text-sm")}

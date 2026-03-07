@@ -99,17 +99,17 @@ export function SignInForm() {
         </form.AppForm>
       </CardContent>
       <CardFooter>
-        <span className="flex w-full items-center justify-center gap-x-1 text-center text-xs sm:text-sm">
+        <span className="flex w-full items-center justify-center gap-x-1 text-center text-muted-foreground text-sm">
           Don&apos; t have an account?
           <Link
-            className={cn(buttonVariants({ variant: "link" }), "px-0")}
+            className={cn(buttonVariants({ variant: "link" }), "px-0 text-sm")}
             to="/sign-up"
           >
             Sign up
           </Link>
           or
           <Link
-            className={cn(buttonVariants({ variant: "link" }), "px-0")}
+            className={cn(buttonVariants({ variant: "link" }), "px-0 text-sm")}
             to="/"
           >
             Learn more
