@@ -9,7 +9,6 @@ import { HomeIcon, LogOutIcon, ShieldIcon, UserIcon } from "lucide-react"
 
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { buttonVariants } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -54,39 +53,30 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className={cn(
-          "flex h-full items-center justify-center gap-x-2",
-          className
-        )}
+        className={cn("flex items-center gap-x-2", className)}
       >
-        <Avatar className="flex items-center *:absolute after:border-transparent">
+        <Avatar
+          className={cn(
+            "flex size-7 items-center *:absolute after:border-transparent"
+          )}
+        >
           <AvatarImage
             alt={user?.name}
-            className={cn(
-              buttonVariants({
-                variant: "outline",
-                size: "icon",
-              })
-            )}
+            className={cn("rounded-md")}
             src={user?.image ?? ""}
           />
-          <AvatarFallback
-            className={buttonVariants({
-              variant: "outline",
-              size: "icon",
-            })}
-          >
+          <AvatarFallback className={cn("rounded-md")}>
             {getInitials(user?.name ?? "")}
           </AvatarFallback>
         </Avatar>
-        {label && <span className="">{user?.name}</span>}
+        {label && <span className="text-sm">{user?.name}</span>}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="font-medium text-sm leading-none">{user?.name}</p>
-              <p className="text-muted-foreground text-xs leading-none">
+              <p className="text-muted-foreground leading-none">
                 {user?.email}
               </p>
             </div>

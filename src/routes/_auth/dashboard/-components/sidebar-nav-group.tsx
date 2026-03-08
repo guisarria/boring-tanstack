@@ -71,7 +71,9 @@ export function SidebarNavGroup({
                   tooltip={item.title}
                 >
                   <item.icon className="text-muted-foreground" />
-                  <span>{item.title}</span>
+                  <span className="text-foreground/90 text-sm">
+                    {item.title}
+                  </span>
                 </SidebarMenuButton>
                 {item.items?.length ? (
                   <>
@@ -83,18 +85,16 @@ export function SidebarNavGroup({
                       <ChevronRight />
                       <span className="sr-only">Toggle</span>
                     </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {item.items?.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton
-                              render={<Link to={subItem.url} />}
-                            >
-                              <span>{subItem.title}</span>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
+                    <CollapsibleContent render={<SidebarMenuSub />}>
+                      {item.items?.map((subItem) => (
+                        <SidebarMenuSubItem key={subItem.title}>
+                          <SidebarMenuSubButton
+                            render={<Link to={subItem.url} />}
+                          >
+                            <span>{subItem.title}</span>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
                     </CollapsibleContent>
                   </>
                 ) : null}

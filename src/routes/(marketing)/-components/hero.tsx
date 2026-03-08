@@ -23,7 +23,7 @@ function Hero({
     <section className="flex w-full items-center justify-between">
       <div className="flex items-center justify-between">
         <div className="flex h-full w-full flex-col gap-y-6">
-          <h1 className="font-bold text-4xl text-foreground tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="font-bold text-4xl text-foreground tracking-tight sm:text-5xl">
             {title}
           </h1>
           <p className="max-w-xl text-lg text-muted-foreground">

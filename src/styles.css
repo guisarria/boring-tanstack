@@ -120,7 +120,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply font-sans bg-background text-foreground antialiased;
+    @apply font-sans bg-background text-pretty text-foreground antialiased;
     text-rendering: optimizeLegibility;
   }
   html {

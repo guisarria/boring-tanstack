@@ -60,11 +60,12 @@ const data: {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useRouteContext({ from: "__root__" })
   return (
-    <Sidebar variant="inset" {...props}>
-      <SidebarHeader>
-        <SidebarMenuButton>
-          {user ? <UserDropdown className="" label /> : undefined}
-        </SidebarMenuButton>
+    <Sidebar className="px-0" variant="inset" {...props}>
+      <SidebarHeader className="pt-1 pb-0">
+        <SidebarMenuButton
+          className=""
+          render={user ? <UserDropdown label /> : undefined}
+        />
       </SidebarHeader>
       <SidebarContent>
         <SidebarNavGroup items={data.navMain} label="Main" />
