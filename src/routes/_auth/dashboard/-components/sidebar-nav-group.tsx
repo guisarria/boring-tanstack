@@ -70,7 +70,10 @@ export function SidebarNavGroup({
                   render={<Link to={item.url} />}
                   tooltip={item.title}
                 >
-                  <item.icon className="text-muted-foreground" />
+                  <item.icon
+                    className="text-muted-foreground"
+                    strokeWidth={1.5}
+                  />
                   <span className="text-foreground/90 text-sm">
                     {item.title}
                   </span>

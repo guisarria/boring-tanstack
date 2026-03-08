@@ -13,6 +13,7 @@ import {
   SidebarContent,
   SidebarHeader,
   SidebarMenuButton,
+  SidebarRail,
 } from "@/components/ui/sidebar"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
 import { type NavItem, SidebarNavGroup } from "./sidebar-nav-group"
@@ -61,7 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useRouteContext({ from: "__root__" })
   return (
     <Sidebar className="px-0" variant="inset" {...props}>
-      <SidebarHeader className="pt-1 pb-0">
+      <SidebarHeader className="pb-0">
         <SidebarMenuButton
           className=""
           render={user ? <UserDropdown label /> : undefined}
@@ -71,6 +72,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarNavGroup items={data.navMain} label="Main" />
         <SidebarNavGroup items={data.projects} label="Projects" />
       </SidebarContent>
+      <SidebarRail />
     </Sidebar>
   )
 }
