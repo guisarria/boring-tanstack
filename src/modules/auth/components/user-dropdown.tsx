@@ -54,7 +54,10 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className={cn("flex items-center justify-start gap-x-4", className)}
+        className={cn(
+          "flex h-full items-center justify-center gap-x-2",
+          className
+        )}
       >
         <Avatar className="flex items-center *:absolute after:border-transparent">
           <AvatarImage
@@ -76,7 +79,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
             {getInitials(user?.name ?? "")}
           </AvatarFallback>
         </Avatar>
-        {label && <span className="font-semibold text-lg">{user?.name}</span>}
+        {label && <span className="">{user?.name}</span>}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>

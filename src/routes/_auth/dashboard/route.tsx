@@ -8,10 +8,10 @@ export const Route = createFileRoute("/_auth/dashboard")({
 
 function RouteComponent() {
   return (
-    <SidebarProvider className="h-screen overflow-hidden p-1 pt-2 has-data-[variant=inset]:bg-sidebar">
+    <SidebarProvider className="pt-2">
       <AppSidebar />
-      <SidebarInset className="md:peer-data-[variant=inset]:mt-0">
-        <div className="flex h-full flex-col place-items-center rounded-md border border-border/90 bg-muted/30">
+      <SidebarInset className="md:peer-data-[variant=inset]:mt-0 md:peer-data-[variant=inset]:rounded-md">
+        <div className="flex h-full flex-col place-items-center rounded-md border border-border bg-muted/30">
           <Outlet />
         </div>
       </SidebarInset>

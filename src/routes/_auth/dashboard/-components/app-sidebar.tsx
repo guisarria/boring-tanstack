@@ -12,9 +12,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
-  SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
 import { type NavItem, SidebarNavGroup } from "./sidebar-nav-group"
@@ -62,15 +60,11 @@ const data: {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useRouteContext({ from: "__root__" })
   return (
-    <Sidebar className="bg-sidebar" variant="inset" {...props}>
+    <Sidebar variant="inset" {...props}>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              render={user ? <UserDropdown label /> : undefined}
-            />
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <SidebarMenuButton>
+          {user ? <UserDropdown className="" label /> : undefined}
+        </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
         <SidebarNavGroup items={data.navMain} label="Main" />
