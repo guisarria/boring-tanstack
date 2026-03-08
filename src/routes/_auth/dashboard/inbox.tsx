@@ -54,7 +54,7 @@ const email = [
 
 function RouteComponent() {
   const { defaultLayout, onLayoutChanged } = useDefaultLayout({
-    id: "unique-layout-id",
+    id: "resizable-inbox",
     storage: localStorageLayoutStorage,
   })
 
