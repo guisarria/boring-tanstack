@@ -9,11 +9,11 @@ export function Header() {
   const { user } = Route.useRouteContext()
 
   return (
-    <header className="w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div className="container mx-auto flex items-center justify-between p-4">
-        <Link className="flex items-center gap-2" to="/">
+    <header className="flex w-full flex-col items-center justify-center border-border border-x border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+      <div className="container flex items-center justify-between py-4">
+        <Link className="flex items-center gap-x-2" to="/">
           <EncoderDisc className="size-8" />
-          <span className="font-semibold">Boring</span>
+          <span className="font-semibold text-lg">Boring Tanstack</span>
         </Link>
 
         <div className="flex items-center gap-2">

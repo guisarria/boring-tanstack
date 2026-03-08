@@ -5,7 +5,7 @@ export const Route = createFileRoute("/(marketing)/")({ component: Index })
 
 function Index() {
   return (
-    <div className="container flex w-full flex-col items-center justify-between">
+    <div className="container relative flex h-full w-full flex-col items-start justify-start">
       <Hero />
     </div>
   )
