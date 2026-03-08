@@ -12,11 +12,9 @@ function RouteComponent() {
     <SidebarProvider className="pt-2">
       <AppSidebar />
       <SidebarInset className="md:peer-data-[variant=inset]:mt-0 md:peer-data-[variant=inset]:rounded-md">
-        <div className="flex flex-1 flex-col rounded-md border border-border bg-muted/30 pt-0">
+        <div className="flex w-full flex-1 flex-col rounded-md border border-border bg-muted/30 pt-0">
           <AppHeader />
-          <div className="flex-1">
-            <Outlet />
-          </div>
+          <Outlet />
         </div>
       </SidebarInset>
     </SidebarProvider>

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { CheckIcon, InboxIcon } from "lucide-react"
+import { type LayoutStorage, useDefaultLayout } from "react-resizable-panels"
 import {
   Avatar,
   AvatarBadge,
@@ -27,6 +28,15 @@ export const Route = createFileRoute("/_auth/dashboard/inbox")({
   component: RouteComponent,
 })
 
+const localStorageLayoutStorage: LayoutStorage = {
+  getItem(key: string) {
+    return localStorage.getItem(key)
+  },
+  setItem(key: string, value: string) {
+    localStorage.setItem(key, value)
+  },
+}
+
 const email = [
   {
     title: "Midnight City Lights",
@@ -43,9 +53,18 @@ const email = [
 ]
 
 function RouteComponent() {
+  const { defaultLayout, onLayoutChanged } = useDefaultLayout({
+    id: "unique-layout-id",
+    storage: localStorageLayoutStorage,
+  })
+
   return (
-    <ResizablePanelGroup>
-      <ResizablePanel className="min-w-20" minSize="18rem">
+    <ResizablePanelGroup
+      defaultLayout={defaultLayout}
+      onLayoutChanged={onLayoutChanged}
+      orientation="horizontal"
+    >
+      <ResizablePanel defaultSize={"28rem"} maxSize={"30rem"} minSize={"18rem"}>
         <ItemGroup className="p-2">
           {email.map((mail) => (
             <Item
@@ -78,8 +97,8 @@ function RouteComponent() {
         </ItemGroup>
       </ResizablePanel>
       <ResizableHandle />
-      <ResizablePanel minSize="50%">
-        <Empty className="flex h-full flex-col items-center justify-center">
+      <ResizablePanel>
+        <Empty className="flex h-full flex-1 flex-col items-center justify-center">
           <InboxIcon
             absoluteStrokeWidth
             className="size-40 text-muted-foreground"
