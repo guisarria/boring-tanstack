@@ -21,19 +21,25 @@ import type { FileRoutesByTo } from "@/routeTree.gen"
 
 type AppRoutePaths = keyof FileRoutesByTo
 
-export function NavMain({
-  items,
-}: {
-  items: {
+export type NavItem = {
+  icon: LucideIcon
+  isActive?: boolean
+  items?: {
     title: string
     url: AppRoutePaths
-    icon: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: AppRoutePaths
-    }[]
   }[]
+  title: string
+  url: AppRoutePaths
+}
+
+export function SidebarNavGroup({
+  label,
+  items,
+  className,
+}: {
+  label: string
+  items: NavItem[]
+  className?: string
 }) {
   const location = useLocation()
   const currentPathname = location.pathname
@@ -41,13 +47,13 @@ export function NavMain({
     <Collapsible
       className="group/collapsible"
       defaultOpen
-      render={<SidebarGroup className="group/label text-foreground/90" />}
+      render={<SidebarGroup className={className} />}
     >
       <SidebarGroupLabel
         className="group/label"
         render={<CollapsibleTrigger className={"flex items-center gap-x-2"} />}
       >
-        Platform
+        {label}
         <ChevronRight className="transition-transform duration-200 group-data-panel-open/label:rotate-90" />
       </SidebarGroupLabel>
       <CollapsibleContent>
@@ -64,7 +70,7 @@ export function NavMain({
                   render={<Link to={item.url} />}
                   tooltip={item.title}
                 >
-                  <item.icon />
+                  <item.icon className="text-muted-foreground" />
                   <span>{item.title}</span>
                 </SidebarMenuButton>
                 {item.items?.length ? (

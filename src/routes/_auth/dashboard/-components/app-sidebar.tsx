@@ -1,8 +1,7 @@
-import { useNavigate, useRouteContext, useRouter } from "@tanstack/react-router"
+import { useRouteContext } from "@tanstack/react-router"
 import {
   Frame,
   InboxIcon,
-  type LucideIcon,
   MapIcon,
   PieChart,
   ScanIcon,
@@ -17,30 +16,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { authClient } from "@/modules/auth/auth-client"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
-import type { FileRoutesByTo } from "@/routeTree.gen"
-import { NavMain } from "./sidebar-nav-main"
-import { NavProjects } from "./sidebar-nav-projects"
-
-type AppRoutePaths = keyof FileRoutesByTo
+import { type NavItem, SidebarNavGroup } from "./sidebar-nav-group"
 
 const data: {
-  navMain: {
-    title: string
-    url: AppRoutePaths
-    icon: LucideIcon
-    isActive?: boolean
-    items?: {
-      title: string
-      url: AppRoutePaths
-    }[]
-  }[]
-  projects: {
-    name: string
-    url: AppRoutePaths
-    icon: LucideIcon
-  }[]
+  navMain: NavItem[]
+  projects: NavItem[]
 } = {
   navMain: [
     {
@@ -61,17 +42,17 @@ const data: {
   ],
   projects: [
     {
-      name: "Design Engineering",
+      title: "Design Engineering",
       url: "/",
       icon: Frame,
     },
     {
-      name: "Sales & Marketing",
+      title: "Sales & Marketing",
       url: "/",
       icon: PieChart,
     },
     {
-      name: "Travel",
+      title: "Travel",
       url: "/",
       icon: MapIcon,
     },
@@ -79,33 +60,21 @@ const data: {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const router = useRouter()
-  const navigate = useNavigate()
-
-  const handleSignOut = async () => {
-    await authClient.signOut()
-    router.invalidate()
-    navigate({ to: "/" })
-  }
   const { user } = useRouteContext({ from: "__root__" })
   return (
-    <Sidebar className="bg-background" variant="inset" {...props}>
-      <SidebarHeader className="bg-background">
+    <Sidebar className="bg-sidebar" variant="inset" {...props}>
+      <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              render={
-                user ? (
-                  <UserDropdown label onSignOut={handleSignOut} user={user} />
-                ) : undefined
-              }
+              render={user ? <UserDropdown label /> : undefined}
             />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="bg-background">
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+      <SidebarContent>
+        <SidebarNavGroup items={data.navMain} label="Main" />
+        <SidebarNavGroup items={data.projects} label="Projects" />
       </SidebarContent>
     </Sidebar>
   )
