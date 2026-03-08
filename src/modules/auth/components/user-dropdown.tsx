@@ -55,11 +55,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
       <DropdownMenuTrigger
         className={cn("flex items-center gap-x-2", className)}
       >
-        <Avatar
-          className={cn(
-            "flex size-7 items-center *:absolute after:border-transparent"
-          )}
-        >
+        <Avatar className={cn("flex size-7 after:border-transparent")}>
           <AvatarImage
             alt={user?.name}
             className={cn("rounded-md")}

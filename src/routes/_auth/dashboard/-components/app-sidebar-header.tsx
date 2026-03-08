@@ -1,5 +1,7 @@
 /** biome-ignore-all lint/performance/useTopLevelRegex: <a> */
+
 import { Link, useMatches } from "@tanstack/react-router"
+import React from "react"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -40,12 +42,14 @@ export function AppHeader() {
             </BreadcrumbLink>
           </BreadcrumbItem>
           {breadcrumbs.map((crumb) => (
-            <BreadcrumbItem key={crumb.path}>
+            <React.Fragment key={crumb.path}>
               <BreadcrumbSeparator />
-              <BreadcrumbPage className="text-foreground/90">
-                {crumb.label}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
+              <BreadcrumbItem>
+                <BreadcrumbPage className="text-foreground/90">
+                  {crumb.label}
+                </BreadcrumbPage>
+              </BreadcrumbItem>
+            </React.Fragment>
           ))}
         </BreadcrumbList>
       </Breadcrumb>
