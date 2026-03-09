@@ -12,4 +12,5 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string().optional(),
   },
   runtimeEnv: process.env,
+  emptyStringAsUndefined: true,
 })
