@@ -19,12 +19,20 @@ function Hero({
   const { user } = Route.useRouteContext()
 
   return (
-    <section className="container relative flex w-full items-center justify-between py-60">
+    <section className="container relative flex w-full items-center justify-between pt-80 pb-60">
       <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-y-6">
-          <h1 className="w-3/5 font-bold text-4xl text-foreground tracking-tight sm:text-5xl">
-            {title}
-          </h1>
+        <div className="flex w-full flex-col gap-y-6">
+          <span className="relative flex max-w-3xl items-center gap-0.5 text-left">
+            <h1 className="section-title font-pixel lg:text-7xl">{title}</h1>
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 flex animate-pulse items-center gap-0.5 blur-xs"
+            >
+              <span className="section-title font-pixel lg:text-7xl">
+                {title}
+              </span>
+            </span>
+          </span>
           <p className="max-w-xl text-lg text-muted-foreground">
             {description}
           </p>

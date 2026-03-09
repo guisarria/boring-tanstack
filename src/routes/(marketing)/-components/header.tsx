@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router"
-import { EncoderDisc } from "@/components/encoder-disc"
 import { Button } from "@/components/ui/button"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
 import { ThemeToggle } from "../../../components/theme-toggle"
@@ -9,12 +8,21 @@ export function Header() {
   const { user } = Route.useRouteContext()
 
   return (
-    <header className="z-50 flex w-full flex-col items-center justify-center bg-transparent">
+    <header className="fixed inset-x-0 top-0 z-50 flex w-full flex-col items-center justify-center border-transparent bg-transparent backdrop-blur-none">
       <div className="container flex items-center justify-between py-4">
-        <Link className="flex items-center gap-x-2" to="/">
-          <EncoderDisc className="size-8" />
-          <span className="font-semibold text-lg">Boring Tanstack</span>
-        </Link>
+        <span className="relative flex items-center gap-0.5">
+          <span className="font-normal font-pixel text-xl">
+            Boring Tanstack
+          </span>
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 flex animate-pulse items-center gap-0.5 blur-xs"
+          >
+            <span className="font-normal font-pixel text-xl">
+              Boring Tanstack
+            </span>
+          </span>
+        </span>
 
         <div className="flex items-center gap-2">
           <ThemeToggle />

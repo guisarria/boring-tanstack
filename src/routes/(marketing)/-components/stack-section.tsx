@@ -75,7 +75,17 @@ function StackSection() {
   return (
     <section className="container flex w-full flex-col gap-y-8 py-28">
       <div className="flex flex-col gap-y-2">
-        <h2 className="font-bold text-3xl tracking-tight">The Stack</h2>
+        <span className="relative flex items-center gap-0.5 text-left">
+          <h2 className="section-title font-pixel md:text-6xl">The Stack</h2>
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 flex animate-pulse items-center gap-0.5 blur-xs"
+          >
+            <span className="section-title font-pixel md:text-6xl">
+              The Stack
+            </span>
+          </span>
+        </span>
         <p className="text-muted-foreground">
           Built with modern, production-ready tools so you can focus on
           shipping.

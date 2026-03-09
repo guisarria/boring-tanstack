@@ -2,9 +2,15 @@
 @import "tw-animate-css";
 @import "@fontsource-variable/inter";
 
+@font-face {
+  font-family: "Geist Pixel Line";
+  src: url("/fonts/GeistPixel-Line.otf");
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --font-pixel: "Geist Pixel Line";
   --background: oklch(1 0 0);
   --foreground: oklch(32.5% 0 0);
   --card: oklch(98.5% 0 0);
@@ -27,7 +33,7 @@
   --chart-2: oklch(0.715 0.143 215.221);
   --chart-3: oklch(0.609 0.126 221.723);
   --chart-4: oklch(0.52 0.105 223.128);
-  --chart-5:oklch(0.483 0.075 187.623);
+  --chart-5: oklch(0.483 0.075 187.623);
   --radius: 0.625rem;
   --sidebar: oklch(100% 0 0);
   --sidebar-foreground: oklch(32.5% 0 0);
@@ -62,7 +68,7 @@
   --chart-2: oklch(0.715 0.143 215.221);
   --chart-3: oklch(0.609 0.126 221.723);
   --chart-4: oklch(0.52 0.105 223.128);
-  --chart-5:oklch(0.483 0.075 187.623);
+  --chart-5: oklch(0.483 0.075 187.623);
   --sidebar: oklch(24% 0 0);
   --sidebar-foreground: oklch(100% 0 0);
   --sidebar-primary: oklch(0.715 0.143 215.221);
@@ -74,7 +80,8 @@
 }
 
 @theme inline {
-  --font-sans: 'Inter Variable', sans-serif;
+  --font-sans: "Inter Variable", sans-serif;
+  --font-pixel: "Geist Pixel Line";
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -138,6 +145,9 @@
   }
   html {
     @apply font-sans;
+  }
+  .section-title {
+    @apply font-pixel text-4xl md:text-5xl lg:text-6xl tracking-tight text-foreground;
   }
 }
 
@@ -214,8 +224,7 @@
   @supports (corner-shape: superellipse(1)) {
     corner-shape: superellipse(var(--superellipse-curve, 1.6));
     border-radius: calc(
-      --value(--radius-*, [length]) *
-      var(--radius-scale, 1.6)
+      --value(--radius- *, [length]) * var(--radius-scale, 1.6)
     ) !important;
   }
 }

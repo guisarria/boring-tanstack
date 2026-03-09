@@ -14,7 +14,7 @@ function Index() {
       <StackSection />
       <CloneRepository />
       <Footer />
-      <BlurOverlay position="both" size={100} />
+      <BlurOverlay position="both" size={85} />
     </div>
   )
 }
