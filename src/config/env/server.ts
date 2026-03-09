@@ -4,7 +4,6 @@ import * as z from "zod"
 export const env = createEnv({
   server: {
     DATABASE_URL: z.url(),
-    VITE_BASE_URL: z.url().default("http://localhost:3000"),
     BETTER_AUTH_SECRET: z.string(),
     BETTER_AUTH_URL: z.url(),
     GITHUB_CLIENT_ID: z.string().optional(),

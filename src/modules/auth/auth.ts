@@ -9,7 +9,7 @@ export const auth = betterAuth({
   appName: "Boring Template",
   baseURL: env.BETTER_AUTH_URL,
   experimental: { joins: true },
-  trustedOrigins: [env.VITE_BASE_URL],
+  trustedOrigins: [env.BETTER_AUTH_URL],
   database: drizzleAdapter(db, {
     provider: "pg",
     usePlural: true,
