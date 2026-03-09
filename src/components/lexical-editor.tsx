@@ -226,7 +226,7 @@ export const LexicalEditor = function LexicalEditor({
   className,
   onPaste,
 }: LexicalEditorProps & {
-  ref: RefObject<LexicalEditorHandle>
+  ref?: RefObject<LexicalEditorHandle>
 }) {
   const initialConfig = useMemo<InitialConfigType>(
     () => ({

@@ -9,10 +9,10 @@ export const Route = createFileRoute("/_auth/dashboard")({
 
 function RouteComponent() {
   return (
-    <SidebarProvider className="pt-2">
+    <SidebarProvider className="sm:pt-2">
       <AppSidebar />
-      <SidebarInset className="md:peer-data-[variant=inset]:mt-0 md:peer-data-[variant=inset]:rounded-md">
-        <div className="flex w-full flex-1 flex-col rounded-md border border-border bg-muted/30 pt-0">
+      <SidebarInset className="rounded-none md:peer-data-[variant=inset]:mt-0 md:peer-data-[variant=inset]:rounded-md">
+        <div className="flex w-full flex-1 flex-col border border-border bg-muted/30 pt-0 sm:rounded-md">
           <AppHeader />
           <Outlet />
         </div>

@@ -10,6 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
 function formatSegment(segment: string) {
   return segment.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
@@ -33,7 +34,8 @@ export function AppHeader() {
     })
 
   return (
-    <header className="border-border border-b py-2 pl-6">
+    <header className="flex items-center gap-x-2 border-border border-b py-2 pl-2">
+      <SidebarTrigger className="pb-px text-foreground/60" />
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
