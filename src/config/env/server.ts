@@ -3,6 +3,7 @@ import * as z from "zod"
 
 export const env = createEnv({
   server: {
+    BASE_URL: z.url(),
     DATABASE_URL: z.url(),
     BETTER_AUTH_SECRET: z.string(),
     GITHUB_CLIENT_ID: z.string().optional(),
