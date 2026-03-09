@@ -24,10 +24,7 @@ export function Header() {
           </span>
 
           <div className="flex items-center gap-x-2">
-            <ThemeToggle
-              className="bg-background dark:bg-[#1E1E1E]"
-              variant="outline"
-            />
+            <ThemeToggle variant="outline" />
             {user ? (
               <UserDropdown className="hover:bg-transparent aria-expanded:bg-transparent dark:hover:bg-transparent" />
             ) : (

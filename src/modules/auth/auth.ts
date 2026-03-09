@@ -15,6 +15,12 @@ export const auth = betterAuth({
     usePlural: true,
     schema,
   }),
+  session: {
+    cookieCache: {
+      enabled: true,
+      strategy: "jwe",
+    },
+  },
   account: {
     accountLinking: {
       enabled: true,

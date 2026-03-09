@@ -26,8 +26,8 @@ import { HeadingNode, QuoteNode } from "@lexical/rich-text"
 import type { EditorState } from "lexical"
 import {
   type ClipboardEventHandler,
-  forwardRef,
   type Ref,
+  type RefObject,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -218,13 +218,16 @@ function LexicalEditorInner({
   )
 }
 
-export const LexicalEditor = forwardRef<
-  LexicalEditorHandle,
-  LexicalEditorProps
->(function LexicalEditor(
-  { value, onChange, placeholder, className, onPaste },
-  ref
-) {
+export const LexicalEditor = function LexicalEditor({
+  ref,
+  value,
+  onChange,
+  placeholder,
+  className,
+  onPaste,
+}: LexicalEditorProps & {
+  ref: RefObject<LexicalEditorHandle>
+}) {
   const initialConfig = useMemo<InitialConfigType>(
     () => ({
       namespace: DEFAULT_NAMESPACE,
@@ -254,4 +257,4 @@ export const LexicalEditor = forwardRef<
       />
     </LexicalComposer>
   )
-})
+}
