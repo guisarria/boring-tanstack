@@ -7,7 +7,7 @@ import * as schema from "./schema"
 
 export const auth = betterAuth({
   appName: "Boring Template",
-  baseURL: env.VITE_BASE_URL,
+  baseURL: env.BETTER_AUTH_URL,
   experimental: { joins: true },
   trustedOrigins: [env.VITE_BASE_URL],
   database: drizzleAdapter(db, {
