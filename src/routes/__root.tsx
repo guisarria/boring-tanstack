@@ -1,10 +1,8 @@
-import { TanStackDevtools } from "@tanstack/react-devtools"
 import {
   createRootRouteWithContext,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router"
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { DefaultNotFound } from "@/components/default-not-found"
 import TanStackQueryProvider, {
   type AppRouterContext,
@@ -12,7 +10,6 @@ import TanStackQueryProvider, {
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { getSession } from "@/modules/auth/auth.functions"
-import TanStackQueryDevtools from "../components/providers/devtools"
 import appCss from "../styles.css?url"
 
 export const Route = createRootRouteWithContext<AppRouterContext>()({
@@ -56,7 +53,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <TanStackQueryProvider queryClient={queryClient}>
           <ThemeProvider
             attribute={"class"}
-            defaultTheme="system"
+            defaultTheme="dark"
             disableTransitionOnChange
             enableSystem
           >
@@ -64,7 +61,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <Toaster richColors />
           </ThemeProvider>
 
-          <TanStackDevtools
+          {/* <TanStackDevtools
             config={{
               position: "bottom-right",
             }}
@@ -75,7 +72,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               },
               TanStackQueryDevtools,
             ]}
-          />
+          /> */}
         </TanStackQueryProvider>
         <Scripts />
       </body>

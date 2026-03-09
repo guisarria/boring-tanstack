@@ -1,13 +1,14 @@
 import { Link } from "@tanstack/react-router"
+import { Container } from "@/components/ui/design-system"
 import { Icons } from "@/components/ui/icons"
 
 export const Footer = () => (
-  <footer className="container z-10 mt-auto flex w-full items-center bg-background py-4 text-muted-foreground text-xs">
-    <div className="flex w-full justify-between px-4 sm:px-0">
+  <footer className="pb-4 text-muted-foreground text-sm">
+    <Container className="flex justify-between">
       <p>© Boring TanStack</p>
       <div className="flex items-start justify-start gap-x-12">
         <div className="flex flex-col gap-y-2">
-          <h2 className="text-foreground text-sm">Legal</h2>
+          <h2 className="text-foreground">Legal</h2>
           <ul className="flex flex-col gap-y-2">
             <li>
               <Link to={"/"}>Privacy Policy</Link>
@@ -34,6 +35,6 @@ export const Footer = () => (
           </ul>
         </div>
       </div>
-    </div>
+    </Container>
   </footer>
 )

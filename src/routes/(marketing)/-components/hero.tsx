@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router"
 import { ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Container, Section } from "@/components/ui/design-system"
 import { Route } from "../route"
 import { DitherCanvas } from "./dither-canvas"
 
@@ -19,24 +20,24 @@ function Hero({
   const { user } = Route.useRouteContext()
 
   return (
-    <section className="container relative flex w-full items-center justify-between pt-80 pb-60">
-      <div className="flex items-center justify-between">
-        <div className="flex w-full flex-col gap-y-6">
-          <span className="relative flex max-w-3xl items-center gap-0.5 text-left">
-            <h1 className="section-title font-pixel lg:text-7xl">{title}</h1>
+    <Section className="relative pt-60 pb-20">
+      <Container>
+        <div className="flex flex-col gap-y-2">
+          <span className="relative flex items-center gap-0.5 text-left">
+            <h1 className="section-title z-10 font-pixel lg:text-7xl">
+              {title}
+            </h1>
             <span
               aria-hidden="true"
-              className="absolute inset-0 flex animate-pulse items-center gap-0.5 blur-xs"
+              className="absolute inset-0 flex animate-pulse select-none items-center gap-0.5 blur-xs"
             >
               <span className="section-title font-pixel lg:text-7xl">
                 {title}
               </span>
             </span>
           </span>
-          <p className="max-w-xl text-lg text-muted-foreground">
-            {description}
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <p className="text-lg text-muted-foreground">{description}</p>
+          <div className="mt-4">
             <Button>
               <Link
                 className="flex items-center gap-x-2"
@@ -48,9 +49,9 @@ function Hero({
             </Button>
           </div>
         </div>
-      </div>
+      </Container>
       <DitherCanvas />
-    </section>
+    </Section>
   )
 }
 

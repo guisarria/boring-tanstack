@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 const GRID_SIZE = 4
 const FG = "oklch(75.7% 0 0)"
 const FREQUENCY = 0.05
-const SPEED = 0.02
+const SPEED = 0.023
 
 const BAYER_4X4 = [
   0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5,

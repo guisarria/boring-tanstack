@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Container, Section } from "@/components/ui/design-system"
 import { Icons } from "@/components/ui/icons"
 import { cn } from "@/lib/utils"
 
@@ -73,51 +74,55 @@ const stack = [
 
 function StackSection() {
   return (
-    <section className="container flex w-full flex-col gap-y-8 py-28">
-      <div className="flex flex-col gap-y-2">
-        <span className="relative flex items-center gap-0.5 text-left">
-          <h2 className="section-title font-pixel md:text-6xl">The Stack</h2>
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 flex animate-pulse items-center gap-0.5 blur-xs"
-          >
-            <span className="section-title font-pixel md:text-6xl">
+    <Section className="pt-40 pb-20">
+      <Container className="flex flex-col gap-y-6">
+        <div className="flex flex-col gap-y-2">
+          <span className="relative flex items-center gap-0.5 text-left">
+            <h2 className="section-title z-10 font-pixel md:text-5xl">
               The Stack
+            </h2>
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 flex animate-pulse select-none items-center gap-0.5 blur-xs"
+            >
+              <span className="section-title font-pixel md:text-5xl">
+                The Stack
+              </span>
             </span>
           </span>
-        </span>
-        <p className="text-muted-foreground">
-          Built with modern, production-ready tools so you can focus on
-          shipping.
-        </p>
-      </div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {stack.map((item) => (
-          <Card
-            className="flex w-full flex-col justify-between"
-            key={item.name}
-          >
-            <CardHeader className="gap-y-2">
-              <div className="flex items-center gap-x-3">
-                <item.icon className="size-6 shrink-0" />
-                <CardTitle>{item.name}</CardTitle>
-              </div>
-              <CardDescription>{item.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="self-end">
-              <a
-                className={cn(buttonVariants({ variant: "link" }), "px-0")}
-                href={item.documentationUrl}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Documentation
-              </a>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </section>
+          <p className="text-lg text-muted-foreground">
+            Built with modern, production-ready tools so you can focus on
+            shipping.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {stack.map((item) => (
+            <Card
+              className="flex w-full flex-col justify-between"
+              key={item.name}
+            >
+              <CardHeader className="gap-y-2">
+                <div className="flex items-center gap-x-3">
+                  <item.icon className="size-6 shrink-0" />
+                  <CardTitle>{item.name}</CardTitle>
+                </div>
+                <CardDescription>{item.description}</CardDescription>
+              </CardHeader>
+              <CardContent className="self-end">
+                <a
+                  className={cn(buttonVariants({ variant: "link" }), "px-0")}
+                  href={item.documentationUrl}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  Documentation
+                </a>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </Container>
+    </Section>
   )
 }
 
