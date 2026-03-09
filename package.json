@@ -10,6 +10,8 @@
     "format": "biome format",
     "lint": "biome lint",
     "type-check": "tsc --noEmit",
+    "deploy": "npm run build && wrangler deploy",
+    "cf-typegen": "wrangler types",
     "auth:generate": "pnpm dlx @better-auth/cli@latest generate --config ./src/modules/auth/auth.ts --y ",
     "check": "ultracite check",
     "db:generate": "drizzle-kit generate",
