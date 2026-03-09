@@ -23,10 +23,7 @@ async function resolveSession() {
     throw toHttpError(result.error)
   }
 
-  return {
-    session: result.value.session,
-    user: result.value.user,
-  }
+  return result.value
 }
 
 async function resolveSessions() {

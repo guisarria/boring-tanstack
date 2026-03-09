@@ -31,12 +31,17 @@ export function getSessionResult(headers: Headers) {
   return ResultAsync.fromPromise(
     auth.api.getSession({ headers }),
     toProviderFailure
-  ).map<SessionPayload>((response) => ({
-    session: response?.session ?? null,
-    user: response?.user ?? null,
+  ).map((response) => ({
+    user: response?.user
+      ? {
+          id: response.user.id,
+          name: response.user.name,
+          image: response.user.image,
+          email: response.user.email,
+        }
+      : null,
   }))
 }
-
 export function requireSessionResult(headers: Headers) {
   return ResultAsync.fromPromise(
     auth.api.getSession({ headers }),

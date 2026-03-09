@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: "Geist Pixel Line";
-  src: url("/fonts/GeistPixel-Line.otf");
+  src: url("/fonts/GeistPixel-Line.woff2") format("woff2");
 }
 
 @custom-variant dark (&:is(.dark *));

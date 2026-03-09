@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
+    "@cloudflare/vite-plugin": "^1.26.1",
     "@fontsource-variable/inter": "^5.2.8",
     "@lexical/code": "^0.41.0",
     "@lexical/link": "^0.41.0",
@@ -84,6 +85,7 @@
     "ultracite": "7.2.5",
     "vite": "^7.3.1",
     "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "wrangler": "^4.71.0"
   }
 }
