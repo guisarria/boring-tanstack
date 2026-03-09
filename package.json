@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
+    "dev": "vite dev --port 3000",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
@@ -52,7 +52,6 @@
     "lexical": "^0.41.0",
     "lucide-react": "^0.577.0",
     "neverthrow": "^8.2.0",
-    "nitro": "npm:nitro-nightly@3.0.1-20260227-181935-bfbb207c",
     "pg": "^8.20.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
