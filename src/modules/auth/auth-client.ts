@@ -4,6 +4,6 @@ import { env } from "@/config/env/client"
 import type { auth } from "./auth"
 
 export const authClient = createAuthClient({
-  baseURL: env.VITE_BASE_URL,
+  baseURL: env.VITE_BETTER_AUTH_URL,
   plugins: [inferAdditionalFields<typeof auth>()],
 })
