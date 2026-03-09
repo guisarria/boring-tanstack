@@ -120,7 +120,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
           <DropdownMenuItem
             render={
               <ThemeToggle
-                className="flex w-full items-start justify-start px-0 text-inherit"
+                className="flex w-full items-start justify-start px-0"
                 label
                 variant="ghost"
               />

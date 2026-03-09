@@ -19,7 +19,7 @@ export function ThemeToggle({
 
   return (
     <Button
-      className={cn("", className)}
+      className={cn("items-center", className)}
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       size={size}
       variant={variant}

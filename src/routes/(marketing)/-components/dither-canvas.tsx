@@ -186,7 +186,6 @@ export function DitherCanvas({ className }: { className?: string }) {
         WebkitMaskImage: `linear-gradient(to right, transparent, ${BG} 100%)`,
         maskImage: `linear-gradient(to right, transparent, ${BG} 100%)`,
       }}
-      suppressHydrationWarning
     />
   )
 }
