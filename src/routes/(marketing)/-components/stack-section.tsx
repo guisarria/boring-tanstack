@@ -73,7 +73,7 @@ const stack = [
 
 function StackSection() {
   return (
-    <section className="container flex w-full flex-col gap-y-8 py-24">
+    <section className="container flex w-full flex-col gap-y-8 py-28">
       <div className="flex flex-col gap-y-2">
         <h2 className="font-bold text-3xl tracking-tight">The Stack</h2>
         <p className="text-muted-foreground">
