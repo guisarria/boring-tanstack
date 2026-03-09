@@ -22,7 +22,7 @@ function Hero({
     <section className="container relative flex w-full items-center justify-between py-60">
       <div className="flex items-center justify-between">
         <div className="flex flex-col gap-y-6">
-          <h1 className="w-3/5 font-bold text-4xl text-foreground tracking-tight sm:text-5xl">
+          <h1 className="w-4/6 font-bold text-4xl text-foreground tracking-tight sm:text-5xl lg:text-6xl">
             {title}
           </h1>
           <p className="max-w-xl text-lg text-muted-foreground">
