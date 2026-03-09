@@ -12,18 +12,17 @@ type HeroProps = {
 }
 
 function Hero({
-  title = "TanStack Start Template",
-  description = "Bootstrap with the best defaults.",
+  title = "Bootstrap your app with the best defaults",
+  description = "TanStack Start template",
   primaryCTA = { label: "Get Started", href: "/sign-up" },
-  secondaryCTA = { label: "View Docs", href: "/docs" },
 }: HeroProps) {
   const { user } = Route.useRouteContext()
 
   return (
-    <section className="flex w-full items-center justify-between">
+    <section className="container relative flex w-full items-center justify-between py-60">
       <div className="flex items-center justify-between">
-        <div className="flex h-full w-full flex-col gap-y-6">
-          <h1 className="font-bold text-4xl text-foreground tracking-tight sm:text-5xl">
+        <div className="flex flex-col gap-y-6">
+          <h1 className="w-3/5 font-bold text-4xl text-foreground tracking-tight sm:text-5xl">
             {title}
           </h1>
           <p className="max-w-xl text-lg text-muted-foreground">
@@ -39,15 +38,10 @@ function Hero({
                 <ChevronRight />
               </Link>
             </Button>
-            <Button variant="outline">
-              <Link to={secondaryCTA.href}>{secondaryCTA.label}</Link>
-            </Button>
           </div>
         </div>
       </div>
-      <div className="w-full">
-        <DitherCanvas />
-      </div>
+      <DitherCanvas />
     </section>
   )
 }

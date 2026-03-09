@@ -1,5 +1,5 @@
 import type { ComponentProps, ElementType } from "react"
-import { GitHubIcon, GoogleIcon } from "@/components/ui/icons"
+import { Icons } from "@/components/ui/icons"
 
 type OAuthProviderConfig = {
   id: string
@@ -11,12 +11,12 @@ export const OAUTH_PROVIDERS = [
   {
     id: "github",
     name: "GitHub",
-    Icon: GitHubIcon,
+    Icon: Icons.gitHub,
   },
   {
     id: "google",
     name: "Google",
-    Icon: GoogleIcon,
+    Icon: Icons.google,
   },
 ] as const satisfies readonly OAuthProviderConfig[]
 

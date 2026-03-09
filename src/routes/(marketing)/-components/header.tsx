@@ -9,7 +9,7 @@ export function Header() {
   const { user } = Route.useRouteContext()
 
   return (
-    <header className="flex w-full flex-col items-center justify-center border-border border-x border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+    <header className="flex w-full flex-col items-center justify-center bg-transparent backdrop-blur">
       <div className="container flex items-center justify-between py-4">
         <Link className="flex items-center gap-x-2" to="/">
           <EncoderDisc className="size-8" />

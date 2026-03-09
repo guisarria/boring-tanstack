@@ -19,7 +19,7 @@ export function ThemeToggle({
 
   return (
     <Button
-      className={cn("text-muted-foreground", className)}
+      className={cn("", className)}
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       size={size}
       variant={variant}

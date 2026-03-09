@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef } from "react"
+import { useTheme } from "@/components/providers/theme-provider"
 import { cn } from "@/lib/utils"
 
 const GRID_SIZE = 4
-const BG = "#0a0a0a"
-const FG = "#a3a3a3"
+const FG = "oklch(75.7% 0 0)"
 const FREQUENCY = 0.05
 const SPEED = 0.02
 
@@ -35,6 +35,9 @@ export function DitherCanvas({ className }: { className?: string }) {
   const frameRef = useRef<number | null>(null)
   const timeRef = useRef(0)
   const noiseRef = useRef<Float32Array>(new Float32Array(0))
+  const { theme } = useTheme()
+
+  const BG = theme === "dark" ? "oklch(21% 0 0)" : "oklch(1 0 0)"
 
   const sizeRef = useRef({
     width: 0,
@@ -123,7 +126,7 @@ export function DitherCanvas({ className }: { className?: string }) {
     }
     timeRef.current = t + SPEED
     frameRef.current = requestAnimationFrame(drawFrame)
-  }, [])
+  }, [BG])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -174,11 +177,14 @@ export function DitherCanvas({ className }: { className?: string }) {
 
   return (
     <canvas
-      className={cn("h-full w-full", className)}
+      className={cn(
+        "absolute top-0 right-0 -z-10 h-full max-h-160 w-full",
+        className
+      )}
       ref={canvasRef}
       style={{
-        WebkitMaskImage: "linear-gradient(to right, transparent, black 100%)",
-        maskImage: "linear-gradient(to right, transparent, black 100%)",
+        WebkitMaskImage: `linear-gradient(to right, transparent, ${BG} 100%)`,
+        maskImage: `linear-gradient(to right, transparent, ${BG} 100%)`,
       }}
     />
   )
