@@ -10,6 +10,7 @@ import tsconfigPaths from "vite-tsconfig-paths"
 const config = defineConfig({
   plugins: [
     devtools(),
+    cloudflare({ viteEnvironment: { name: "ssr" } }),
     nitro(),
     tsconfigPaths({ projects: ["./tsconfig.json"] }),
     tailwindcss(),
@@ -19,7 +20,6 @@ const config = defineConfig({
         plugins: ["babel-plugin-react-compiler"],
       },
     }),
-    cloudflare({ viteEnvironment: { name: "ssr" } }),
   ],
 })
 
