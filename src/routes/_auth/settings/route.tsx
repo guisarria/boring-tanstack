@@ -1,12 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router"
-import {
-  Frame,
-  InboxIcon,
-  MapIcon,
-  PieChart,
-  ScanIcon,
-  Settings2,
-} from "lucide-react"
+import { UserIcon, UserKeyIcon } from "lucide-react"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import {
   AppSidebar,
@@ -16,24 +9,19 @@ import { AppHeader } from "@/routes/_auth/-components/app-sidebar-header"
 
 const navGroups: NavGroup[] = [
   {
-    label: "Main",
+    label: "Settings",
     items: [
-      { title: "Inbox", url: "/dashboard/inbox", icon: InboxIcon },
-      { title: "My Issues", url: "/dashboard/my-issues", icon: ScanIcon },
-      { title: "Settings", url: "/", icon: Settings2 },
-    ],
-  },
-  {
-    label: "Projects",
-    items: [
-      { title: "Design Engineering", url: "/", icon: Frame },
-      { title: "Sales & Marketing", url: "/", icon: PieChart },
-      { title: "Travel", url: "/", icon: MapIcon },
+      {
+        title: "Security & access",
+        url: "/settings/security",
+        icon: UserKeyIcon,
+      },
+      { title: "Profile", url: "/settings", icon: UserIcon },
     ],
   },
 ]
 
-export const Route = createFileRoute("/_auth/dashboard")({
+export const Route = createFileRoute("/_auth/settings")({
   component: RouteComponent,
 })
 
@@ -43,7 +31,7 @@ function RouteComponent() {
       <AppSidebar navGroups={navGroups} />
       <SidebarInset className="rounded-none md:peer-data-[variant=inset]:mt-0 md:peer-data-[variant=inset]:rounded-md">
         <div className="flex w-full flex-1 flex-col border border-border bg-muted/30 pt-0 sm:rounded-md">
-          <AppHeader basePath="/dashboard" rootLabel="Dashboard" />
+          <AppHeader basePath="/settings" rootLabel="Settings" />
           <Outlet />
         </div>
       </SidebarInset>

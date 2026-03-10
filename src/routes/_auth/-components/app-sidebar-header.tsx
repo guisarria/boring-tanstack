@@ -16,13 +16,19 @@ function formatSegment(segment: string) {
   return segment.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
-export function AppHeader() {
+export function AppHeader({
+  basePath,
+  rootLabel,
+}: {
+  basePath: string
+  rootLabel: string
+}) {
   const matches = useMatches()
 
   const breadcrumbs = matches
     .filter((match) => {
       const pathname = match.pathname.replace(/\/$/, "")
-      return pathname.startsWith("/dashboard") && pathname !== "/dashboard"
+      return pathname.startsWith(basePath) && pathname !== basePath
     })
     .map((match) => {
       const pathname = match.pathname.replace(/\/$/, "")
@@ -39,8 +45,8 @@ export function AppHeader() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink render={<Link to="/dashboard" />}>
-              Dashboard
+            <BreadcrumbLink render={<Link to={basePath} />}>
+              {rootLabel}
             </BreadcrumbLink>
           </BreadcrumbItem>
           {breadcrumbs.map((crumb) => (

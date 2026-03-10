@@ -6,10 +6,10 @@ import { DefaultNotFound } from "./components/default-not-found"
 import { routeTree } from "./routeTree.gen"
 
 export function getRouter() {
-  const rqContext = createAppRouterContext()
+  const { queryClient } = createAppRouterContext()
 
   const router = createTanStackRouter({
-    context: rqContext,
+    context: { queryClient },
     defaultPreload: "intent",
     defaultPreloadStaleTime: 0,
     routeTree,
@@ -21,7 +21,7 @@ export function getRouter() {
 
   setupRouterSsrQueryIntegration({
     router,
-    queryClient: rqContext.queryClient,
+    queryClient,
   })
 
   return router

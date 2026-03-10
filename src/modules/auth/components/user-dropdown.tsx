@@ -96,7 +96,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
           />
           <DropdownMenuItem
             render={
-              <Link to="/dashboard">
+              <Link to="/settings">
                 <UserIcon />
                 Account
               </Link>

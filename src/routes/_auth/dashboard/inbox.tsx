@@ -101,8 +101,8 @@ function RouteComponent() {
         <Empty className="flex h-full flex-1 flex-col items-center justify-center">
           <InboxIcon
             absoluteStrokeWidth
-            className="size-40 text-muted-foreground"
-            strokeWidth={1.5}
+            className="size-40 text-primary-foreground"
+            strokeWidth={1}
           />
           <EmptyTitle>No notifications</EmptyTitle>
         </Empty>
