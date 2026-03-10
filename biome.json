@@ -37,7 +37,8 @@
       "source": {
         "organizeImports": "on",
         "useSortedAttributes": "on",
-        "useSortedProperties": "on"
+        "useSortedProperties": "on",
+        "useSortedInterfaceMembers": "on"
       }
     }
   },
@@ -57,10 +58,6 @@
       },
       "suspicious": {
         "noBitwiseOperators": "off"
-      },
-      "performance": {
-        "noNamespaceImport": "off",
-        "noBarrelFile": "off"
       }
     }
   },

@@ -3,7 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { tanstackStartCookies } from "better-auth/tanstack-start"
 import { env } from "@/config/env/server"
 import { db } from "@/db"
-import * as schema from "./schema"
+import { schema } from "@/db/index"
 
 export const auth = betterAuth({
   appName: "Boring Template",
