@@ -14,10 +14,7 @@ const positions = {
   },
 } as const
 
-function BlurLayer({
-  pos,
-  size,
-}: { pos: "top" | "bottom"; size: number }) {
+function BlurLayer({ pos, size }: { pos: "top" | "bottom"; size: number }) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -52,10 +49,7 @@ function BlurLayer({
 
   return (
     <div
-      className={cn(
-        "fixed inset-x-0 isolate z-40",
-        positions[pos].className
-      )}
+      className={cn("fixed inset-x-0 isolate z-40", positions[pos].className)}
       ref={containerRef}
       style={{ height: `${size}px` }}
     >

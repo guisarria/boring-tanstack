@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
-import { LexicalEditor } from "@/components/lexical-editor"
+import { LexicalEditor } from "@/routes/_auth/dashboard/-components/lexical-editor"
 
 export const Route = createFileRoute("/_auth/dashboard/")({
   component: RouteComponent,

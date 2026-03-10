@@ -5,7 +5,13 @@ import {
   useRouteContext,
   useRouter,
 } from "@tanstack/react-router"
-import { HomeIcon, LogOutIcon, ShieldIcon, UserIcon } from "lucide-react"
+import {
+  HomeIcon,
+  LayoutDashboard,
+  LogOutIcon,
+  ShieldIcon,
+  UserIcon,
+} from "lucide-react"
 
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -83,7 +89,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
           <DropdownMenuItem
             render={
               <Link to="/dashboard">
-                <HomeIcon />
+                <LayoutDashboard />
                 Dashboard
               </Link>
             }
@@ -108,7 +114,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
             <DropdownMenuItem
               render={
                 <Link to="/">
-                  <ShieldIcon />
+                  <HomeIcon />
                   Home
                 </Link>
               }

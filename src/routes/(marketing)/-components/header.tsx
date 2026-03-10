@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router"
-import { BlurOverlay } from "@/components/blur-overlay"
 import { Button } from "@/components/ui/button"
 import { Container, Nav } from "@/components/ui/design-system"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
+import { BlurOverlay } from "@/routes/(marketing)/-components/blur-overlay"
 import { ThemeToggle } from "../../../components/theme-toggle"
 import { Route } from "../route"
 

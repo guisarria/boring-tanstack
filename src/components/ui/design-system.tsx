@@ -30,7 +30,7 @@ const Main = ({ children, className, id, style }: ComponentProps) => (
 
 const Nav = ({ children, className, id, style }: ComponentProps) => (
   <nav
-    className={cn("max-w-4xl w-full px-4 sm:px-6 py-2", className)}
+    className={cn("max-w-5xl w-full px-4 sm:px-6 py-2", className)}
     id={id}
     style={style}
   >
@@ -50,7 +50,7 @@ const Section = ({ children, className, id, style }: ComponentProps) => (
 
 const Container = ({ children, className, id, style }: ComponentProps) => (
   <div
-    className={cn("max-w-4xl w-full p-4 sm:p-6 ", className)}
+    className={cn("max-w-5xl w-full p-4 sm:p-6 ", className)}
     id={id}
     style={style}
   >

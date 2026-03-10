@@ -138,7 +138,7 @@ function LexicalEditorInner({
   onChange,
   onPaste,
   editorRef,
-}: LexicalEditorProps & { editorRef: Ref<LexicalEditorHandle> }) {
+}: LexicalEditorProps & { editorRef?: Ref<LexicalEditorHandle> }) {
   const [editor] = useLexicalComposerContext()
   const onChangeRef = useRef(onChange)
   const snapshotRef = useRef(value)
