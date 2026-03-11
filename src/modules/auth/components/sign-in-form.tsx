@@ -69,7 +69,12 @@ export function SignInForm() {
             }}
           >
             <FieldGroup>
-              <form.AppField name="email">
+              <form.AppField
+                name="email"
+                validators={{
+                  onBlur: signInSchema.shape.email,
+                }}
+              >
                 {(field) => (
                   <field.InputField
                     autoComplete="email"
@@ -79,7 +84,12 @@ export function SignInForm() {
                   />
                 )}
               </form.AppField>
-              <form.AppField name="password">
+              <form.AppField
+                name="password"
+                validators={{
+                  onBlur: signInSchema.shape.password,
+                }}
+              >
                 {(field) => (
                   <field.PasswordField
                     label="Password"

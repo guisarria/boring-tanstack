@@ -1,3 +1,4 @@
+import z from "zod"
 import { withFieldGroup } from "../form-context"
 
 type PasswordFields = {
@@ -10,12 +11,28 @@ const defaultValues: PasswordFields = {
   confirmPassword: "",
 }
 
-export const PasswordFieldGroup = withFieldGroup({
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/
+
+export const PasswordFieldsGroup = withFieldGroup({
   defaultValues,
   render({ group }) {
     return (
       <>
-        <group.AppField name="password">
+        <group.AppField
+          name="password"
+          validators={{
+            onBlur: z
+              .string()
+              .min(8, {
+                message: "Password must be at least 8 characters long",
+              })
+              .max(50)
+              .regex(PASSWORD_REGEX, {
+                message:
+                  "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+              }),
+          }}
+        >
           {(field) => (
             <field.PasswordField
               autoComplete="new-password"
@@ -28,12 +45,12 @@ export const PasswordFieldGroup = withFieldGroup({
           name="confirmPassword"
           validators={{
             onChangeListenTo: ["password"],
-            onChange: ({ value }) => {
-              if (value !== group.getFieldValue("password")) {
-                return "Passwords do not match"
-              }
-              return undefined
-            },
+            onChange: z
+              .string()
+              .refine((value) => value === group.getFieldValue("password"), {
+                error: "Passwords don't match",
+                path: ["confirmPassword"],
+              }),
           }}
         >
           {(field) => (

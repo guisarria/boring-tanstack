@@ -45,6 +45,7 @@ export function FieldBase({
 
   return (
     <Field
+      className=""
       data-invalid={isInvalid}
       orientation={horizontal ? "horizontal" : undefined}
     >

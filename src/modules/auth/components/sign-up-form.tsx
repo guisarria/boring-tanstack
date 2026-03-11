@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router"
 import { useTransition } from "react"
 import { toast } from "sonner"
-import { PasswordFieldGroup } from "@/components/forms/fields/password-field-group"
+import { PasswordFieldsGroup } from "@/components/forms/fields/password-fields-group"
 import { useAppForm } from "@/components/forms/form-context"
 import { buttonVariants } from "@/components/ui/button"
 import {
@@ -76,12 +76,22 @@ export function SignUpForm() {
             <FieldGroup>
               <SocialAuthButtons />
               <FieldSeparator />
-              <form.AppField name="name">
+              <form.AppField
+                name="name"
+                validators={{
+                  onBlur: signUpSchema.shape.name,
+                }}
+              >
                 {(field) => (
                   <field.InputField label="Name" placeholder="Jane Doe" />
                 )}
               </form.AppField>
-              <form.AppField name="email">
+              <form.AppField
+                name="email"
+                validators={{
+                  onBlur: signUpSchema.shape.email,
+                }}
+              >
                 {(field) => (
                   <field.InputField
                     autoComplete="email"
@@ -91,7 +101,7 @@ export function SignUpForm() {
                   />
                 )}
               </form.AppField>
-              <PasswordFieldGroup
+              <PasswordFieldsGroup
                 fields={{
                   password: "password",
                   confirmPassword: "confirmPassword",
