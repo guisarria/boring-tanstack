@@ -20,7 +20,7 @@ import { SocialAuthButtons } from "./social-auth-buttons"
 export function SignInForm() {
   const [isPending, startTransition] = useTransition()
   const navigate = useNavigate()
-  const { redirect } = useSearch({ from: "/(auth)/sign-in/" })
+  const { redirect } = useSearch({ from: "/(marketing)/(auth)/sign-in/" })
 
   const form = useAppForm({
     defaultValues: {

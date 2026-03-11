@@ -44,6 +44,7 @@
     "@tanstack/router-plugin": "^1.166.6",
     "@unpic/react": "^1.0.2",
     "better-auth": "^1.5.4",
+    "boring-avatars": "^2.0.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.1",
@@ -58,6 +59,7 @@
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.1",
     "tw-animate-css": "^1.4.0",
+    "ua-parser-js": "^2.0.9",
     "zod": "^4.3.6"
   },
   "devDependencies": {

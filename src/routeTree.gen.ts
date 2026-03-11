@@ -11,18 +11,18 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as marketingRouteRouteImport } from './routes/(marketing)/route'
-import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as marketingIndexRouteImport } from './routes/(marketing)/index'
 import { Route as AuthSettingsRouteRouteImport } from './routes/_auth/settings/route'
 import { Route as AuthDashboardRouteRouteImport } from './routes/_auth/dashboard/route'
+import { Route as marketingauthRouteRouteImport } from './routes/(marketing)/(auth)/route'
 import { Route as AuthSettingsIndexRouteImport } from './routes/_auth/settings/index'
 import { Route as AuthDashboardIndexRouteImport } from './routes/_auth/dashboard/index'
-import { Route as authSignUpIndexRouteImport } from './routes/(auth)/sign-up/index'
-import { Route as authSignInIndexRouteImport } from './routes/(auth)/sign-in/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthSettingsSecurityRouteImport } from './routes/_auth/settings/security'
 import { Route as AuthDashboardMyIssuesRouteImport } from './routes/_auth/dashboard/my-issues'
 import { Route as AuthDashboardInboxRouteImport } from './routes/_auth/dashboard/inbox'
+import { Route as marketingauthSignUpIndexRouteImport } from './routes/(marketing)/(auth)/sign-up/index'
+import { Route as marketingauthSignInIndexRouteImport } from './routes/(marketing)/(auth)/sign-in/index'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
@@ -30,10 +30,6 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 } as any)
 const marketingRouteRoute = marketingRouteRouteImport.update({
   id: '/(marketing)',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const authRouteRoute = authRouteRouteImport.update({
-  id: '/(auth)',
   getParentRoute: () => rootRouteImport,
 } as any)
 const marketingIndexRoute = marketingIndexRouteImport.update({
@@ -51,6 +47,10 @@ const AuthDashboardRouteRoute = AuthDashboardRouteRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const marketingauthRouteRoute = marketingauthRouteRouteImport.update({
+  id: '/(auth)',
+  getParentRoute: () => marketingRouteRoute,
+} as any)
 const AuthSettingsIndexRoute = AuthSettingsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -60,16 +60,6 @@ const AuthDashboardIndexRoute = AuthDashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthDashboardRouteRoute,
-} as any)
-const authSignUpIndexRoute = authSignUpIndexRouteImport.update({
-  id: '/sign-up/',
-  path: '/sign-up/',
-  getParentRoute: () => authRouteRoute,
-} as any)
-const authSignInIndexRoute = authSignInIndexRouteImport.update({
-  id: '/sign-in/',
-  path: '/sign-in/',
-  getParentRoute: () => authRouteRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -91,6 +81,18 @@ const AuthDashboardInboxRoute = AuthDashboardInboxRouteImport.update({
   path: '/inbox',
   getParentRoute: () => AuthDashboardRouteRoute,
 } as any)
+const marketingauthSignUpIndexRoute =
+  marketingauthSignUpIndexRouteImport.update({
+    id: '/sign-up/',
+    path: '/sign-up/',
+    getParentRoute: () => marketingauthRouteRoute,
+  } as any)
+const marketingauthSignInIndexRoute =
+  marketingauthSignInIndexRouteImport.update({
+    id: '/sign-in/',
+    path: '/sign-in/',
+    getParentRoute: () => marketingauthRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof marketingIndexRoute
@@ -100,10 +102,10 @@ export interface FileRoutesByFullPath {
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/settings/security': typeof AuthSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/sign-in/': typeof authSignInIndexRoute
-  '/sign-up/': typeof authSignUpIndexRoute
   '/dashboard/': typeof AuthDashboardIndexRoute
   '/settings/': typeof AuthSettingsIndexRoute
+  '/sign-in/': typeof marketingauthSignInIndexRoute
+  '/sign-up/': typeof marketingauthSignUpIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof marketingIndexRoute
@@ -111,16 +113,16 @@ export interface FileRoutesByTo {
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/settings/security': typeof AuthSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/sign-in': typeof authSignInIndexRoute
-  '/sign-up': typeof authSignUpIndexRoute
   '/dashboard': typeof AuthDashboardIndexRoute
   '/settings': typeof AuthSettingsIndexRoute
+  '/sign-in': typeof marketingauthSignInIndexRoute
+  '/sign-up': typeof marketingauthSignUpIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/(auth)': typeof authRouteRouteWithChildren
   '/(marketing)': typeof marketingRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
+  '/(marketing)/(auth)': typeof marketingauthRouteRouteWithChildren
   '/_auth/dashboard': typeof AuthDashboardRouteRouteWithChildren
   '/_auth/settings': typeof AuthSettingsRouteRouteWithChildren
   '/(marketing)/': typeof marketingIndexRoute
@@ -128,10 +130,10 @@ export interface FileRoutesById {
   '/_auth/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/_auth/settings/security': typeof AuthSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/(auth)/sign-in/': typeof authSignInIndexRoute
-  '/(auth)/sign-up/': typeof authSignUpIndexRoute
   '/_auth/dashboard/': typeof AuthDashboardIndexRoute
   '/_auth/settings/': typeof AuthSettingsIndexRoute
+  '/(marketing)/(auth)/sign-in/': typeof marketingauthSignInIndexRoute
+  '/(marketing)/(auth)/sign-up/': typeof marketingauthSignUpIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -143,10 +145,10 @@ export interface FileRouteTypes {
     | '/dashboard/my-issues'
     | '/settings/security'
     | '/api/auth/$'
-    | '/sign-in/'
-    | '/sign-up/'
     | '/dashboard/'
     | '/settings/'
+    | '/sign-in/'
+    | '/sign-up/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -154,15 +156,15 @@ export interface FileRouteTypes {
     | '/dashboard/my-issues'
     | '/settings/security'
     | '/api/auth/$'
-    | '/sign-in'
-    | '/sign-up'
     | '/dashboard'
     | '/settings'
+    | '/sign-in'
+    | '/sign-up'
   id:
     | '__root__'
-    | '/(auth)'
     | '/(marketing)'
     | '/_auth'
+    | '/(marketing)/(auth)'
     | '/_auth/dashboard'
     | '/_auth/settings'
     | '/(marketing)/'
@@ -170,14 +172,13 @@ export interface FileRouteTypes {
     | '/_auth/dashboard/my-issues'
     | '/_auth/settings/security'
     | '/api/auth/$'
-    | '/(auth)/sign-in/'
-    | '/(auth)/sign-up/'
     | '/_auth/dashboard/'
     | '/_auth/settings/'
+    | '/(marketing)/(auth)/sign-in/'
+    | '/(marketing)/(auth)/sign-up/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  authRouteRoute: typeof authRouteRouteWithChildren
   marketingRouteRoute: typeof marketingRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -197,13 +198,6 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof marketingRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(auth)': {
-      id: '/(auth)'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof authRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(marketing)/': {
@@ -227,6 +221,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardRouteRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/(marketing)/(auth)': {
+      id: '/(marketing)/(auth)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof marketingauthRouteRouteImport
+      parentRoute: typeof marketingRouteRoute
+    }
     '/_auth/settings/': {
       id: '/_auth/settings/'
       path: '/'
@@ -240,20 +241,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof AuthDashboardIndexRouteImport
       parentRoute: typeof AuthDashboardRouteRoute
-    }
-    '/(auth)/sign-up/': {
-      id: '/(auth)/sign-up/'
-      path: '/sign-up'
-      fullPath: '/sign-up/'
-      preLoaderRoute: typeof authSignUpIndexRouteImport
-      parentRoute: typeof authRouteRoute
-    }
-    '/(auth)/sign-in/': {
-      id: '/(auth)/sign-in/'
-      path: '/sign-in'
-      fullPath: '/sign-in/'
-      preLoaderRoute: typeof authSignInIndexRouteImport
-      parentRoute: typeof authRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -283,28 +270,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardInboxRouteImport
       parentRoute: typeof AuthDashboardRouteRoute
     }
+    '/(marketing)/(auth)/sign-up/': {
+      id: '/(marketing)/(auth)/sign-up/'
+      path: '/sign-up'
+      fullPath: '/sign-up/'
+      preLoaderRoute: typeof marketingauthSignUpIndexRouteImport
+      parentRoute: typeof marketingauthRouteRoute
+    }
+    '/(marketing)/(auth)/sign-in/': {
+      id: '/(marketing)/(auth)/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in/'
+      preLoaderRoute: typeof marketingauthSignInIndexRouteImport
+      parentRoute: typeof marketingauthRouteRoute
+    }
   }
 }
 
-interface authRouteRouteChildren {
-  authSignInIndexRoute: typeof authSignInIndexRoute
-  authSignUpIndexRoute: typeof authSignUpIndexRoute
+interface marketingauthRouteRouteChildren {
+  marketingauthSignInIndexRoute: typeof marketingauthSignInIndexRoute
+  marketingauthSignUpIndexRoute: typeof marketingauthSignUpIndexRoute
 }
 
-const authRouteRouteChildren: authRouteRouteChildren = {
-  authSignInIndexRoute: authSignInIndexRoute,
-  authSignUpIndexRoute: authSignUpIndexRoute,
+const marketingauthRouteRouteChildren: marketingauthRouteRouteChildren = {
+  marketingauthSignInIndexRoute: marketingauthSignInIndexRoute,
+  marketingauthSignUpIndexRoute: marketingauthSignUpIndexRoute,
 }
 
-const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
-  authRouteRouteChildren,
-)
+const marketingauthRouteRouteWithChildren =
+  marketingauthRouteRoute._addFileChildren(marketingauthRouteRouteChildren)
 
 interface marketingRouteRouteChildren {
+  marketingauthRouteRoute: typeof marketingauthRouteRouteWithChildren
   marketingIndexRoute: typeof marketingIndexRoute
 }
 
 const marketingRouteRouteChildren: marketingRouteRouteChildren = {
+  marketingauthRouteRoute: marketingauthRouteRouteWithChildren,
   marketingIndexRoute: marketingIndexRoute,
 }
 
@@ -355,7 +357,6 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  authRouteRoute: authRouteRouteWithChildren,
   marketingRouteRoute: marketingRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
