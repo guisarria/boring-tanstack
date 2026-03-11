@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Container, Nav } from "@/components/ui/design-system"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
 import { BlurOverlay } from "@/routes/(marketing)/-components/blur-overlay"
-import { ThemeToggle } from "../../../components/theme-toggle"
 import { Route } from "../route"
 
 export function Header() {
@@ -13,16 +13,17 @@ export function Header() {
     <header className="fixed inset-x-0 z-40 flex justify-center">
       <Nav className="z-90 sm:px-0">
         <Container className="relative flex justify-between">
-          <span className="relative flex items-center gap-0.5">
-            <span className="font-pixel text-xl">Boring Tanstack</span>
-            <span
-              aria-hidden="true"
-              className="absolute inset-0 flex animate-pulse items-center gap-0.5 blur-xs"
-            >
+          <Link to="/">
+            <span className="relative flex items-center gap-0.5">
               <span className="font-pixel text-xl">Boring Tanstack</span>
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 flex animate-pulse items-center gap-0.5 blur-xs"
+              >
+                <span className="font-pixel text-xl">Boring Tanstack</span>
+              </span>
             </span>
-          </span>
-
+          </Link>
           <div className="flex items-center gap-x-2">
             <ThemeToggle variant="outline" />
             {user ? (

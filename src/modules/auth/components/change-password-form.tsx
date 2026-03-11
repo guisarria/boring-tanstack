@@ -1,37 +1,31 @@
-"use client"
-
-import { Loader, RectangleEllipsis } from "lucide-react"
-import { useState } from "react"
 import { toast } from "sonner"
 
 import { useAppForm } from "@/components/forms/form-context"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import { DialogFooter } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { changePasswordSchema } from "@/modules/auth/validations/change-password"
-import { authClient } from "@/modules/auth/auth-client"
+import { Spinner } from "@/components/ui/spinner"
+import { authClient } from "../auth-client"
+import { changePasswordSchema } from "../validations/change-password"
 
 function ChangePassword() {
-  const [open, setOpen] = useState<boolean>(false)
-
   const form = useAppForm({
     defaultValues: {
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
-      revokeOtherSessions: false as boolean,
+      revokeOtherSessions: false,
     },
     validators: {
-      onSubmit: changePasswordSchema,
+      onChange: changePasswordSchema,
     },
     onSubmit: async ({ value }) => {
       try {
@@ -46,7 +40,6 @@ function ChangePassword() {
         } else {
           toast.success("Password changed successfully")
           form.reset()
-          setOpen(false)
         }
       } catch {
         toast.error("Failed to change password")
@@ -55,20 +48,12 @@ function ChangePassword() {
   })
 
   return (
-    <Dialog onOpenChange={setOpen} open={open}>
-      <DialogTrigger
-        render={
-          <Button className="z-10 gap-2" size="sm" variant="outline">
-            <RectangleEllipsis />
-            Change Password
-          </Button>
-        }
-      />
-      <DialogContent className="w-11/12 sm:max-w-106.25">
-        <DialogHeader>
-          <DialogTitle>Change Password</DialogTitle>
-          <DialogDescription>Change your password</DialogDescription>
-        </DialogHeader>
+    <Card>
+      <CardHeader>
+        <CardTitle>Change Password</CardTitle>
+        <CardDescription>Change your password</CardDescription>
+      </CardHeader>
+      <CardContent>
         <form.AppForm>
           <form
             onSubmit={(e) => {
@@ -134,15 +119,15 @@ function ChangePassword() {
                     disabled={!canSubmit || isSubmitting}
                     type="submit"
                   >
-                    {isSubmitting ? <Loader /> : "Change Password"}
+                    {isSubmitting ? <Spinner /> : "Change Password"}
                   </Button>
                 )}
               </form.Subscribe>
             </DialogFooter>
           </form>
         </form.AppForm>
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+    </Card>
   )
 }
 

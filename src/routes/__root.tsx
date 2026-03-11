@@ -24,7 +24,6 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
 
   shellComponent: RootDocument,
   notFoundComponent: DefaultNotFound,
-
   beforeLoad: async () => {
     const { user } = await getSession()
     return { user }
@@ -39,7 +38,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="flex flex-col items-center bg-background selection:bg-cyan-700 selection:text-background dark:selection:text-foreground">
+      <body className="flex flex-col items-center selection:bg-cyan-700 selection:text-background dark:selection:text-foreground">
         <TanStackQueryProvider queryClient={queryClient}>
           <ThemeProvider
             attribute={"class"}

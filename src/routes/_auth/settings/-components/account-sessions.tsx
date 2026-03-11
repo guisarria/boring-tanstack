@@ -92,7 +92,7 @@ function SessionItem({
 
   return (
     <div>
-      <div className="flex max-w-md items-start justify-between">
+      <div className="flex max-w-sm items-start justify-between">
         <div className="flex items-start gap-3">
           <div className="rounded-md bg-secondary p-2">
             {getDeviceIcon(userAgent?.getDevice().type ?? "laptop")}

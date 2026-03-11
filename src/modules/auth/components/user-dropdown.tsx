@@ -4,7 +4,12 @@ import {
   useRouteContext,
   useRouter,
 } from "@tanstack/react-router"
-import { HomeIcon, LayoutDashboard, LogOutIcon, UserIcon } from "lucide-react"
+import {
+  HomeIcon,
+  LayoutDashboard,
+  LogOutIcon,
+  Settings2Icon,
+} from "lucide-react"
 import { toast } from "sonner"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -28,10 +33,8 @@ type UserDropdownProps = {
 export function UserDropdown({ label, className }: UserDropdownProps) {
   const { user } = useRouteContext({ from: "__root__" })
 
-  const location = useLocation()
+  const { pathname } = useLocation()
   const router = useRouter()
-
-  const currentPathname = location.pathname
 
   const handleSignOut = async () => {
     await authClient.signOut({
@@ -83,7 +86,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {!currentPathname.includes("/settings") && (
+          {!pathname.includes("/dashboard") && (
             <DropdownMenuItem
               render={
                 <Link to="/dashboard">
@@ -93,18 +96,18 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
               }
             />
           )}
-          {!currentPathname.includes("/settings") && (
+          {!pathname.includes("/settings") && (
             <DropdownMenuItem
               render={
                 <Link to="/settings">
-                  <UserIcon />
-                  Account
+                  <Settings2Icon />
+                  Settings
                 </Link>
               }
             />
           )}
 
-          {currentPathname !== "/" && (
+          {pathname !== "/" && (
             <DropdownMenuItem
               render={
                 <Link to="/">

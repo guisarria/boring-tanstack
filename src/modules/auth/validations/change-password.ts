@@ -5,9 +5,12 @@ const changePasswordSchema = z
     currentPassword: z.string().min(1, "Current password is required"),
     newPassword: z
       .string()
-      .min(8, "Password should have at least 8 characters")
-      .max(100),
-    confirmPassword: z.string().min(8).max(100),
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .max(50),
+    confirmPassword: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .max(50),
     revokeOtherSessions: z.boolean(),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {

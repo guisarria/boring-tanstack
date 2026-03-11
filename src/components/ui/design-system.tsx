@@ -50,7 +50,7 @@ const Section = ({ children, className, id, style }: ComponentProps) => (
 
 const Container = ({ children, className, id, style }: ComponentProps) => (
   <div
-    className={cn("max-w-5xl w-full p-4 sm:p-6 ", className)}
+    className={cn("max-w-5xl w-full p-4", className)}
     id={id}
     style={style}
   >

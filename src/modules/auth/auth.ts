@@ -6,7 +6,7 @@ import { db } from "@/db"
 import { schema } from "@/db/index"
 
 export const auth = betterAuth({
-  appName: "Boring Template",
+  appName: "Boring Tanstack",
   baseURL: env.BASE_URL,
   experimental: { joins: true },
   trustedOrigins: [env.BASE_URL],
