@@ -6,11 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { useFieldContext } from "../form-context"
-import {
-  FieldBase,
-  type FieldBaseProps,
-  useFieldInvalid,
-} from "./field-base"
+import { FieldBase, type FieldBaseProps, useFieldInvalid } from "./field-base"
 
 type SelectFieldProps = FieldBaseProps & {
   placeholder?: string

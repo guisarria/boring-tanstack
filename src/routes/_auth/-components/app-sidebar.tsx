@@ -21,13 +21,14 @@ export function AppSidebar({
 }: React.ComponentProps<typeof Sidebar> & {
   navGroups: NavGroup[]
 }) {
-  const { user } = useRouteContext({ from: "__root__" })
+  const { user } = useRouteContext({ from: "/_auth" })
+
   return (
-    <Sidebar className="px-0" variant="inset" {...props}>
-      <SidebarHeader className="pb-0">
+    <Sidebar className="px-0 pt-0" variant="inset" {...props}>
+      <SidebarHeader className="pt-1 pb-0">
         <SidebarMenuButton
-          className=""
           render={user ? <UserDropdown label /> : undefined}
+          size={"lg"}
         />
       </SidebarHeader>
       <SidebarContent>

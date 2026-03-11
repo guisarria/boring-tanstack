@@ -4,13 +4,7 @@ import {
   useRouteContext,
   useRouter,
 } from "@tanstack/react-router"
-import {
-  HomeIcon,
-  LayoutDashboard,
-  LogOutIcon,
-  ShieldIcon,
-  UserIcon,
-} from "lucide-react"
+import { HomeIcon, LayoutDashboard, LogOutIcon, UserIcon } from "lucide-react"
 import { toast } from "sonner"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -89,30 +83,27 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem
-            render={
-              <Link to="/dashboard">
-                <LayoutDashboard />
-                Dashboard
-              </Link>
-            }
-          />
-          <DropdownMenuItem
-            render={
-              <Link to="/settings">
-                <UserIcon />
-                Account
-              </Link>
-            }
-          />
-          <DropdownMenuItem
-            render={
-              <Link to="/dashboard">
-                <ShieldIcon />
-                Security
-              </Link>
-            }
-          />
+          {!currentPathname.includes("/settings") && (
+            <DropdownMenuItem
+              render={
+                <Link to="/dashboard">
+                  <LayoutDashboard />
+                  Dashboard
+                </Link>
+              }
+            />
+          )}
+          {!currentPathname.includes("/settings") && (
+            <DropdownMenuItem
+              render={
+                <Link to="/settings">
+                  <UserIcon />
+                  Account
+                </Link>
+              }
+            />
+          )}
+
           {currentPathname !== "/" && (
             <DropdownMenuItem
               render={

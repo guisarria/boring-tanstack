@@ -14,7 +14,7 @@ function RouteComponent() {
         className="size-20 text-destructive"
         strokeWidth={1}
       />
-      <EmptyTitle>No issues</EmptyTitle>
+      <EmptyTitle className="text-muted-foreground">No issues</EmptyTitle>
     </Empty>
   )
 }

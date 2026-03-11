@@ -7,12 +7,9 @@ import {
   ScanIcon,
   Settings2,
 } from "lucide-react"
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import {
-  AppSidebar,
-  type NavGroup,
-} from "@/routes/_auth/-components/app-sidebar"
+import type { NavGroup } from "@/routes/_auth/-components/app-sidebar"
 import { AppHeader } from "@/routes/_auth/-components/app-sidebar-header"
+import { AppSidebarProvider } from "../-components/app-sidebar-provider"
 
 const navGroups: NavGroup[] = [
   {
@@ -20,15 +17,15 @@ const navGroups: NavGroup[] = [
     items: [
       { title: "Inbox", url: "/dashboard/inbox", icon: InboxIcon },
       { title: "My Issues", url: "/dashboard/my-issues", icon: ScanIcon },
-      { title: "Settings", url: "/", icon: Settings2 },
+      { title: "Account", url: "/settings", icon: Settings2 },
     ],
   },
   {
     label: "Projects",
     items: [
-      { title: "Design Engineering", url: "/", icon: Frame },
-      { title: "Sales & Marketing", url: "/", icon: PieChart },
-      { title: "Travel", url: "/", icon: MapIcon },
+      { title: "Design Engineering", url: "/settings", icon: Frame },
+      { title: "Sales & Marketing", url: "/settings", icon: PieChart },
+      { title: "Travel", url: "/settings", icon: MapIcon },
     ],
   },
 ]
@@ -39,14 +36,9 @@ export const Route = createFileRoute("/_auth/dashboard")({
 
 function RouteComponent() {
   return (
-    <SidebarProvider className="sm:pt-2">
-      <AppSidebar navGroups={navGroups} />
-      <SidebarInset className="rounded-none md:peer-data-[variant=inset]:mt-0 md:peer-data-[variant=inset]:rounded-md">
-        <div className="flex w-full flex-1 flex-col border border-border bg-muted/30 pt-0 sm:rounded-md">
-          <AppHeader basePath="/dashboard" rootLabel="Dashboard" />
-          <Outlet />
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+    <AppSidebarProvider navGroups={navGroups}>
+      <AppHeader basePath="/dashboard" rootLabel="Dashboard" />
+      <Outlet />
+    </AppSidebarProvider>
   )
 }

@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label"
 import { authClient } from "@/modules/auth/auth-client"
 import { Image } from "@unpic/react"
 import type { User } from "@/modules/auth/schema"
-import  { Spinner } from "@/components/ui/spinner"
+import { Spinner } from "@/components/ui/spinner"
 
 function convertImageToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
