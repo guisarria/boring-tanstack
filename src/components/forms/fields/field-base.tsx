@@ -8,15 +8,25 @@ import {
 } from "@/components/ui/field"
 import { useFieldContext } from "../form-context"
 
-export type FieldProps = {
+export function useFieldInvalid() {
+  const field = useFieldContext()
+  const { isTouched, isValid } = field.state.meta
+  return isTouched && !isValid
+}
+
+export type FieldBaseProps = {
   label: string
   description?: string
+  disabled?: boolean
+}
+
+export type InputFieldProps = FieldBaseProps & {
   type?: React.ComponentProps<"input">["type"]
   placeholder?: React.ComponentProps<"input">["placeholder"]
   autoComplete?: React.ComponentProps<"input">["autoComplete"]
 }
 
-type FieldBaseProps = FieldProps & {
+type FieldBaseInternalProps = FieldBaseProps & {
   children: ReactNode
   horizontal?: boolean
   controlFirst?: boolean
@@ -28,10 +38,10 @@ export function FieldBase({
   description,
   controlFirst,
   horizontal,
-}: FieldBaseProps) {
+}: FieldBaseInternalProps) {
   const field = useFieldContext()
-  const { isTouched, isValid, errors } = field.state.meta
-  const isInvalid = isTouched && !isValid
+  const { errors } = field.state.meta
+  const isInvalid = useFieldInvalid()
 
   return (
     <Field

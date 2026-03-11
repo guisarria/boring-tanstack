@@ -9,23 +9,23 @@ import {
   FieldTitle,
 } from "@/components/ui/field"
 import { useFieldContext } from "../form-context"
+import { type FieldBaseProps, useFieldInvalid } from "./field-base"
 
-type SelectCardFieldProps = {
-  label: string
-  description?: string
+type CheckboxCardFieldProps = FieldBaseProps & {
   orientation?: "horizontal" | "vertical"
 }
 
 export function CheckboxCardField({
   label,
   description,
+  disabled,
   orientation = "vertical",
-}: SelectCardFieldProps) {
+}: CheckboxCardFieldProps) {
   const field = useFieldContext<boolean>()
   const errorId = useId()
 
-  const { isTouched, isValid, errors } = field.state.meta
-  const isInvalid = isTouched && !isValid
+  const { errors } = field.state.meta
+  const isInvalid = useFieldInvalid()
 
   return (
     <FieldLabel data-invalid={isInvalid} htmlFor={field.name}>
@@ -40,7 +40,10 @@ export function CheckboxCardField({
           aria-describedby={isInvalid ? errorId : undefined}
           aria-invalid={isInvalid}
           checked={field.state.value}
+          disabled={disabled}
           id={field.name}
+          name={field.name}
+          onBlur={field.handleBlur}
           onCheckedChange={(checked) => field.handleChange(!!checked)}
         />
         <Activity mode={isInvalid ? "visible" : "hidden"}>

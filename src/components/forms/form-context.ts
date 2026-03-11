@@ -16,7 +16,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   fieldComponents: {
     InputField,
     PasswordField,
-    SelectCardField: CheckboxCardField,
+    CheckboxCardField,
     TextareaField,
     CheckboxField,
     SelectField,

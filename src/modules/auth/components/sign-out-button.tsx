@@ -1,4 +1,4 @@
-import { useNavigate, useRouter } from "@tanstack/react-router"
+import { useRouter } from "@tanstack/react-router"
 import { LogOutIcon } from "lucide-react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -7,7 +7,6 @@ import { authClient } from "../auth-client"
 
 export function SignOutButton({ className }: { className?: string }) {
   const router = useRouter()
-  const navigate = useNavigate()
 
   const handleSignOut = async () => {
     await authClient.signOut({
@@ -15,7 +14,6 @@ export function SignOutButton({ className }: { className?: string }) {
         onSuccess: () => {
           toast.success("Signed out")
           router.invalidate()
-          navigate({ to: "/" })
         },
       },
     })

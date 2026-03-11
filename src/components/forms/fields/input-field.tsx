@@ -1,17 +1,17 @@
 import { Input } from "@/components/ui/input"
 import { useFieldContext } from "../form-context"
-import { FieldBase, type FieldProps } from "./field-base"
+import { FieldBase, type InputFieldProps, useFieldInvalid } from "./field-base"
 
-export function InputField(props: FieldProps) {
+export function InputField(props: InputFieldProps) {
   const field = useFieldContext<string>()
-  const { isTouched, isValid } = field.state.meta
-  const isInvalid = isTouched && !isValid
+  const isInvalid = useFieldInvalid()
 
   return (
     <FieldBase {...props}>
       <Input
         aria-invalid={isInvalid}
         autoComplete={props.autoComplete}
+        disabled={props.disabled}
         id={field.name}
         name={field.name}
         onBlur={field.handleBlur}

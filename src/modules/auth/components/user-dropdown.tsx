@@ -1,7 +1,6 @@
 import {
   Link,
   useLocation,
-  useNavigate,
   useRouteContext,
   useRouter,
 } from "@tanstack/react-router"
@@ -12,7 +11,7 @@ import {
   ShieldIcon,
   UserIcon,
 } from "lucide-react"
-
+import { toast } from "sonner"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -37,14 +36,18 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
 
   const location = useLocation()
   const router = useRouter()
-  const navigate = useNavigate()
 
   const currentPathname = location.pathname
 
   const handleSignOut = async () => {
-    await authClient.signOut()
-    router.invalidate()
-    navigate({ to: "/" })
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          toast.success("Signed out")
+          router.invalidate()
+        },
+      },
+    })
   }
 
   function getInitials(name: string) {
