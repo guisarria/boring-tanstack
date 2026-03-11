@@ -169,4 +169,26 @@ const Prose = ({
   )
 }
 
-export { Layout, Main, Nav, Container, Prose, Section }
+type GlowTextProps = {
+  children: React.ReactNode
+  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+  className?: string
+}
+
+const GlowText = ({ children, as: Tag = "h2", className }: GlowTextProps) => (
+  <span className="relative flex items-center gap-0.5 text-left">
+    <Tag className={cn("section-title z-10 font-pixel", className)}>
+      {children}
+    </Tag>
+    <span
+      aria-hidden="true"
+      className="absolute inset-0 flex animate-pulse select-none items-center gap-0.5 blur-xs"
+    >
+      <span className={cn("section-title font-pixel", className)}>
+        {children}
+      </span>
+    </span>
+  </span>
+)
+
+export { Layout, Main, Nav, Container, GlowText, Prose, Section }

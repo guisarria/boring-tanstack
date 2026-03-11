@@ -15,7 +15,6 @@ import { Route as marketingIndexRouteImport } from './routes/(marketing)/index'
 import { Route as AuthSettingsRouteRouteImport } from './routes/_auth/settings/route'
 import { Route as AuthDashboardRouteRouteImport } from './routes/_auth/dashboard/route'
 import { Route as marketingauthRouteRouteImport } from './routes/(marketing)/(auth)/route'
-import { Route as AuthSettingsIndexRouteImport } from './routes/_auth/settings/index'
 import { Route as AuthDashboardIndexRouteImport } from './routes/_auth/dashboard/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthSettingsSecurityRouteImport } from './routes/_auth/settings/security'
@@ -50,11 +49,6 @@ const AuthDashboardRouteRoute = AuthDashboardRouteRouteImport.update({
 const marketingauthRouteRoute = marketingauthRouteRouteImport.update({
   id: '/(auth)',
   getParentRoute: () => marketingRouteRoute,
-} as any)
-const AuthSettingsIndexRoute = AuthSettingsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthSettingsRouteRoute,
 } as any)
 const AuthDashboardIndexRoute = AuthDashboardIndexRouteImport.update({
   id: '/',
@@ -103,18 +97,17 @@ export interface FileRoutesByFullPath {
   '/settings/security': typeof AuthSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/': typeof AuthDashboardIndexRoute
-  '/settings/': typeof AuthSettingsIndexRoute
   '/sign-in/': typeof marketingauthSignInIndexRoute
   '/sign-up/': typeof marketingauthSignUpIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof marketingIndexRoute
+  '/settings': typeof AuthSettingsRouteRouteWithChildren
   '/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/settings/security': typeof AuthSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard': typeof AuthDashboardIndexRoute
-  '/settings': typeof AuthSettingsIndexRoute
   '/sign-in': typeof marketingauthSignInIndexRoute
   '/sign-up': typeof marketingauthSignUpIndexRoute
 }
@@ -131,7 +124,6 @@ export interface FileRoutesById {
   '/_auth/settings/security': typeof AuthSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/dashboard/': typeof AuthDashboardIndexRoute
-  '/_auth/settings/': typeof AuthSettingsIndexRoute
   '/(marketing)/(auth)/sign-in/': typeof marketingauthSignInIndexRoute
   '/(marketing)/(auth)/sign-up/': typeof marketingauthSignUpIndexRoute
 }
@@ -146,18 +138,17 @@ export interface FileRouteTypes {
     | '/settings/security'
     | '/api/auth/$'
     | '/dashboard/'
-    | '/settings/'
     | '/sign-in/'
     | '/sign-up/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/settings'
     | '/dashboard/inbox'
     | '/dashboard/my-issues'
     | '/settings/security'
     | '/api/auth/$'
     | '/dashboard'
-    | '/settings'
     | '/sign-in'
     | '/sign-up'
   id:
@@ -173,7 +164,6 @@ export interface FileRouteTypes {
     | '/_auth/settings/security'
     | '/api/auth/$'
     | '/_auth/dashboard/'
-    | '/_auth/settings/'
     | '/(marketing)/(auth)/sign-in/'
     | '/(marketing)/(auth)/sign-up/'
   fileRoutesById: FileRoutesById
@@ -227,13 +217,6 @@ declare module '@tanstack/react-router' {
       fullPath: ''
       preLoaderRoute: typeof marketingauthRouteRouteImport
       parentRoute: typeof marketingRouteRoute
-    }
-    '/_auth/settings/': {
-      id: '/_auth/settings/'
-      path: '/'
-      fullPath: '/settings/'
-      preLoaderRoute: typeof AuthSettingsIndexRouteImport
-      parentRoute: typeof AuthSettingsRouteRoute
     }
     '/_auth/dashboard/': {
       id: '/_auth/dashboard/'
@@ -331,12 +314,10 @@ const AuthDashboardRouteRouteWithChildren =
 
 interface AuthSettingsRouteRouteChildren {
   AuthSettingsSecurityRoute: typeof AuthSettingsSecurityRoute
-  AuthSettingsIndexRoute: typeof AuthSettingsIndexRoute
 }
 
 const AuthSettingsRouteRouteChildren: AuthSettingsRouteRouteChildren = {
   AuthSettingsSecurityRoute: AuthSettingsSecurityRoute,
-  AuthSettingsIndexRoute: AuthSettingsIndexRoute,
 }
 
 const AuthSettingsRouteRouteWithChildren =

@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Container, Section } from "@/components/ui/design-system"
+import { Container, GlowText, Section } from "@/components/ui/design-system"
 import { Icons } from "@/components/ui/icons"
 import { cn } from "@/lib/utils"
 
@@ -77,19 +77,7 @@ function StackSection() {
     <Section className="pt-40 pb-20">
       <Container className="flex flex-col gap-y-6">
         <div className="flex flex-col gap-y-2">
-          <span className="relative flex items-center gap-0.5 text-left">
-            <h2 className="section-title z-10 font-pixel md:text-5xl">
-              The Stack
-            </h2>
-            <span
-              aria-hidden="true"
-              className="absolute inset-0 flex animate-pulse select-none items-center gap-0.5 blur-xs"
-            >
-              <span className="section-title font-pixel md:text-5xl">
-                The Stack
-              </span>
-            </span>
-          </span>
+          <GlowText className="md:text-5xl">The Stack</GlowText>
           <p className="text-lg text-muted-foreground">
             Built with modern, production-ready tools so you can focus on
             shipping.

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
+import { Container, Section } from "@/components/ui/design-system"
 import { sessionsAction } from "@/modules/auth/auth.functions"
 import { AccountSessions } from "./-components/account-sessions"
 
@@ -17,8 +18,10 @@ function RouteComponent() {
   const { sessions, sessionId } = Route.useRouteContext()
 
   return (
-    <div>
-      <AccountSessions sessionId={sessionId} sessions={sessions} />
-    </div>
+    <Section>
+      <Container>
+        <AccountSessions sessionId={sessionId} sessions={sessions} />
+      </Container>
+    </Section>
   )
 }

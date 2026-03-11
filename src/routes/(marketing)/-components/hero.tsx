@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router"
 import { ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Container, Section } from "@/components/ui/design-system"
+import { Container, GlowText, Section } from "@/components/ui/design-system"
 import { Route } from "../route"
 import { DitherCanvas } from "./dither-canvas"
 
@@ -23,19 +23,9 @@ function Hero({
     <Section className="relative pt-60 pb-20">
       <Container>
         <div className="flex flex-col gap-y-2">
-          <span className="relative flex items-center gap-0.5 text-left">
-            <h1 className="section-title z-10 font-pixel lg:text-7xl">
-              {title}
-            </h1>
-            <span
-              aria-hidden="true"
-              className="absolute inset-0 flex animate-pulse select-none items-center gap-0.5 blur-xs"
-            >
-              <span className="section-title font-pixel lg:text-7xl">
-                {title}
-              </span>
-            </span>
-          </span>
+          <GlowText as="h1" className="lg:text-7xl">
+            {title}
+          </GlowText>
           <p className="text-lg text-muted-foreground">{description}</p>
           <div className="mt-4">
             <Button>

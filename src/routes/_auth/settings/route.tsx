@@ -11,12 +11,12 @@ const navGroups: NavGroup[] = [
   {
     label: "Settings",
     items: [
+      { title: "Profile", url: "/settings", icon: UserIcon },
       {
         title: "Security & access",
         url: "/settings/security",
         icon: UserKeyIcon,
       },
-      { title: "Profile", url: "/settings", icon: UserIcon },
     ],
   },
 ]
@@ -30,7 +30,7 @@ function RouteComponent() {
     <SidebarProvider className="sm:pt-2">
       <AppSidebar navGroups={navGroups} />
       <SidebarInset className="rounded-none md:peer-data-[variant=inset]:mt-0 md:peer-data-[variant=inset]:rounded-md">
-        <div className="flex w-full flex-1 flex-col border border-border bg-muted/30 pt-0 sm:rounded-md">
+        <div className="flex flex-1 flex-col border border-border bg-muted/30 sm:rounded-md">
           <AppHeader basePath="/settings" rootLabel="Settings" />
           <Outlet />
         </div>
