@@ -40,8 +40,8 @@ export function AppHeader({
     })
 
   return (
-    <header className="flex items-center gap-x-2 border-border border-b py-2 pl-2">
-      <SidebarTrigger className="pb-px text-foreground/60" />
+    <header className="flex items-center gap-x-2 border-border border-b p-2">
+      <SidebarTrigger className="pb-0.5 text-foreground/60" />
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

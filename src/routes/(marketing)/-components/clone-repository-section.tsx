@@ -4,7 +4,7 @@ import { Item, ItemActions, ItemContent } from "@/components/ui/item"
 
 export function CloneRepository() {
   return (
-    <Section className="flex w-full flex-col items-center pt-28 pb-48">
+    <Section className="pt-28 pb-48">
       <Container className="flex flex-col items-center gap-y-4 text-center">
         <GlowText className="text-4xl md:text-5xl">Ready to build?</GlowText>
         <p className="text-lg text-muted-foreground">

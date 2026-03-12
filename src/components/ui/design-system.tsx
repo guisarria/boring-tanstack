@@ -177,14 +177,14 @@ type GlowTextProps = {
 
 const GlowText = ({ children, as: Tag = "h2", className }: GlowTextProps) => (
   <span className="relative font-pixel text-5xl lg:text-6xl tracking-tight text-foreground flex items-center gap-0.5 text-left">
-    <Tag className={cn("section-title font-pixel", className)}>
+    <Tag className={cn("", className)}>
       {children}
     </Tag>
     <span
       aria-hidden="true"
       className="absolute inset-0 flex animate-pulse select-none items-center gap-0.5 blur-xs"
     >
-      <span className={cn("section-title font-pixel", className)}>
+      <span className={cn("", className)}>
         {children}
       </span>
     </span>

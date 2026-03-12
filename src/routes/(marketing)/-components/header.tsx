@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
-import { Container, Nav } from "@/components/ui/design-system"
+import { Container, GlowText, Nav } from "@/components/ui/design-system"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
 import { Route } from "../route"
 
@@ -13,15 +13,9 @@ export function Header() {
       <Nav>
         <Container className="flex justify-between">
           <Link to="/">
-            <span className="relative flex items-center gap-0.5">
-              <span className="font-pixel text-xl">Boring Tanstack</span>
-              <span
-                aria-hidden="true"
-                className="absolute inset-0 flex animate-pulse items-center gap-0.5 blur-xs"
-              >
-                <span className="font-pixel text-xl">Boring Tanstack</span>
-              </span>
-            </span>
+            <GlowText as="h1" className="text-xl">
+              Boring Tanstack
+            </GlowText>
           </Link>
           <div className="flex items-center gap-x-2">
             <ThemeToggle variant="outline" />

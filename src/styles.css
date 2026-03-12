@@ -143,9 +143,6 @@
     @apply font-sans bg-background text-pretty text-foreground antialiased;
     text-rendering: optimizeLegibility;
   }
-  html {
-    @apply font-sans;
-  }
 }
 
 @custom-variant data-open {
