@@ -77,7 +77,7 @@ function StackSection() {
     <Section>
       <Container className="flex flex-col gap-y-6">
         <div className="flex flex-col gap-y-2">
-          <GlowText className="text-4xl md:text-5xl">The Stack</GlowText>
+          <GlowText className="text-4xl lg:text-5xl">The Stack</GlowText>
           <p className="text-lg text-muted-foreground">
             Built with modern, production-ready tools so you can focus on
             shipping.

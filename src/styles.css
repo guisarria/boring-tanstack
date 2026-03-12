@@ -146,9 +146,6 @@
   html {
     @apply font-sans;
   }
-  .section-title {
-    @apply font-pixel text-5xl lg:text-6xl tracking-tight text-foreground;
-  }
 }
 
 @custom-variant data-open {

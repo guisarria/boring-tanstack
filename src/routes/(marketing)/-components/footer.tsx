@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/design-system"
 import { Icons } from "@/components/ui/icons"
 
 export const Footer = () => (
-  <footer className="w-full max-w-5xl items-center pb-4 text-muted-foreground text-sm">
+  <footer className="w-full items-center pb-4 text-muted-foreground text-sm">
     <Container className="flex justify-between">
       <p>© Boring TanStack</p>
       <div className="flex items-start justify-start gap-x-12">
@@ -19,7 +19,7 @@ export const Footer = () => (
           </ul>
         </div>
         <div className="flex flex-col gap-y-2">
-          <h2 className="text-foreground text-sm">Links</h2>
+          <h2 className="text-foreground">Links</h2>
           <ul className="flex flex-col gap-y-2">
             <li>
               <a

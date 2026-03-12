@@ -38,7 +38,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="flex flex-col items-center selection:bg-cyan-700 selection:text-background dark:selection:text-foreground">
+      <body className="selection:bg-cyan-700 selection:text-background dark:selection:text-foreground">
         <TanStackQueryProvider queryClient={queryClient}>
           <ThemeProvider
             attribute={"class"}

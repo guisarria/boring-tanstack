@@ -30,7 +30,7 @@ const Main = ({ children, className, id, style }: ComponentProps) => (
 
 const Nav = ({ children, className, id, style }: ComponentProps) => (
   <nav
-    className={cn("max-w-5xl w-full px-4 sm:px-6 py-2", className)}
+    className={cn("max-w-5xl w-full py-2", className)}
     id={id}
     style={style}
   >
@@ -50,7 +50,7 @@ const Section = ({ children, className, id, style }: ComponentProps) => (
 
 const Container = ({ children, className, id, style }: ComponentProps) => (
   <div
-    className={cn("max-w-5xl w-full p-4", className)}
+    className={cn("max-w-5xl mx-auto w-full p-4", className)}
     id={id}
     style={style}
   >
@@ -176,7 +176,7 @@ type GlowTextProps = {
 }
 
 const GlowText = ({ children, as: Tag = "h2", className }: GlowTextProps) => (
-  <span className="relative flex items-center gap-0.5 text-left">
+  <span className="relative font-pixel text-5xl lg:text-6xl tracking-tight text-foreground flex items-center gap-0.5 text-left">
     <Tag className={cn("section-title font-pixel", className)}>
       {children}
     </Tag>

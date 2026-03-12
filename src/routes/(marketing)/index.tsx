@@ -11,7 +11,7 @@ export const Route = createFileRoute("/(marketing)/")({ component: Index })
 function Index() {
   return (
     <>
-      <Main className="flex flex-col gap-y-20">
+      <Main className="flex flex-col items-center gap-y-20">
         <Hero />
         <StackSection />
         <CloneRepository />

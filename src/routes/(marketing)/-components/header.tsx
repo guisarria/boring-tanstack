@@ -10,7 +10,7 @@ export function Header() {
 
   return (
     <header className="fixed inset-x-0 z-90 flex justify-center">
-      <Nav className="sm:px-0">
+      <Nav>
         <Container className="flex justify-between">
           <Link to="/">
             <span className="relative flex items-center gap-0.5">
@@ -28,14 +28,18 @@ export function Header() {
             {user ? (
               <UserDropdown />
             ) : (
-              <>
-                <Button variant="outline">
-                  <Link to="/sign-in">Sign In</Link>
-                </Button>
-                <Button>
-                  <Link to="/sign-up">Sign Up</Link>
-                </Button>
-              </>
+              <ul className="flex items-center gap-x-2">
+                <li>
+                  <Button render={<Link to="/sign-in" />} variant="outline">
+                    Sign in
+                  </Button>
+                </li>
+                <li>
+                  <Button render={<Link to="/sign-up" />} variant="default">
+                    Sign Up
+                  </Button>
+                </li>
+              </ul>
             )}
           </div>
         </Container>

@@ -13,18 +13,18 @@ type HeroProps = {
 }
 
 function Hero({
-  title = "Bootstrap your app with the best defaults",
   description = "TanStack Start template",
   primaryCTA = { label: "Get Started", href: "/sign-up" },
 }: HeroProps) {
   const { user } = Route.useRouteContext()
 
   return (
-    <Section className="relative pt-68 pb-34">
+    <Section className="relative max-w-5xl pt-68 pb-34">
       <Container>
         <div className="flex flex-col gap-y-2">
-          <GlowText as="h1" className="sm:pr-0 md:w-6/7 lg:w-6/8">
-            {title}
+          <GlowText as="h1" className="">
+            Bootstrap your app
+            <br /> with the best defaults
           </GlowText>
           <p className="text-lg text-muted-foreground">{description}</p>
           <div className="mt-4">
