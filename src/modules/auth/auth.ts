@@ -1,5 +1,5 @@
-import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
+import { betterAuth } from "better-auth/minimal"
 import { tanstackStartCookies } from "better-auth/tanstack-start"
 import { env } from "@/config/env/server"
 import { db } from "@/db"
