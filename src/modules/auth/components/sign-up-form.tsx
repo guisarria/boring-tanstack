@@ -79,7 +79,7 @@ export function SignUpForm() {
               <form.AppField
                 name="name"
                 validators={{
-                  onBlur: signUpSchema.shape.email,
+                  onBlur: signUpSchema.shape.name,
                 }}
               >
                 {(field) => (
