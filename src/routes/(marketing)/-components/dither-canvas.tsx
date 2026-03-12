@@ -37,7 +37,11 @@ export function DitherCanvas({ className }: { className?: string }) {
   const noiseRef = useRef<Float32Array>(new Float32Array(0))
   const { theme } = useTheme()
 
-  const BG = theme === "dark" ? "oklch(21% 0 0)" : "oklch(1 0 0)"
+  const bgRef = useRef(theme === "dark" ? "oklch(21% 0 0)" : "oklch(1 0 0)")
+
+  useEffect(() => {
+    bgRef.current = theme === "dark" ? "oklch(21% 0 0)" : "oklch(1 0 0)"
+  }, [theme])
 
   const sizeRef = useRef({
     width: 0,
@@ -98,7 +102,7 @@ export function DitherCanvas({ className }: { className?: string }) {
       waveYByCol[x] = waveCenterY + wave1 + wave2
     }
 
-    ctx.fillStyle = BG
+    ctx.fillStyle = bgRef.current
     ctx.fillRect(0, 0, width, height)
 
     ctx.fillStyle = FG
@@ -126,7 +130,7 @@ export function DitherCanvas({ className }: { className?: string }) {
     }
     timeRef.current = t + SPEED
     frameRef.current = requestAnimationFrame(drawFrame)
-  }, [BG])
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current

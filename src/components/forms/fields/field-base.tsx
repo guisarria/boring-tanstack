@@ -1,4 +1,4 @@
-import { Activity, type ReactNode } from "react"
+import type { ReactNode } from "react"
 import {
   Field,
   FieldContent,
@@ -54,28 +54,21 @@ export function FieldBase({
           {children}
           <FieldContent>
             <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-            <Activity mode={description ? "visible" : "hidden"}>
-              <FieldDescription>{description}</FieldDescription>
-            </Activity>
-            <Activity mode={isInvalid ? "visible" : "hidden"}>
-              <FieldError errors={errors} />
-            </Activity>
+            {description && <FieldDescription>{description}</FieldDescription>}
+            {isInvalid && <FieldError errors={errors} />}
           </FieldContent>
         </>
       ) : (
         <>
           <FieldContent>
             <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-            <Activity mode={description ? "visible" : "hidden"}>
-              <FieldDescription>{description}</FieldDescription>
-            </Activity>
+            {description && <FieldDescription>{description}</FieldDescription>}
           </FieldContent>
           {children}
-          <Activity mode={isInvalid ? "visible" : "hidden"}>
-            <FieldError errors={errors} />
-          </Activity>
+          {isInvalid && <FieldError errors={errors} />}
         </>
       )}
     </Field>
   )
 }
+

@@ -22,6 +22,8 @@ function BlurLayer({ pos, size }: { pos: "top" | "bottom"; size: number }) {
       return
     }
 
+    let rafId: number | null = null
+
     function updateOpacity() {
       const el = containerRef.current
       if (!el) {
@@ -42,11 +44,23 @@ function BlurLayer({ pos, size }: { pos: "top" | "bottom"; size: number }) {
       for (const child of el.children) {
         ;(child as HTMLElement).style.opacity = String(opacity)
       }
+      rafId = null
+    }
+
+    function onScroll() {
+      if (rafId == null) {
+        rafId = requestAnimationFrame(updateOpacity)
+      }
     }
 
     updateOpacity()
-    window.addEventListener("scroll", updateOpacity, { passive: true })
-    return () => window.removeEventListener("scroll", updateOpacity)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => {
+      window.removeEventListener("scroll", onScroll)
+      if (rafId != null) {
+        cancelAnimationFrame(rafId)
+      }
+    }
   }, [pos])
 
   return (

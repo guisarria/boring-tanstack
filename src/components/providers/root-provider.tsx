@@ -16,7 +16,7 @@ type TanStackQueryProviderProps = {
   queryClient: QueryClient
 }
 
-export default function TanStackQueryProvider({
+export function TanStackQueryProvider({
   children,
   queryClient,
 }: TanStackQueryProviderProps) {

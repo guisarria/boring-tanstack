@@ -1,5 +1,4 @@
 import { Moon, Sun } from "lucide-react"
-import { Activity } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useTheme } from "./providers/theme-provider"
@@ -26,9 +25,7 @@ export function ThemeToggle({
     >
       <Sun className="dark:hidden" />
       <Moon className="hidden dark:block" />
-      <Activity mode={label ? "visible" : "hidden"}>
-        <span>Toggle theme</span>
-      </Activity>
+      {label && <span>Toggle theme</span>}
     </Button>
   )
 }

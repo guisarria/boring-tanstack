@@ -2,7 +2,8 @@ import { Link } from "@tanstack/react-router"
 import { Container } from "@/components/ui/design-system"
 import { Icons } from "@/components/ui/icons"
 
-export const Footer = () => (
+export function Footer() {
+  return (
   <footer className="w-full pb-4 text-muted-foreground text-sm">
     <Container className="flex justify-between">
       <p>© Boring TanStack</p>
@@ -37,4 +38,5 @@ export const Footer = () => (
       </nav>
     </Container>
   </footer>
-)
+  )
+}

@@ -1,7 +1,6 @@
 import { toast } from "sonner"
 
 import { useAppForm } from "@/components/forms/form-context"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,9 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
-import { DialogFooter } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { Spinner } from "@/components/ui/spinner"
 import { authClient } from "../auth-client"
 import { changePasswordSchema } from "../validations/change-password"
 
@@ -106,24 +103,9 @@ function ChangePassword() {
                 )}
               </form.AppField>
             </div>
-            <DialogFooter className="mt-4">
-              <form.Subscribe
-                selector={(state) => ({
-                  canSubmit: state.canSubmit,
-                  isSubmitting: state.isSubmitting,
-                })}
-              >
-                {({ canSubmit, isSubmitting }) => (
-                  <Button
-                    className="w-full"
-                    disabled={!canSubmit || isSubmitting}
-                    type="submit"
-                  >
-                    {isSubmitting ? <Spinner /> : "Change Password"}
-                  </Button>
-                )}
-              </form.Subscribe>
-            </DialogFooter>
+            <div className="mt-4 flex justify-end">
+              <form.SubmitButton>Change Password</form.SubmitButton>
+            </div>
           </form>
         </form.AppForm>
       </CardContent>
@@ -132,3 +114,4 @@ function ChangePassword() {
 }
 
 export { ChangePassword }
+

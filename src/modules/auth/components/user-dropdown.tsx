@@ -25,6 +25,15 @@ import {
 import { cn } from "@/lib/utils"
 import { authClient } from "../auth-client"
 
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2)
+}
+
 type UserDropdownProps = {
   label?: boolean
   className?: string
@@ -45,15 +54,6 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
         },
       },
     })
-  }
-
-  function getInitials(name: string) {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2)
   }
 
   return (
@@ -86,7 +86,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {!pathname.includes("/dashboard") && (
+          {!pathname.startsWith("/dashboard") && (
             <DropdownMenuItem
               render={
                 <Link to="/dashboard">
@@ -96,7 +96,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
               }
             />
           )}
-          {!pathname.includes("/settings") && (
+          {!pathname.startsWith("/settings") && (
             <DropdownMenuItem
               render={
                 <Link to="/settings">

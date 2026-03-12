@@ -5,16 +5,7 @@ import { Container, GlowText, Section } from "@/components/ui/design-system"
 import { Route } from "../route"
 import { DitherCanvas } from "./dither-canvas"
 
-type HeroProps = {
-  description?: string
-  primaryCTA?: { label: string; href: string }
-  secondaryCTA?: { label: string; href: string }
-  title?: string
-}
-
-function Hero({
-  primaryCTA = { label: "Get Started", href: "/sign-up" },
-}: HeroProps) {
+function Hero() {
   const { user } = Route.useRouteContext()
 
   return (
@@ -34,9 +25,9 @@ function Hero({
               render={
                 <Link
                   className="flex items-center gap-x-2"
-                  to={user ? "/dashboard" : primaryCTA.href}
+                  to={user ? "/dashboard" : "/sign-up"}
                 >
-                  {primaryCTA.label}
+                  Get started
                   <ChevronRight />
                 </Link>
               }

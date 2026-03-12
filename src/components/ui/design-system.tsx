@@ -1,19 +1,6 @@
 import { cn } from "@/lib/utils"
 import type { ComponentPropsWithoutRef, ElementType } from "react"
 
-type Props = ComponentPropsWithoutRef<"div">
-
-function Layout({ className, ...props }: ComponentPropsWithoutRef<"html">) {
-  return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={cn("scroll-smooth antialiased focus:scroll-auto", className)}
-      {...props}
-    />
-  )
-}
-
 function Main({ className, ...props }: ComponentPropsWithoutRef<"main">) {
   return <main data-slot="main" className={className} {...props} />
 }
@@ -28,7 +15,10 @@ function Nav({ className, ...props }: ComponentPropsWithoutRef<"nav">) {
   )
 }
 
-function Section({ className, ...props }: ComponentPropsWithoutRef<"section">) {
+function Section({
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"section">) {
   return (
     <section
       data-slot="section"
@@ -38,7 +28,10 @@ function Section({ className, ...props }: ComponentPropsWithoutRef<"section">) {
   )
 }
 
-function Container({ className, ...props }: Props) {
+function Container({
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"div">) {
   return (
     <div
       data-slot="container"
@@ -48,29 +41,41 @@ function Container({ className, ...props }: Props) {
   )
 }
 
-type ProseProps = ComponentPropsWithoutRef<"div"> & {
+type ProseBaseProps = ComponentPropsWithoutRef<"div"> & {
   article?: boolean
   spaced?: boolean
-  html?: { __html: string }
 }
+
+type ProseWithChildren = ProseBaseProps & {
+  dangerousHTML?: never
+}
+
+type ProseWithHTML = ProseBaseProps & {
+  dangerousHTML: { __html: string }
+  children?: never
+}
+
+type ProseProps = ProseWithChildren | ProseWithHTML
 
 function Prose({
   article,
   spaced,
-  html,
+  dangerousHTML,
   className,
   children,
   ...props
 }: ProseProps) {
   const Tag: "article" | "div" = article ? "article" : "div"
 
-  const contentProps = html ? { dangerouslySetInnerHTML: html } : { children }
+  const contentProps = dangerousHTML
+    ? { dangerouslySetInnerHTML: dangerousHTML }
+    : { children }
 
   return (
     <Tag
       data-slot="prose"
       className={cn(
-        "antialiased text-base leading-7",
+        "text-base leading-7",
         "[&_h1]:text-4xl sm:[&_h1]:text-5xl [&_h1]:font-medium [&_h1]:tracking-tight",
         "[&_h2]:text-3xl sm:[&_h2]:text-4xl [&_h2]:font-medium [&_h2]:tracking-tight",
         "[&_h3]:text-2xl sm:[&_h3]:text-3xl [&_h3]:font-medium",
@@ -92,6 +97,8 @@ function Prose({
   )
 }
 
+// ─── GlowText ────────────────────────────────────────────────────────
+
 type GlowTextProps<T extends ElementType = "span"> = {
   as?: T
   variant?: "default" | "strong"
@@ -108,10 +115,10 @@ function GlowText<T extends ElementType = "span">({
 
   return (
     <Tag
-      data-variant={variant}
+      data-slot="glow-text"
       className={cn(
         "relative font-pixel text-5xl tracking-tight text-foreground lg:text-6xl",
-        className
+        className,
       )}
       {...props}
     >
@@ -121,7 +128,7 @@ function GlowText<T extends ElementType = "span">({
         aria-hidden
         className={cn(
           "pointer-events-none absolute inset-0 select-none blur-xs animate-pulse",
-          "data-[variant=strong]:blur-sm"
+          variant === "strong" && "blur-sm",
         )}
       >
         {children}
@@ -130,4 +137,4 @@ function GlowText<T extends ElementType = "span">({
   )
 }
 
-export { Layout, Main, Nav, Container, GlowText, Prose, Section }
+export { Container, GlowText, Main, Nav, Prose, Section }
