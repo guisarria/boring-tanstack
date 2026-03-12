@@ -13,10 +13,7 @@ const config = defineConfig({
     react(),
     babel({
       presets: [reactCompilerPreset()],
-      parserOpts: {
-        plugins: ["jsx", "typescript"],
-      },
-    } as Parameters<typeof babel>[0]),
+    }),
   ],
   build: {
     rolldownOptions: {
