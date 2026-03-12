@@ -1,6 +1,6 @@
 import { CopyButton } from "@/components/ui/copy-button"
 import { Container, GlowText, Section } from "@/components/ui/design-system"
-import { Item, ItemActions, ItemContent } from "@/components/ui/item"
+import { Item, ItemActions } from "@/components/ui/item"
 
 export function CloneRepository() {
   return (
@@ -10,12 +10,16 @@ export function CloneRepository() {
         <p className="text-lg text-muted-foreground">
           Clone the repository and start shipping in minutes.
         </p>
-        <Item className="max-w-lg p-4" size="default" variant="outline">
-          <ItemContent>
+        <Item
+          className="flex max-w-lg items-center justify-between p-4"
+          size="default"
+          variant="outline"
+        >
+          <pre>
             <code className="w-full select-all text-left font-mono text-foreground text-xs sm:text-sm">
               git clone github.com/guisarria/boring-tanstack
             </code>
-          </ItemContent>
+          </pre>
           <ItemActions>
             <CopyButton textToCopy="git clone github.com/guisarria/boring-tanstack" />
           </ItemActions>

@@ -29,11 +29,7 @@ const Main = ({ children, className, id, style }: ComponentProps) => (
 )
 
 const Nav = ({ children, className, id, style }: ComponentProps) => (
-  <nav
-    className={cn("max-w-5xl w-full py-2", className)}
-    id={id}
-    style={style}
-  >
+  <nav className={cn("max-w-5xl w-full py-2", className)} id={id} style={style}>
     {children}
   </nav>
 )
@@ -171,24 +167,26 @@ const Prose = ({
 
 type GlowTextProps = {
   children: React.ReactNode
-  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p"
   className?: string
 }
 
 const GlowText = ({ children, as: Tag = "h2", className }: GlowTextProps) => (
-  <span className="relative font-pixel text-5xl lg:text-6xl tracking-tight text-foreground flex items-center gap-0.5 text-left">
-    <Tag className={cn("", className)}>
-      {children}
-    </Tag>
+  <Tag
+    className={cn(
+      "relative font-pixel text-5xl lg:text-6xl tracking-tight text-foreground flex items-center gap-0.5 text-left",
+      className,
+    )}
+  >
+    <span className="relative z-10">{children}</span>
+
     <span
       aria-hidden="true"
-      className="absolute inset-0 flex animate-pulse select-none items-center gap-0.5 blur-xs"
+      className="absolute inset-0 flex animate-pulse pointer-events-none select-none items-center gap-0.5 blur-xs"
     >
-      <span className={cn("", className)}>
-        {children}
-      </span>
+      {children}
     </span>
-  </span>
+  </Tag>
 )
 
 export { Layout, Main, Nav, Container, GlowText, Prose, Section }

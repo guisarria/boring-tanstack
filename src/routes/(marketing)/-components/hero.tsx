@@ -13,7 +13,6 @@ type HeroProps = {
 }
 
 function Hero({
-  description = "TanStack Start template",
   primaryCTA = { label: "Get Started", href: "/sign-up" },
 }: HeroProps) {
   const { user } = Route.useRouteContext()
@@ -26,17 +25,22 @@ function Hero({
             Bootstrap your app
             <br /> with the best defaults
           </GlowText>
-          <p className="text-lg text-muted-foreground">{description}</p>
+          <p className="text-lg text-muted-foreground">
+            TanStack Start template
+          </p>
           <div className="mt-4">
-            <Button>
-              <Link
-                className="flex items-center gap-x-2"
-                to={user ? "/dashboard" : primaryCTA.href}
-              >
-                {primaryCTA.label}
-                <ChevronRight />
-              </Link>
-            </Button>
+            <Button
+              nativeButton={false}
+              render={
+                <Link
+                  className="flex items-center gap-x-2"
+                  to={user ? "/dashboard" : primaryCTA.href}
+                >
+                  {primaryCTA.label}
+                  <ChevronRight />
+                </Link>
+              }
+            />
           </div>
         </div>
       </Container>

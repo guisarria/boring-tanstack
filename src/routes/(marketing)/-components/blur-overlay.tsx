@@ -31,7 +31,9 @@ function BlurLayer({ pos, size }: { pos: "top" | "bottom"; size: number }) {
       const distanceToBottom =
         document.documentElement.scrollHeight -
         (window.scrollY + window.innerHeight)
+
       const transitionZone = 200
+
       const opacity =
         distanceToBottom <= transitionZone
           ? distanceToBottom / transitionZone
@@ -49,6 +51,7 @@ function BlurLayer({ pos, size }: { pos: "top" | "bottom"; size: number }) {
 
   return (
     <div
+      aria-hidden="true"
       className={cn("fixed inset-x-0 z-30", positions[pos].className)}
       ref={containerRef}
       style={{ height: `${size}px` }}

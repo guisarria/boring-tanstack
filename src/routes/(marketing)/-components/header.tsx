@@ -11,9 +11,9 @@ export function Header() {
   return (
     <header className="fixed inset-x-0 z-90 flex justify-center">
       <Nav>
-        <Container className="flex justify-between">
+        <Container className="flex items-center justify-between">
           <Link to="/">
-            <GlowText as="h1" className="text-xl">
+            <GlowText as="p" className="text-xl lg:text-xl">
               Boring Tanstack
             </GlowText>
           </Link>
@@ -22,18 +22,28 @@ export function Header() {
             {user ? (
               <UserDropdown />
             ) : (
-              <ul className="flex items-center gap-x-2">
-                <li>
-                  <Button render={<Link to="/sign-in" />} variant="outline">
-                    Sign in
-                  </Button>
-                </li>
-                <li>
-                  <Button render={<Link to="/sign-up" />} variant="default">
-                    Sign Up
-                  </Button>
-                </li>
-              </ul>
+              <nav>
+                <ul className="flex items-center gap-x-2">
+                  <li>
+                    <Button
+                      nativeButton={false}
+                      render={<Link to="/sign-in" />}
+                      variant="outline"
+                    >
+                      Sign in
+                    </Button>
+                  </li>
+                  <li>
+                    <Button
+                      nativeButton={false}
+                      render={<Link to="/sign-up" />}
+                      variant="default"
+                    >
+                      Sign Up
+                    </Button>
+                  </li>
+                </ul>
+              </nav>
             )}
           </div>
         </Container>
