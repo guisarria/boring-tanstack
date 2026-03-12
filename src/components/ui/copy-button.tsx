@@ -1,5 +1,5 @@
 import { Check, Copy } from "lucide-react"
-import { useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
@@ -10,61 +10,85 @@ import {
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 
+const COPY_RESET_DELAY = 2000
+
+function useCopyToClipboard() {
+  const [isCopied, setIsCopied] = useState(false)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const copy = useCallback(async (text: string) => {
+    if (!navigator?.clipboard) {
+      toast.error("Clipboard API not supported.")
+      return false
+    }
+
+    try {
+      await navigator.clipboard.writeText(text)
+
+      setIsCopied(true)
+      toast.success("Copied to clipboard!")
+
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+      }
+
+      timerRef.current = setTimeout(() => {
+        setIsCopied(false)
+      }, COPY_RESET_DELAY)
+
+      return true
+    } catch {
+      toast.error("Failed to copy to clipboard.")
+      return false
+    }
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+      }
+    }
+  }, [])
+
+  return { isCopied, copy } as const
+}
+
 type CopyButtonProps = {
   textToCopy: string
   className?: string
-  onCopySuccess?: () => void
-  onCopyError?: (error: unknown) => void
 }
 
-function CopyButton({
-  textToCopy,
-  className,
-  onCopySuccess,
-  onCopyError,
-}: CopyButtonProps) {
-  const [isCopied, setIsCopied] = useState(false)
-  const timerRef = useRef<NodeJS.Timeout | null>(null)
-
-  async function handleCopy() {
-    try {
-      await navigator.clipboard.writeText(textToCopy)
-      setIsCopied(true)
-      toast.success("Copied to clipboard!")
-      onCopySuccess?.()
-
-      if (timerRef.current) clearTimeout(timerRef.current)
-      timerRef.current = setTimeout(() => setIsCopied(false), 2000)
-    } catch (err) {
-      toast.error("Failed to copy to clipboard.")
-      onCopyError?.(err)
-    }
-  }
+function CopyButton({ textToCopy, className }: CopyButtonProps) {
+  const { isCopied, copy } = useCopyToClipboard()
+  const [tooltipOpen, setTooltipOpen] = useState(false)
 
   return (
     <TooltipProvider closeDelay={20}>
-      <Tooltip open={isCopied ? false : undefined}>
+      <Tooltip open={tooltipOpen && !isCopied} onOpenChange={setTooltipOpen}>
         <TooltipTrigger
           render={
             <Button
               aria-label={isCopied ? "Copied!" : "Copy to clipboard"}
-              className={cn("size-8", className)}
-              onClick={handleCopy}
+              className={cn("text-cyan-300", className)}
+              onClick={() => copy(textToCopy)}
               size="icon"
-              variant="link"
-            >
-              {isCopied ? (
-                <Check className="size-4" />
-              ) : (
-                <Copy className="size-4" />
-              )}
-            </Button>
+              variant="ghost"
+            />
           }
-        />
-        <TooltipContent>Copy to clipboard</TooltipContent>
+        >
+          {isCopied ? (
+            <Check className="size-4" />
+          ) : (
+            <Copy className="size-4" />
+          )}
+        </TooltipTrigger>
+        <TooltipContent>
+          {isCopied ? "Copied!" : "Copy to clipboard"}
+        </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   )
 }
 
-export { CopyButton }
+export { CopyButton, useCopyToClipboard }

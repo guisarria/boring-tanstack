@@ -9,7 +9,7 @@ import {
 } from "lucide-react"
 import type { NavGroup } from "@/routes/_auth/-components/app-sidebar"
 import { AppHeader } from "@/routes/_auth/-components/app-sidebar-header"
-import { AppSidebarProvider } from "../-components/app-sidebar-provider"
+import { AppSidebarLayout } from "../-components/app-sidebar-layout"
 
 const navGroups: NavGroup[] = [
   {
@@ -36,9 +36,9 @@ export const Route = createFileRoute("/_auth/dashboard")({
 
 function RouteComponent() {
   return (
-    <AppSidebarProvider navGroups={navGroups}>
+    <AppSidebarLayout navGroups={navGroups}>
       <AppHeader basePath="/dashboard" rootLabel="Dashboard" />
       <Outlet />
-    </AppSidebarProvider>
+    </AppSidebarLayout>
   )
 }

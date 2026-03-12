@@ -20,10 +20,10 @@ function Hero({
   const { user } = Route.useRouteContext()
 
   return (
-    <Section className="relative pt-60 pb-20">
+    <Section className="relative pt-68 pb-34">
       <Container>
         <div className="flex flex-col gap-y-2">
-          <GlowText as="h1" className="lg:text-7xl">
+          <GlowText as="h1" className="sm:pr-0 md:w-6/7 lg:w-6/8">
             {title}
           </GlowText>
           <p className="text-lg text-muted-foreground">{description}</p>

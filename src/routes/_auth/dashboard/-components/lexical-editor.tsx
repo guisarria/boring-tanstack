@@ -238,7 +238,6 @@ export const LexicalEditor = function LexicalEditor({
         $convertFromMarkdownString(value, TRANSFORMERS)
       },
       onError: (error) => {
-        console.error("Lexical editor error:", error)
         throw error
       },
     }),

@@ -177,7 +177,7 @@ type GlowTextProps = {
 
 const GlowText = ({ children, as: Tag = "h2", className }: GlowTextProps) => (
   <span className="relative flex items-center gap-0.5 text-left">
-    <Tag className={cn("section-title z-10 font-pixel", className)}>
+    <Tag className={cn("section-title font-pixel", className)}>
       {children}
     </Tag>
     <span

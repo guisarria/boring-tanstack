@@ -98,6 +98,9 @@ const applyAttributes = (
   }
 }
 
+const isColorScheme = (value: string): value is ColorScheme =>
+  COLOR_SCHEMES.includes(value as ColorScheme)
+
 const applyColorScheme = (
   resolved: string,
   defaultTheme: string,
@@ -106,13 +109,9 @@ const applyColorScheme = (
   if (!enableColorScheme) {
     return
   }
-  const fallback = COLOR_SCHEMES.includes(defaultTheme as ColorScheme)
-    ? defaultTheme
-    : null
-  const colorScheme = COLOR_SCHEMES.includes(resolved as ColorScheme)
-    ? resolved
-    : fallback
-  document.documentElement.style.colorScheme = colorScheme || ""
+  const fallback = isColorScheme(defaultTheme) ? defaultTheme : null
+  const colorScheme = isColorScheme(resolved) ? resolved : fallback
+  document.documentElement.style.colorScheme = colorScheme ?? ""
 }
 
 const getSystemTheme = (): ColorScheme => {

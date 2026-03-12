@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/design-system"
 import { Icons } from "@/components/ui/icons"
 
 export const Footer = () => (
-  <footer className="pb-4 text-muted-foreground text-sm">
+  <footer className="w-full max-w-5xl items-center pb-4 text-muted-foreground text-sm">
     <Container className="flex justify-between">
       <p>© Boring TanStack</p>
       <div className="flex items-start justify-start gap-x-12">

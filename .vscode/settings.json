@@ -1,6 +1,6 @@
 {
   "[css]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "bradlc.vscode-tailwindcss"
   },
   "[javascript]": {
     "editor.defaultFormatter": "biomejs.biome"

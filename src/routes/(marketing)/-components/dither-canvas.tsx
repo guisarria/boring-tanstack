@@ -178,7 +178,7 @@ export function DitherCanvas({ className }: { className?: string }) {
   return (
     <canvas
       className={cn(
-        "absolute top-0 right-0 -z-10 h-full max-h-160 w-full opacity-40 backdrop-blur",
+        "absolute top-0 right-0 -z-10 h-full w-full opacity-40 backdrop-blur",
         "mask-[linear-gradient(to_right,transparent,black)]",
         "[-webkit-mask-image:linear-gradient(to_right,transparent,black)]",
         className
