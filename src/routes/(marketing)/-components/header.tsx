@@ -22,28 +22,26 @@ export function Header() {
             {user ? (
               <UserDropdown />
             ) : (
-              <nav>
-                <ul className="flex items-center gap-x-2">
-                  <li>
-                    <Button
-                      nativeButton={false}
-                      render={<Link to="/sign-in" />}
-                      variant="outline"
-                    >
-                      Sign in
-                    </Button>
-                  </li>
-                  <li>
-                    <Button
-                      nativeButton={false}
-                      render={<Link to="/sign-up" />}
-                      variant="default"
-                    >
-                      Sign Up
-                    </Button>
-                  </li>
-                </ul>
-              </nav>
+              <ul className="flex items-center gap-x-2">
+                <li>
+                  <Button
+                    nativeButton={false}
+                    render={<Link to="/sign-in" />}
+                    variant="outline"
+                  >
+                    Sign in
+                  </Button>
+                </li>
+                <li>
+                  <Button
+                    nativeButton={false}
+                    render={<Link to="/sign-up" />}
+                    variant="default"
+                  >
+                    Sign Up
+                  </Button>
+                </li>
+              </ul>
             )}
           </div>
         </Container>
