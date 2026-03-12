@@ -13,6 +13,9 @@ const config = defineConfig({
     react(),
     babel({
       presets: [reactCompilerPreset()],
+      parserOpts: {
+        plugins: ["jsx", "typescript"],
+      },
     }),
   ],
   build: {
