@@ -1,12 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { Container, Main, Section } from "@/components/ui/design-system"
+import { Main } from "@/components/ui/design-system"
 import { Hero } from "@/routes/(marketing)/-components/hero"
 import { StackSection } from "@/routes/(marketing)/-components/stack-section"
 import { BlurOverlay } from "./-components/blur-overlay"
 import { CloneRepository } from "./-components/clone-repository-section"
 import { Footer } from "./-components/footer"
-
-import { DashboardMockup } from "./-components/dashboard-mockup"
 
 export const Route = createFileRoute("/(marketing)/")({ component: Index })
 
@@ -15,11 +13,6 @@ function Index() {
     <>
       <Main className="flex flex-col items-center gap-y-20">
         <Hero />
-        <Section>
-          <Container>
-            <DashboardMockup />
-          </Container>
-        </Section>
         <StackSection />
         <CloneRepository />
       </Main>
