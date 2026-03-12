@@ -86,15 +86,17 @@ function StackSection() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:[&_div]:last:col-span-2 lg:[&_div]:last:col-span-1">
           {stack.map((item) => (
             <Card
-              className="flex w-full flex-col justify-between"
+              className="flex w-ful flex-col justify-between"
               key={item.name}
             >
               <CardHeader className="gap-y-2">
                 <div className="flex items-center gap-x-3">
                   <item.icon className="size-6 shrink-0" />
-                  <CardTitle>{item.name}</CardTitle>
+                  <CardTitle className="text-base">{item.name}</CardTitle>
                 </div>
-                <CardDescription>{item.description}</CardDescription>
+                <CardDescription className="text-sm">
+                  {item.description}
+                </CardDescription>
               </CardHeader>
               <CardContent className="self-end">
                 <a
