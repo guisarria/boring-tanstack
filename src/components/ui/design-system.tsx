@@ -92,45 +92,39 @@ function Prose({
   )
 }
 
-type GlowTextProps<T extends ElementType = "h2"> = {
+type GlowTextProps<T extends ElementType = "span"> = {
   as?: T
   variant?: "default" | "strong"
-} & ComponentPropsWithoutRef<T>
+} & Omit<ComponentPropsWithoutRef<T>, "as">
 
-function GlowText<T extends ElementType = "h2">({
+function GlowText<T extends ElementType = "span">({
   as,
   variant = "default",
   className,
   children,
   ...props
 }: GlowTextProps<T>) {
-  const Tag = as || "h2"
-
-  const content = <>{children}</>
+  const Tag = as || "span"
 
   return (
     <Tag
-      data-slot="glow-text"
       data-variant={variant}
       className={cn(
         "relative font-pixel text-5xl tracking-tight text-foreground lg:text-6xl",
-        className,
+        className
       )}
       {...props}
     >
-      <span data-slot="glow-text-content" className="relative z-10">
-        {content}
-      </span>
+      <span className="relative z-10">{children}</span>
 
       <span
-        aria-hidden="true"
-        data-slot="glow-text-layer"
+        aria-hidden
         className={cn(
           "pointer-events-none absolute inset-0 select-none blur-xs animate-pulse",
-          "data-[variant=strong]:blur-sm",
+          "data-[variant=strong]:blur-sm"
         )}
       >
-        {content}
+        {children}
       </span>
     </Tag>
   )

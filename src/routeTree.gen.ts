@@ -21,6 +21,7 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthSettingsSecurityRouteImport } from './routes/_auth/settings/security'
 import { Route as AuthDashboardMyIssuesRouteImport } from './routes/_auth/dashboard/my-issues'
 import { Route as AuthDashboardInboxRouteImport } from './routes/_auth/dashboard/inbox'
+import { Route as AuthDashboardHtmlTreeCleanerRouteImport } from './routes/_auth/dashboard/html-tree-cleaner'
 import { Route as marketingauthSignUpIndexRouteImport } from './routes/(marketing)/(auth)/sign-up/index'
 import { Route as marketingauthSignInIndexRouteImport } from './routes/(marketing)/(auth)/sign-in/index'
 
@@ -81,6 +82,12 @@ const AuthDashboardInboxRoute = AuthDashboardInboxRouteImport.update({
   path: '/inbox',
   getParentRoute: () => AuthDashboardRouteRoute,
 } as any)
+const AuthDashboardHtmlTreeCleanerRoute =
+  AuthDashboardHtmlTreeCleanerRouteImport.update({
+    id: '/html-tree-cleaner',
+    path: '/html-tree-cleaner',
+    getParentRoute: () => AuthDashboardRouteRoute,
+  } as any)
 const marketingauthSignUpIndexRoute =
   marketingauthSignUpIndexRouteImport.update({
     id: '/sign-up/',
@@ -98,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/': typeof marketingIndexRoute
   '/dashboard': typeof AuthDashboardRouteRouteWithChildren
   '/settings': typeof AuthSettingsRouteRouteWithChildren
+  '/dashboard/html-tree-cleaner': typeof AuthDashboardHtmlTreeCleanerRoute
   '/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/settings/security': typeof AuthSettingsSecurityRoute
@@ -109,6 +117,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof marketingIndexRoute
+  '/dashboard/html-tree-cleaner': typeof AuthDashboardHtmlTreeCleanerRoute
   '/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/settings/security': typeof AuthSettingsSecurityRoute
@@ -126,6 +135,7 @@ export interface FileRoutesById {
   '/_auth/dashboard': typeof AuthDashboardRouteRouteWithChildren
   '/_auth/settings': typeof AuthSettingsRouteRouteWithChildren
   '/(marketing)/': typeof marketingIndexRoute
+  '/_auth/dashboard/html-tree-cleaner': typeof AuthDashboardHtmlTreeCleanerRoute
   '/_auth/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/_auth/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/_auth/settings/security': typeof AuthSettingsSecurityRoute
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/settings'
+    | '/dashboard/html-tree-cleaner'
     | '/dashboard/inbox'
     | '/dashboard/my-issues'
     | '/settings/security'
@@ -152,6 +163,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dashboard/html-tree-cleaner'
     | '/dashboard/inbox'
     | '/dashboard/my-issues'
     | '/settings/security'
@@ -168,6 +180,7 @@ export interface FileRouteTypes {
     | '/_auth/dashboard'
     | '/_auth/settings'
     | '/(marketing)/'
+    | '/_auth/dashboard/html-tree-cleaner'
     | '/_auth/dashboard/inbox'
     | '/_auth/dashboard/my-issues'
     | '/_auth/settings/security'
@@ -270,6 +283,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardInboxRouteImport
       parentRoute: typeof AuthDashboardRouteRoute
     }
+    '/_auth/dashboard/html-tree-cleaner': {
+      id: '/_auth/dashboard/html-tree-cleaner'
+      path: '/html-tree-cleaner'
+      fullPath: '/dashboard/html-tree-cleaner'
+      preLoaderRoute: typeof AuthDashboardHtmlTreeCleanerRouteImport
+      parentRoute: typeof AuthDashboardRouteRoute
+    }
     '/(marketing)/(auth)/sign-up/': {
       id: '/(marketing)/(auth)/sign-up/'
       path: '/sign-up'
@@ -315,12 +335,14 @@ const marketingRouteRouteWithChildren = marketingRouteRoute._addFileChildren(
 )
 
 interface AuthDashboardRouteRouteChildren {
+  AuthDashboardHtmlTreeCleanerRoute: typeof AuthDashboardHtmlTreeCleanerRoute
   AuthDashboardInboxRoute: typeof AuthDashboardInboxRoute
   AuthDashboardMyIssuesRoute: typeof AuthDashboardMyIssuesRoute
   AuthDashboardIndexRoute: typeof AuthDashboardIndexRoute
 }
 
 const AuthDashboardRouteRouteChildren: AuthDashboardRouteRouteChildren = {
+  AuthDashboardHtmlTreeCleanerRoute: AuthDashboardHtmlTreeCleanerRoute,
   AuthDashboardInboxRoute: AuthDashboardInboxRoute,
   AuthDashboardMyIssuesRoute: AuthDashboardMyIssuesRoute,
   AuthDashboardIndexRoute: AuthDashboardIndexRoute,

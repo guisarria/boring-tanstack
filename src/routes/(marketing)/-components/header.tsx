@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Container, GlowText, Nav } from "@/components/ui/design-system"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
 import { Route } from "../route"
@@ -13,9 +13,7 @@ export function Header() {
       <Nav>
         <Container className="flex items-center justify-between">
           <Link to="/">
-            <GlowText as="p" className="text-xl lg:text-xl">
-              Boring Tanstack
-            </GlowText>
+            <GlowText className="text-xl lg:text-xl">Boring Tanstack</GlowText>
           </Link>
           <div className="flex items-center gap-x-2">
             <ThemeToggle variant="outline" />
@@ -24,22 +22,20 @@ export function Header() {
             ) : (
               <ul className="flex items-center gap-x-2">
                 <li>
-                  <Button
-                    nativeButton={false}
-                    render={<Link to="/sign-in" />}
-                    variant="outline"
+                  <Link
+                    className={buttonVariants({ variant: "outline" })}
+                    to="/sign-in"
                   >
                     Sign in
-                  </Button>
+                  </Link>
                 </li>
                 <li>
-                  <Button
-                    nativeButton={false}
-                    render={<Link to="/sign-up" />}
-                    variant="default"
+                  <Link
+                    className={buttonVariants({ variant: "default" })}
+                    to="/sign-up"
                   >
                     Sign Up
-                  </Button>
+                  </Link>
                 </li>
               </ul>
             )}
