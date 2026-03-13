@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router"
 import { useTransition } from "react"
 import { toast } from "sonner"
+import { z } from "zod"
 import { PasswordFieldsGroup } from "@/components/forms/fields/password-fields-group"
 import { useAppForm } from "@/components/forms/form-context"
 import { buttonVariants } from "@/components/ui/button"
@@ -15,42 +16,74 @@ import {
 import { Field, FieldGroup, FieldSeparator } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
 import { authClient } from "../auth-client"
-import { type SignUp, signUpSchema } from "../validations/sign-up"
 import { SocialAuthButtons } from "./social-auth-buttons"
+
+const signUpFormSchema = z
+  .object({
+    name: z
+      .string()
+      .min(2, { message: "Name must be at least 2 characters long" })
+      .max(50, { message: "Name must be less than 50 characters" }),
+    email: z.email({ message: "Invalid email address" }),
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .max(50)
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
+        message:
+          "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+      }),
+    confirmPassword: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .max(50),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  })
+
+type SignUpForm = z.infer<typeof signUpFormSchema>
+
+const defaultValues: SignUpForm = {
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+}
 
 export function SignUpForm() {
   const [isPending, startTransition] = useTransition()
   const navigate = useNavigate()
 
+  const signUp = (name: string, email: string, password: string) => {
+    return authClient.signUp.email({
+      name,
+      email,
+      password,
+      callbackURL: "/dashboard",
+      fetchOptions: {
+        onSuccess: () => {
+          toast.success("Sign up successfully")
+          navigate({
+            to: "/dashboard",
+          })
+        },
+        onError: ({ error }) => {
+          toast.error(error.message)
+        },
+      },
+    })
+  }
+
   const form = useAppForm({
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    } satisfies SignUp,
+    defaultValues,
     validators: {
-      onSubmit: signUpSchema,
+      onSubmit: signUpFormSchema,
     },
-    onSubmit: ({ value }) => {
+    onSubmit: ({ value: { name, email, password } }) => {
       startTransition(async () => {
-        await authClient.signUp.email({
-          name: value.name,
-          email: value.email,
-          password: value.password,
-          callbackURL: "/dashboard",
-          fetchOptions: {
-            onSuccess: () => {
-              toast.success("Sign up successfully")
-              navigate({
-                to: "/dashboard",
-              })
-            },
-            onError: ({ error }) => {
-              toast.error(error.message)
-            },
-          },
-        })
+        await signUp(name, email, password)
       })
     },
   })
@@ -79,7 +112,7 @@ export function SignUpForm() {
               <form.AppField
                 name="name"
                 validators={{
-                  onBlur: signUpSchema.shape.name,
+                  onBlur: signUpFormSchema.shape.name,
                 }}
               >
                 {(field) => (
@@ -89,7 +122,7 @@ export function SignUpForm() {
               <form.AppField
                 name="email"
                 validators={{
-                  onBlur: signUpSchema.shape.email,
+                  onBlur: signUpFormSchema.shape.email,
                 }}
               >
                 {(field) => (

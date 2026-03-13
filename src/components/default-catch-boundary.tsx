@@ -10,6 +10,7 @@ import { Button } from "./ui/button"
 
 export function DefaultCatchBoundary({ error }: Readonly<ErrorComponentProps>) {
   const router = useRouter()
+
   const isRoot = useMatch({
     strict: false,
     select: (state) => state.id === rootRouteId,

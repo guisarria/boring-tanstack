@@ -1,6 +1,7 @@
 import { Link, useNavigate, useSearch } from "@tanstack/react-router"
 import { useTransition } from "react"
 import { toast } from "sonner"
+import { z } from "zod"
 import { useAppForm } from "@/components/forms/form-context"
 import { buttonVariants } from "@/components/ui/button"
 import {
@@ -14,39 +15,51 @@ import {
 import { FieldGroup, FieldSeparator } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
 import { authClient } from "../auth-client"
-import { type SignIn, signInSchema } from "../validations/sign-in"
 import { SocialAuthButtons } from "./social-auth-buttons"
+
+const signInFormSchema = z.object({
+  email: z.email({ message: "Please enter a valid email address." }),
+  password: z.string().min(8, { message: "Password is required." }),
+})
+
+type SignInForm = z.infer<typeof signInFormSchema>
+
+const defaultValues: SignInForm = {
+  email: "",
+  password: "",
+}
 
 export function SignInForm() {
   const [isPending, startTransition] = useTransition()
   const navigate = useNavigate()
   const { redirect } = useSearch({ from: "/(marketing)/(auth)/sign-in/" })
 
+  const signIn = (email: string, password: string) => {
+    return authClient.signIn.email({
+      email,
+      password,
+      fetchOptions: {
+        onSuccess: () => {
+          toast.success("Logged in successfully")
+          navigate({
+            to: redirect ?? "/dashboard",
+          })
+        },
+        onError: ({ error }) => {
+          toast.error(error.message)
+        },
+      },
+    })
+  }
+
   const form = useAppForm({
-    defaultValues: {
-      email: "",
-      password: "",
-    } satisfies SignIn,
+    defaultValues,
     validators: {
-      onSubmit: signInSchema,
+      onSubmit: signInFormSchema,
     },
-    onSubmit: ({ value }) => {
+    onSubmit: ({ value: { email, password } }) => {
       startTransition(async () => {
-        await authClient.signIn.email({
-          email: value.email,
-          password: value.password,
-          fetchOptions: {
-            onSuccess: () => {
-              toast.success("Logged in successfully")
-              navigate({
-                to: redirect ?? "/dashboard",
-              })
-            },
-            onError: ({ error }) => {
-              toast.error(error.message)
-            },
-          },
-        })
+        await signIn(email, password)
       })
     },
   })
@@ -72,7 +85,7 @@ export function SignInForm() {
               <form.AppField
                 name="email"
                 validators={{
-                  onBlur: signInSchema.shape.email,
+                  onBlur: signInFormSchema.shape.email,
                 }}
               >
                 {(field) => (
@@ -87,7 +100,7 @@ export function SignInForm() {
               <form.AppField
                 name="password"
                 validators={{
-                  onBlur: signInSchema.shape.password,
+                  onBlur: signInFormSchema.shape.password,
                 }}
               >
                 {(field) => (

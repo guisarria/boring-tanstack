@@ -73,6 +73,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
         </Avatar>
         {label && <span className="text-sm">{user?.name}</span>}
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="font-normal">
@@ -106,7 +107,6 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
               }
             />
           )}
-
           {pathname !== "/" && (
             <DropdownMenuItem
               render={
@@ -129,7 +129,6 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
               />
             }
           />
-
           <DropdownMenuItem onClick={handleSignOut}>
             <LogOutIcon />
             Sign out

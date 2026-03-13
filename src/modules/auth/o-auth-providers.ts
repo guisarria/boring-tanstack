@@ -20,4 +20,4 @@ export const OAUTH_PROVIDERS = [
   },
 ] as const satisfies readonly OAuthProviderConfig[]
 
-export type SupportedOAuthProvider = (typeof OAUTH_PROVIDERS)[number]["id"]
+export type OAuthProvider = (typeof OAUTH_PROVIDERS)[number]["id"]

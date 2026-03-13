@@ -1,5 +1,5 @@
 import { toast } from "sonner"
-
+import { z } from "zod"
 import { useAppForm } from "@/components/forms/form-context"
 import {
   Card,
@@ -11,18 +11,39 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { authClient } from "../auth-client"
-import { changePasswordSchema } from "../validations/change-password"
 
-function ChangePassword() {
+const changePasswordFormSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Current password is required"),
+    newPassword: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .max(50),
+    confirmPassword: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .max(50),
+    revokeOtherSessions: z.boolean(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  })
+
+type ChangePasswordForm = z.infer<typeof changePasswordFormSchema>
+
+const defaultValues: ChangePasswordForm = {
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: "",
+  revokeOtherSessions: false,
+}
+
+function ChangePasswordForm() {
   const form = useAppForm({
-    defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-      revokeOtherSessions: false,
-    },
+    defaultValues,
     validators: {
-      onChange: changePasswordSchema,
+      onChange: changePasswordFormSchema,
     },
     onSubmit: async ({ value }) => {
       try {
@@ -113,5 +134,4 @@ function ChangePassword() {
   )
 }
 
-export { ChangePassword }
-
+export { ChangePasswordForm as ChangePassword }
