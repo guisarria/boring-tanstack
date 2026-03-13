@@ -1,11 +1,11 @@
 import { errAsync, okAsync, ResultAsync } from "neverthrow"
 import { auth } from "./auth"
+import type { Session, User } from "./schema"
 
-type AuthSession = Awaited<ReturnType<typeof auth.api.getSession>>
+export type PublicUser = Pick<User, "id" | "name" | "email" | "image" | "role">
 
 export type SessionPayload = {
-  session: NonNullable<AuthSession>["session"] | null
-  user: NonNullable<AuthSession>["user"] | null
+  user: PublicUser | null
 }
 
 export type SessionListPayload = {
@@ -31,13 +31,14 @@ export function getSessionResult(headers: Headers) {
   return ResultAsync.fromPromise(
     auth.api.getSession({ headers }),
     toProviderFailure
-  ).map((response) => ({
+  ).map<SessionPayload>((response) => ({
     user: response?.user
       ? {
           id: response.user.id,
           name: response.user.name,
-          image: response.user.image,
           email: response.user.email,
+          image: response.user.image,
+          role: response.user.role,
         }
       : null,
   }))
@@ -48,7 +49,7 @@ export function requireSessionResult(headers: Headers) {
     toProviderFailure
   ).andThen((response) => {
     if (!response) {
-      return errAsync<NonNullable<AuthSession>, AuthServiceError>({
+      return errAsync<Session, AuthServiceError>({
         code: "UNAUTHORIZED",
         message: "Unauthorized",
       })

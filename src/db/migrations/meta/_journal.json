@@ -8,6 +8,13 @@
       "when": 1772597496059,
       "tag": "0000_real_blink",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1773400883386,
+      "tag": "0001_spooky_thunderbolt",
+      "breakpoints": true
     }
   ]
 }

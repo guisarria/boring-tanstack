@@ -46,8 +46,12 @@ describe("getSessionResult", () => {
 
     expect(result.isOk()).toBe(true)
     expect(result._unsafeUnwrap()).toEqual({
-      session: mockSession.session,
-      user: mockSession.user,
+      user: {
+        id: mockSession.user.id,
+        name: mockSession.user.name,
+        email: mockSession.user.email,
+        image: mockSession.user.image,
+      },
     })
   })
 
@@ -58,7 +62,6 @@ describe("getSessionResult", () => {
 
     expect(result.isOk()).toBe(true)
     expect(result._unsafeUnwrap()).toEqual({
-      session: null,
       user: null,
     })
   })

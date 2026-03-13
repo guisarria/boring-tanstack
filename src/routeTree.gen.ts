@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as marketingRouteRouteImport } from './routes/(marketing)/route'
+import { Route as DebugIndexRouteImport } from './routes/debug/index'
 import { Route as marketingIndexRouteImport } from './routes/(marketing)/index'
 import { Route as AuthSettingsRouteRouteImport } from './routes/_auth/settings/route'
 import { Route as AuthDashboardRouteRouteImport } from './routes/_auth/dashboard/route'
@@ -30,6 +31,11 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 } as any)
 const marketingRouteRoute = marketingRouteRouteImport.update({
   id: '/(marketing)',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DebugIndexRoute = DebugIndexRouteImport.update({
+  id: '/debug/',
+  path: '/debug/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const marketingIndexRoute = marketingIndexRouteImport.update({
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/': typeof marketingIndexRoute
   '/dashboard': typeof AuthDashboardRouteRouteWithChildren
   '/settings': typeof AuthSettingsRouteRouteWithChildren
+  '/debug/': typeof DebugIndexRoute
   '/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/settings/security': typeof AuthSettingsSecurityRoute
@@ -109,6 +116,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof marketingIndexRoute
+  '/debug': typeof DebugIndexRoute
   '/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/settings/security': typeof AuthSettingsSecurityRoute
@@ -126,6 +134,7 @@ export interface FileRoutesById {
   '/_auth/dashboard': typeof AuthDashboardRouteRouteWithChildren
   '/_auth/settings': typeof AuthSettingsRouteRouteWithChildren
   '/(marketing)/': typeof marketingIndexRoute
+  '/debug/': typeof DebugIndexRoute
   '/_auth/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/_auth/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/_auth/settings/security': typeof AuthSettingsSecurityRoute
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/settings'
+    | '/debug/'
     | '/dashboard/inbox'
     | '/dashboard/my-issues'
     | '/settings/security'
@@ -152,6 +162,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/debug'
     | '/dashboard/inbox'
     | '/dashboard/my-issues'
     | '/settings/security'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/_auth/dashboard'
     | '/_auth/settings'
     | '/(marketing)/'
+    | '/debug/'
     | '/_auth/dashboard/inbox'
     | '/_auth/dashboard/my-issues'
     | '/_auth/settings/security'
@@ -181,6 +193,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   marketingRouteRoute: typeof marketingRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  DebugIndexRoute: typeof DebugIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -198,6 +211,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof marketingRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/debug/': {
+      id: '/debug/'
+      path: '/debug'
+      fullPath: '/debug/'
+      preLoaderRoute: typeof DebugIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(marketing)/': {
@@ -359,6 +379,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   marketingRouteRoute: marketingRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  DebugIndexRoute: DebugIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
