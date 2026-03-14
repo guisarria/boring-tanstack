@@ -15,7 +15,9 @@ export function Header() {
       <Nav>
         <Container className="flex items-center justify-between">
           <Link to="/">
-            <GlowText className="text-xl lg:text-xl">Boring Tanstack</GlowText>
+            <GlowText className="font-pixel text-xl lg:text-xl">
+              Boring Tanstack
+            </GlowText>
           </Link>
           <div className="flex items-center gap-x-2">
             <ThemeToggle variant="outline" />

@@ -25,12 +25,12 @@ export function Footer() {
             <ul className="flex flex-col gap-y-2">
               <li>
                 <a
-                  className="flex items-center gap-x-2"
+                  className="flex items-center gap-x-1"
                   href="https://github.com/guisarria/boring-tanstack"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  <Icons.gitHub aria-hidden="true" />
+                  <Icons.gitHub size={20} aria-hidden="true" />
                   GitHub
                 </a>
               </li>

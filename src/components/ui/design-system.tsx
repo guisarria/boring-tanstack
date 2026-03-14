@@ -112,7 +112,7 @@ function GlowText<T extends ElementType = "span">({
     <Tag
       data-slot="glow-text"
       className={cn(
-        "relative font-pixel text-5xl tracking-tight text-foreground lg:text-6xl",
+        "relative font-pixel text-4xl lg:text-5xl tracking-tight text-foreground",
         className,
       )}
       {...props}

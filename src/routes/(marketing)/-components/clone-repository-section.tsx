@@ -6,7 +6,9 @@ export function CloneRepository() {
   return (
     <Section className="pt-28 pb-48">
       <Container className="flex flex-col items-center gap-y-4 text-center">
-        <GlowText className="text-4xl md:text-5xl">Ready to build?</GlowText>
+        <GlowText className="font-pixel text-4xl tracking-tight lg:text-5xl">
+          Ready to build?
+        </GlowText>
         <p className="text-muted-foreground text-lg">
           Clone the repository and start shipping in minutes.
         </p>

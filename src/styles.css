@@ -13,6 +13,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@keyframes move-background {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
 :root {
   color-scheme: light;
   --font-pixel: "Geist Pixel Line";

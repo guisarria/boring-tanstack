@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router"
 import { ChevronRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Container, GlowText, Section } from "@/components/ui/design-system"
+import { Container, Section } from "@/components/ui/design-system"
 
 import { Route } from "../route"
 import { DitherCanvas } from "./dither-canvas"
@@ -14,10 +14,10 @@ function Hero() {
     <Section className="relative max-w-5xl pt-68 pb-34">
       <Container>
         <div className="flex flex-col gap-y-2">
-          <GlowText as="h1" className="">
+          <h1 className="font-pixel text-5xl tracking-tight lg:text-6xl">
             Bootstrap your app
             <br /> with the best defaults
-          </GlowText>
+          </h1>
           <p className="text-muted-foreground text-lg">
             TanStack Start template
           </p>

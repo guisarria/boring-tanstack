@@ -72,20 +72,6 @@ export const Icons = {
       />
     </svg>
   ),
-  resend: ({ size = ICON_SIZE, ...props }: IconProps) => (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        fill="currentColor"
-        d="M2.023 0v24h5.553v-8.434h2.998L15.326 24h6.65l-5.372-9.258a7.65 7.65 0 003.316-3.016q1.063-1.815 1.062-4.08 0-2.194-1.062-3.91-1.063-1.747-2.95-2.742Q15.12 0 12.823 0zm5.553 4.87h4.219q1.097 0 1.851.376.788.378 1.2 1.098.412.685.412 1.611c0 .926-.126 1.165-.378 1.645q-.343.72-1.03 1.13-.651.379-1.542.38H7.576z"
-      />
-    </svg>
-  ),
   neon: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
       width={size}
@@ -485,10 +471,10 @@ export const Icons = {
           id="b"
           x="-1.688"
           y="7.232"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -499,10 +485,10 @@ export const Icons = {
           id="c"
           x="-16.579"
           y="-2.889"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -513,10 +499,10 @@ export const Icons = {
           id="d"
           x="-14.454"
           y="1.198"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -527,10 +513,10 @@ export const Icons = {
           id="e"
           x="-12.49"
           y="8.89"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -541,10 +527,10 @@ export const Icons = {
           id="f"
           x="-11.835"
           y="9.381"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -555,10 +541,10 @@ export const Icons = {
           id="g"
           x="13.495"
           y="-7.32"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -569,10 +555,10 @@ export const Icons = {
           id="h"
           x="16.825"
           y="1.306"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -583,10 +569,10 @@ export const Icons = {
           id="i"
           x="16.825"
           y="1.306"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -597,10 +583,10 @@ export const Icons = {
           id="j"
           x="-5.05"
           y="-9.437"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -611,10 +597,10 @@ export const Icons = {
           id="k"
           x="15.358"
           y="-16.087"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -625,10 +611,10 @@ export const Icons = {
           id="l"
           x="15.994"
           y="-4.143"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -639,10 +625,10 @@ export const Icons = {
           id="m"
           x="-5.755"
           y="2.898"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -653,10 +639,10 @@ export const Icons = {
           id="n"
           x="-5.755"
           y="2.898"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -667,10 +653,10 @@ export const Icons = {
           id="o"
           x="10.173"
           y="-.784"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -681,10 +667,10 @@ export const Icons = {
           id="p"
           x="13.728"
           y="3.092"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
           filterUnits="userSpaceOnUse"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
           <feGaussianBlur
             result="effect1_foregroundBlur_318_26118"
@@ -692,6 +678,185 @@ export const Icons = {
           />
         </filter>
       </defs>
+    </svg>
+  ),
+  oxlint: ({ size = ICON_SIZE, ...props }: IconProps) => (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 32 32"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <defs>
+        <linearGradient id="grad">
+          <stop offset="0%" stopColor="#0891b2" />
+          <stop offset="100%" stopColor="#67e8f9" />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#grad)"
+        d="m29.795 23.354l-4.78-4.95a.645.645 0 0 0-.956 0a14.4 14.4 0 0 1-2.352 1.697A1.197 1.197 0 0 1 20 18.899v-2.333a1.42 1.42 0 0 1 .41-.99l6.585-6.37A.714.714 0 0 0 26.517 8H21.5A1.5 1.5 0 0 1 20 6.5V2.75a.75.75 0 0 0-.75-.75h-6.5a.75.75 0 0 0-.75.75V6.5A1.5 1.5 0 0 1 10.5 8H5.483a.714.714 0 0 0-.478 1.206l6.585 6.37a1.42 1.42 0 0 1 .41.99v2.333a1.197 1.197 0 0 1-1.707 1.202a14.4 14.4 0 0 1-2.352-1.697a.645.645 0 0 0-.956 0l-4.78 4.95a.7.7 0 0 0 0 .99a19.65 19.65 0 0 0 27.59 0a.7.7 0 0 0 0-.99"
+      />
+    </svg>
+  ),
+  oxfmt: ({ size = ICON_SIZE, ...props }: IconProps) => (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 32 32"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <defs>
+        <linearGradient id="grad2">
+          <stop offset="0%" stopColor="#f97316" />
+          <stop offset="100%" stopColor="#fdba74" />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#grad2)"
+        d="m29.795 23.354l-4.78-4.95a.645.645 0 0 0-.956 0a14.4 14.4 0 0 1-2.352 1.697A1.197 1.197 0 0 1 20 18.899v-2.333a1.42 1.42 0 0 1 .41-.99l6.585-6.37A.714.714 0 0 0 26.517 8H21.5A1.5 1.5 0 0 1 20 6.5V2.75a.75.75 0 0 0-.75-.75h-6.5a.75.75 0 0 0-.75.75V6.5A1.5 1.5 0 0 1 10.5 8H5.483a.714.714 0 0 0-.478 1.206l6.585 6.37a1.42 1.42 0 0 1 .41.99v2.333a1.197 1.197 0 0 1-1.707 1.202a14.4 14.4 0 0 1-2.352-1.697a.645.645 0 0 0-.956 0l-4.78 4.95a.7.7 0 0 0 0 .99a19.65 19.65 0 0 0 27.59 0a.7.7 0 0 0 0-.99"
+      />
+    </svg>
+  ),
+  nitro: ({ size = ICON_SIZE, ...props }: IconProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 40 40"
+      fill="none"
+      {...props}
+    >
+      <g clipPath="url(#clip0_115_108)">
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M35.2166 7.02016C28.0478 -1.38317 15.4241 -2.38397 7.02077 4.78481C-1.38256 11.9536 -2.38336 24.5773 4.78542 32.9806C11.9542 41.3839 24.5779 42.3847 32.9812 35.216C41.3846 28.0472 42.3854 15.4235 35.2166 7.02016ZM25.2525 17.5175C26.0233 17.5175 26.5155 18.3527 26.1287 19.0194L26.0175 19.2111L18.4696 31.6294C18.3293 31.8602 18.0788 32.001 17.8088 32.001H17.0883C16.5946 32.001 16.2336 31.5349 16.3573 31.0569L18.4054 23.1384C18.5691 22.5053 18.0912 21.888 17.4373 21.888H14.2914C13.6375 21.888 13.1596 21.2708 13.3232 20.6377L16.4137 8.68289C16.5261 8.28056 16.8904 7.99734 17.3081 8.00208C17.3587 8.00266 17.4046 8.0035 17.4427 8.0047L20.6109 8.00465C21.217 8.00436 21.684 8.53896 21.6023 9.13949L21.5828 9.28246L20.3746 16.349C20.2702 16.9598 20.7406 17.5175 21.3603 17.5175H25.2525Z"
+          fill="url(#paint0_diamond_115_108)"
+        />
+        <mask
+          id="mask0_115_108"
+          style={{ maskType: "alpha" }}
+          maskUnits="userSpaceOnUse"
+          x="0"
+          y="0"
+          width="40"
+          height="41"
+        >
+          <circle
+            cx="20"
+            cy="20.001"
+            r="20"
+            fill="url(#paint1_diamond_115_108)"
+          />
+        </mask>
+        <g mask="url(#mask0_115_108)">
+          <g filter="url(#filter0_f_115_108)">
+            <path
+              d="M1.11145 13.4267C0.0703174 16.4179 -0.245523 19.6136 0.189923 22.7507C0.62537 25.8879 1.79965 28.8768 3.61611 31.4713C5.43256 34.0659 7.83925 36.192 10.6381 37.6746C13.4369 39.1572 16.5478 39.9538 19.7147 39.999C22.8816 40.0442 26.0139 39.3366 28.8539 37.9345C31.6939 36.5324 34.1602 34.4758 36.05 31.9341C37.9397 29.3924 39.1988 26.4383 39.7236 23.3148C40.2483 20.1914 40.0238 16.9879 39.0684 13.9682L33.2532 15.808C33.9172 17.9068 34.0732 20.1333 33.7085 22.3042C33.3438 24.4751 32.4687 26.5283 31.1552 28.2949C29.8418 30.0615 28.1276 31.4908 26.1537 32.4653C24.1799 33.4399 22.0028 33.9316 19.8017 33.9002C17.6006 33.8688 15.4384 33.3151 13.4932 32.2847C11.5479 31.2543 9.87518 29.7766 8.61269 27.9733C7.35019 26.1699 6.53403 24.0926 6.23138 21.9122C5.92873 19.7317 6.14825 17.5106 6.87187 15.4316L1.11145 13.4267Z"
+              fill="white"
+            />
+          </g>
+        </g>
+      </g>
+      <defs>
+        <filter
+          id="filter0_f_115_108"
+          x="-10"
+          y="3.42667"
+          width="60"
+          height="46.5744"
+          filterUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
+        >
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="BackgroundImageFix"
+            result="shape"
+          />
+          <feGaussianBlur
+            stdDeviation="5"
+            result="effect1_foregroundBlur_115_108"
+          />
+        </filter>
+        <radialGradient
+          id="paint0_diamond_115_108"
+          cx="0"
+          cy="0"
+          r="1"
+          gradientUnits="userSpaceOnUse"
+          gradientTransform="translate(4.00069 20.0004) scale(39.0007 397.71)"
+        >
+          <stop stopColor="#31B2F3" />
+          <stop offset="0.473958" stopColor="#F27CEC" />
+          <stop offset="1" stopColor="#FD6641" />
+        </radialGradient>
+        <radialGradient
+          id="paint1_diamond_115_108"
+          cx="0"
+          cy="0"
+          r="1"
+          gradientUnits="userSpaceOnUse"
+          gradientTransform="translate(4 20.0011) scale(39 397.703)"
+        >
+          <stop stopColor="#F27CEC" />
+          <stop offset="0.484375" stopColor="#31B2F3" />
+          <stop offset="1" stopColor="#7D7573" />
+        </radialGradient>
+        <clipPath id="clip0_115_108">
+          <rect width="146" height="40.001" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  ),
+  resend: ({ size = ICON_SIZE, ...props }: IconProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      viewBox="0 0 1800 1800"
+      fill="none"
+      {...props}
+    >
+      <path
+        d="M1000.46 450C1174.77 450 1278.43 553.669 1278.43 691.282C1278.43 828.896 1174.77 932.563 1000.46 932.563H912.382L1350 1350H1040.82L707.794 1033.48C683.944 1011.47 672.936 985.781 672.935 963.765C672.935 932.572 694.959 905.049 737.161 893.122L908.712 847.244C973.85 829.812 1018.81 779.353 1018.81 713.298C1018.8 632.567 952.745 585.78 871.095 585.78H450V450H1000.46Z"
+        className="fill-foreground"
+      />
+    </svg>
+  ),
+  voidZeroIcon: ({ size = ICON_SIZE, ...props }: IconProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      fill="none"
+      viewBox="0 0 400 400"
+      {...props}
+    >
+      <path className="fill-background" d="M0 0h400v400H0z" />
+      <path
+        className="fill-foreground"
+        d="M101.187 109c-35.84 51.313-36.05 130.852 0 182.351H76.965c-36.059-51.499-35.849-131.038 0-182.351zm222.054 0c35.841 51.313 36.05 130.852 0 182.351h-24.22c36.058-51.499 35.848-131.038 0-182.351zm-123.136.252c50.222 0 90.924 40.711 90.924 90.926 0 50.214-40.71 90.925-90.924 90.926-50.215 0-90.926-40.712-90.926-90.926 0-50.215 40.711-90.926 90.926-90.926m55.385 52.733c-1.343-3.013-5.381-3.576-7.464-1.015l-78.65 96.458c-1.881 2.317-.974 5.785 1.797 6.893 8.144 3.258 17.782 4.869 28.932 4.869 41.264 0 62.135-22.164 62.135-69.012 0-15.39-2.258-28.084-6.75-38.193m-55.385-30.568c-41.5 0-62.137 22.165-62.137 68.761 0 15.448 2.25 28.21 6.75 38.377 1.335 3.022 5.382 3.585 7.464 1.024l78.508-96.467c1.889-2.317.974-5.792-1.805-6.892-8.119-3.216-17.715-4.803-28.78-4.803"
+      />
+    </svg>
+  ),
+  voidZeroLogo: () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="283"
+      height="47"
+      shapeRendering="geometricPrecision"
+      fill="none"
+      viewBox="0 0 283 47"
+    >
+      <path
+        className="fill-foreground"
+        d="M85.24 0c19.065 0 29.081 8.014 29.081 23.395s-10.017 23.393-29.08 23.393c-19.065 0-29.017-8.013-29.017-23.393S66.176 0 85.24 0m133.166 0c-9.196 13.166-9.25 33.575 0 46.788h-6.215c-9.252-13.213-9.198-33.622 0-46.788zm56.976 0c9.195 13.166 9.249 33.575 0 46.788h-6.215c9.252-13.213 9.198-33.622 0-46.788zm-31.596.064c12.886 0 23.33 10.446 23.33 23.33 0 12.885-10.446 23.33-23.33 23.33s-23.33-10.445-23.33-23.33S230.902.065 243.786.065M28.5 33.347 40.262.775h16.091L38.518 46.013h-20.68L0 .775h16.544zm107.277 12.666h-15.509V.775h15.509zM172.075.775c15.704 0 24.688 7.11 24.688 22.62s-9.049 22.618-24.752 22.618h-28.37V.775zm85.923 12.82a1.134 1.134 0 0 0-1.915-.261l-20.181 24.75a1.134 1.134 0 0 0 .461 1.768q3.134 1.252 7.423 1.25c10.588 0 15.943-5.687 15.943-17.707 0-3.949-.579-7.207-1.731-9.8M85.24 11.115c-8.982 0-13.183 3.878-13.183 12.28 0 8.4 4.2 12.213 13.183 12.213s13.184-3.748 13.184-12.213-4.2-12.28-13.184-12.28m73.91 23.912h10.728c7.367 0 10.986-3.167 10.986-11.632s-3.619-11.633-10.986-11.633H159.15zm84.636-29.275c-10.648 0-15.943 5.687-15.943 17.643 0 3.963.578 7.238 1.732 9.846.343.776 1.381.92 1.915.263l20.145-24.751a1.134 1.134 0 0 0-.464-1.77c-2.083-.825-4.546-1.231-7.385-1.231"
+      />
     </svg>
   ),
 }
