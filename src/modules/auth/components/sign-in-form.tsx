@@ -112,6 +112,17 @@ export function SignInForm() {
                   />
                 )}
               </form.AppField>
+              <div className="flex justify-end">
+                <Link
+                  className={cn(
+                    buttonVariants({ variant: "link" }),
+                    "h-auto px-0 text-xs",
+                  )}
+                  to="/forgot-password"
+                >
+                  Forgot password?
+                </Link>
+              </div>
               <form.SubmitButton isPending={isPending}>
                 Continue with Email
               </form.SubmitButton>

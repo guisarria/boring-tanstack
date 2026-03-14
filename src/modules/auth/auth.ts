@@ -7,6 +7,7 @@ import { env } from "@/config/env/server"
 import { db } from "@/db"
 import { schema } from "@/db/index"
 
+import PasswordResetEmail from "./emails/password-reset-email"
 import { resend } from "./emails/resend"
 import VerificationEmail from "./emails/verification-email"
 
@@ -36,16 +37,25 @@ export const auth = betterAuth({
   emailVerification: {
     sendOnSignUp: true,
     sendVerificationEmail: async ({ user: { email, name }, url }) => {
-      await resend.emails.send({
+      void resend.emails.send({
         from: `Boring Tanstack <${env.RESEND_EMAIL}>`,
         to: [email],
         subject: "Verify your email address",
         react: VerificationEmail({ name, url }),
       })
     },
+    autoSignInAfterVerification: true,
   },
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ user: { email, name }, url }) => {
+      void resend.emails.send({
+        from: `Boring Tanstack <${env.RESEND_EMAIL}>`,
+        to: [email],
+        subject: "Reset your password",
+        react: PasswordResetEmail({ name, url }),
+      })
+    },
   },
   plugins: [tanstackStartCookies(), admin()],
 })

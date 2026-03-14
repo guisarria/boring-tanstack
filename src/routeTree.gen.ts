@@ -24,6 +24,8 @@ import { Route as AuthDashboardMyIssuesRouteImport } from './routes/_auth/dashbo
 import { Route as AuthDashboardInboxRouteImport } from './routes/_auth/dashboard/inbox'
 import { Route as marketingauthSignUpIndexRouteImport } from './routes/(marketing)/(auth)/sign-up/index'
 import { Route as marketingauthSignInIndexRouteImport } from './routes/(marketing)/(auth)/sign-in/index'
+import { Route as marketingauthResetPasswordIndexRouteImport } from './routes/(marketing)/(auth)/reset-password/index'
+import { Route as marketingauthForgotPasswordIndexRouteImport } from './routes/(marketing)/(auth)/forgot-password/index'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
@@ -99,6 +101,18 @@ const marketingauthSignInIndexRoute =
     path: '/sign-in/',
     getParentRoute: () => marketingauthRouteRoute,
   } as any)
+const marketingauthResetPasswordIndexRoute =
+  marketingauthResetPasswordIndexRouteImport.update({
+    id: '/reset-password/',
+    path: '/reset-password/',
+    getParentRoute: () => marketingauthRouteRoute,
+  } as any)
+const marketingauthForgotPasswordIndexRoute =
+  marketingauthForgotPasswordIndexRouteImport.update({
+    id: '/forgot-password/',
+    path: '/forgot-password/',
+    getParentRoute: () => marketingauthRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof marketingIndexRoute
@@ -111,6 +125,8 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/': typeof AuthDashboardIndexRoute
   '/settings/': typeof AuthSettingsIndexRoute
+  '/forgot-password/': typeof marketingauthForgotPasswordIndexRoute
+  '/reset-password/': typeof marketingauthResetPasswordIndexRoute
   '/sign-in/': typeof marketingauthSignInIndexRoute
   '/sign-up/': typeof marketingauthSignUpIndexRoute
 }
@@ -123,6 +139,8 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard': typeof AuthDashboardIndexRoute
   '/settings': typeof AuthSettingsIndexRoute
+  '/forgot-password': typeof marketingauthForgotPasswordIndexRoute
+  '/reset-password': typeof marketingauthResetPasswordIndexRoute
   '/sign-in': typeof marketingauthSignInIndexRoute
   '/sign-up': typeof marketingauthSignUpIndexRoute
 }
@@ -141,6 +159,8 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/dashboard/': typeof AuthDashboardIndexRoute
   '/_auth/settings/': typeof AuthSettingsIndexRoute
+  '/(marketing)/(auth)/forgot-password/': typeof marketingauthForgotPasswordIndexRoute
+  '/(marketing)/(auth)/reset-password/': typeof marketingauthResetPasswordIndexRoute
   '/(marketing)/(auth)/sign-in/': typeof marketingauthSignInIndexRoute
   '/(marketing)/(auth)/sign-up/': typeof marketingauthSignUpIndexRoute
 }
@@ -157,6 +177,8 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/dashboard/'
     | '/settings/'
+    | '/forgot-password/'
+    | '/reset-password/'
     | '/sign-in/'
     | '/sign-up/'
   fileRoutesByTo: FileRoutesByTo
@@ -169,6 +191,8 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/dashboard'
     | '/settings'
+    | '/forgot-password'
+    | '/reset-password'
     | '/sign-in'
     | '/sign-up'
   id:
@@ -186,6 +210,8 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/_auth/dashboard/'
     | '/_auth/settings/'
+    | '/(marketing)/(auth)/forgot-password/'
+    | '/(marketing)/(auth)/reset-password/'
     | '/(marketing)/(auth)/sign-in/'
     | '/(marketing)/(auth)/sign-up/'
   fileRoutesById: FileRoutesById
@@ -304,15 +330,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof marketingauthSignInIndexRouteImport
       parentRoute: typeof marketingauthRouteRoute
     }
+    '/(marketing)/(auth)/reset-password/': {
+      id: '/(marketing)/(auth)/reset-password/'
+      path: '/reset-password'
+      fullPath: '/reset-password/'
+      preLoaderRoute: typeof marketingauthResetPasswordIndexRouteImport
+      parentRoute: typeof marketingauthRouteRoute
+    }
+    '/(marketing)/(auth)/forgot-password/': {
+      id: '/(marketing)/(auth)/forgot-password/'
+      path: '/forgot-password'
+      fullPath: '/forgot-password/'
+      preLoaderRoute: typeof marketingauthForgotPasswordIndexRouteImport
+      parentRoute: typeof marketingauthRouteRoute
+    }
   }
 }
 
 interface marketingauthRouteRouteChildren {
+  marketingauthForgotPasswordIndexRoute: typeof marketingauthForgotPasswordIndexRoute
+  marketingauthResetPasswordIndexRoute: typeof marketingauthResetPasswordIndexRoute
   marketingauthSignInIndexRoute: typeof marketingauthSignInIndexRoute
   marketingauthSignUpIndexRoute: typeof marketingauthSignUpIndexRoute
 }
 
 const marketingauthRouteRouteChildren: marketingauthRouteRouteChildren = {
+  marketingauthForgotPasswordIndexRoute: marketingauthForgotPasswordIndexRoute,
+  marketingauthResetPasswordIndexRoute: marketingauthResetPasswordIndexRoute,
   marketingauthSignInIndexRoute: marketingauthSignInIndexRoute,
   marketingauthSignUpIndexRoute: marketingauthSignUpIndexRoute,
 }

@@ -7,23 +7,12 @@ import {
   SmartphoneIcon,
   TabletIcon,
 } from "lucide-react"
-import { useState, useTransition } from "react"
+import { useMemo } from "react"
 import { toast } from "sonner"
 import { UAParser } from "ua-parser-js"
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+import { ActionButton } from "@/components/ui/action-button"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -32,7 +21,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { LoadingSwap } from "@/components/ui/loading-swap"
 import { Separator } from "@/components/ui/separator"
 import { authClient } from "@/modules/auth/auth-client"
 import type { ActiveSessions } from "@/modules/auth/schema"
@@ -55,40 +43,42 @@ function SessionItem({
   isCurrent: boolean
 }) {
   const router = useRouter()
-  const [confirmOpen, setConfirmOpen] = useState(false)
-  const [isPending, startTransition] = useTransition()
 
-  const userAgent = session.userAgent ? new UAParser(session.userAgent) : null
+  const userAgent = useMemo(
+    () => (session.userAgent ? new UAParser(session.userAgent) : null),
+    [session.userAgent],
+  )
 
-  function handleRevoke() {
+  const device = userAgent?.getDevice()
+  const browser = userAgent?.getBrowser()
+
+  async function revokeAction(): Promise<{
+    error: boolean
+    message?: string
+  }> {
     if (isCurrent) {
-      startTransition(async () => {
-        await authClient.signOut({
-          fetchOptions: {
-            onSuccess: async () => {
-              toast.success("Signed out")
-              await router.invalidate({ sync: true })
-            },
+      await authClient.signOut({
+        fetchOptions: {
+          onSuccess: async () => {
+            toast.success("Signed out")
+            await router.invalidate({ sync: true })
           },
-        })
+        },
       })
-      return setConfirmOpen(false)
+      return { error: false }
     }
-    setConfirmOpen(true)
-  }
 
-  function confirmRevoke() {
-    startTransition(async () => {
-      const { error } = await authClient.revokeSession({
-        token: session.token,
-      })
-      if (error) {
-        toast.error(error.message)
-      } else {
-        toast.success("Session revoked successfully")
-        void router.invalidate({ sync: true })
-      }
+    const { error } = await authClient.revokeSession({
+      token: session.token,
     })
+
+    if (error) {
+      return { error: true, message: error.message }
+    }
+
+    toast.success("Session revoked successfully")
+    void router.invalidate({ sync: true })
+    return { error: false }
   }
 
   return (
@@ -96,13 +86,12 @@ function SessionItem({
       <div className="flex max-w-sm items-start justify-between">
         <div className="flex items-start gap-3">
           <div className="bg-secondary rounded-md p-2">
-            {getDeviceIcon(userAgent?.getDevice().type ?? "laptop")}
+            {getDeviceIcon(device?.type ?? "laptop")}
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-x-2">
               <p className="font-medium">
-                {userAgent?.getDevice().model} (
-                {userAgent?.getDevice().vendor ?? "Unknown"})
+                {device?.model} ({device?.vendor ?? "Unknown"})
               </p>
               {isCurrent && (
                 <Badge className="text-xs" variant="outline">
@@ -111,7 +100,7 @@ function SessionItem({
               )}
             </div>
             <p className="text-muted-foreground mt-1 text-sm">
-              {userAgent?.getBrowser().name} • {userAgent?.getBrowser().version}
+              {browser?.name} • {browser?.version}
             </p>
             <p className="text-muted-foreground mt-1 text-xs">
               IP: {session.ipAddress ?? "Unknown"} •{" "}
@@ -119,47 +108,16 @@ function SessionItem({
             </p>
           </div>
         </div>
-        <AlertDialog
-          onOpenChange={(open) => !open && setConfirmOpen(false)}
-          open={confirmOpen}
+        <ActionButton
+          action={revokeAction}
+          areYouSureDescription="Are you sure you want to revoke this session? This will sign out the device and require re-authentication."
+          requireAreYouSure={!isCurrent}
+          size="sm"
+          variant="destructive-outline"
         >
-          <AlertDialogTrigger
-            render={
-              <Button
-                disabled={isPending}
-                onClick={handleRevoke}
-                size="sm"
-                variant="destructive-outline"
-              />
-            }
-          >
-            <LoadingSwap isLoading={isPending}>
-              <span className="flex items-center gap-x-1">
-                <LogOut />
-                Revoke
-              </span>
-            </LoadingSwap>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Revoke Session</AlertDialogTitle>
-              <AlertDialogDescription>
-                Are you sure you want to revoke this session? This will sign out
-                the device and require re-authentication.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                disabled={isPending}
-                onClick={confirmRevoke}
-                variant="destructive-outline"
-              >
-                <LoadingSwap isLoading={isPending}>Revoke</LoadingSwap>
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+          <LogOut />
+          Revoke
+        </ActionButton>
       </div>
       <Separator className="mt-4" />
     </div>
@@ -168,64 +126,40 @@ function SessionItem({
 
 function RevokeAllDialog({ disabled }: { disabled: boolean }) {
   const router = useRouter()
-  const [open, setOpen] = useState(false)
-  const [isPending, startTransition] = useTransition()
 
-  function handleRevokeAll() {
-    startTransition(async () => {
-      const { error } = await authClient.revokeSessions()
-      if (error) {
-        toast.error(error.message)
-        return
-      }
-      toast.success("All sessions revoked successfully")
-      await authClient.signOut({
-        fetchOptions: {
-          onSuccess: () => {
-            toast.success("Signed out")
-            void router.invalidate()
-          },
+  async function revokeAllAction(): Promise<{
+    error: boolean
+    message?: string
+  }> {
+    const { error } = await authClient.revokeSessions()
+
+    if (error) {
+      return { error: true, message: error.message }
+    }
+
+    toast.success("All sessions revoked successfully")
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          toast.success("Signed out")
+          void router.invalidate()
         },
-      })
+      },
     })
+    return { error: false }
   }
 
   return (
-    <AlertDialog open={open || isPending}>
-      <AlertDialogTrigger
-        render={
-          <Button
-            disabled={disabled}
-            onClick={() => setOpen(true)}
-            size="sm"
-            variant="destructive-outline"
-          />
-        }
-      >
-        Revoke All Sessions
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Revoke All Sessions</AlertDialogTitle>
-          <AlertDialogDescription>
-            This will sign you out from all devices except your current one.
-            You'll need to sign in again on those devices.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => setOpen(false)}>
-            Cancel
-          </AlertDialogCancel>
-          <AlertDialogAction
-            disabled={isPending}
-            onClick={handleRevokeAll}
-            variant="destructive-outline"
-          >
-            <LoadingSwap isLoading={isPending}>Revoke All</LoadingSwap>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <ActionButton
+      action={revokeAllAction}
+      areYouSureDescription="This will sign you out from all devices. You'll need to sign in again on those devices."
+      disabled={disabled}
+      requireAreYouSure
+      size="sm"
+      variant="destructive-outline"
+    >
+      Revoke All Sessions
+    </ActionButton>
   )
 }
 

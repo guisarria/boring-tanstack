@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react"
 
-import { ActionButton } from "@/components/ui/action-button"
+import { ActionButton, type ActionResult } from "@/components/ui/action-button"
 
 export function AuthActionButton({
   action,
@@ -10,17 +10,14 @@ export function AuthActionButton({
   action: () => Promise<{ error: null | { message?: string } }>
   successMessage?: string
 }) {
-  return (
-    <ActionButton
-      {...props}
-      action={async () => {
-        const res = await action()
+  async function adaptedAction(): Promise<ActionResult> {
+    const res = await action()
 
-        if (res.error) {
-          return { error: true, message: res.error.message || "Action failed" }
-        }
-        return { error: false, message: successMessage }
-      }}
-    />
-  )
+    if (res.error) {
+      return { error: true, message: res.error.message || "Action failed" }
+    }
+    return { error: false, message: successMessage }
+  }
+
+  return <ActionButton {...props} action={adaptedAction} />
 }

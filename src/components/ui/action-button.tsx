@@ -15,42 +15,48 @@ import {
 import { Button } from "@/components/ui/button"
 import { LoadingSwap } from "@/components/ui/loading-swap"
 
+export type ActionResult = { error: boolean; message?: string }
+
+type ActionButtonProps = ComponentProps<typeof Button> & {
+  action: () => Promise<ActionResult>
+  requireAreYouSure?: boolean
+  areYouSureTitle?: ReactNode
+  areYouSureDescription?: ReactNode
+}
+
 export function ActionButton({
   action,
   requireAreYouSure = false,
+  areYouSureTitle = "Are you sure?",
   areYouSureDescription = "This action cannot be undone.",
   ...props
-}: ComponentProps<typeof Button> & {
-  action: () => Promise<{ error: boolean; message?: string }>
-  requireAreYouSure?: boolean
-  areYouSureDescription?: ReactNode
-}) {
-  const [isLoading, startTransition] = useTransition()
+}: ActionButtonProps) {
+  const [isPending, startTransition] = useTransition()
 
   function performAction() {
     startTransition(async () => {
-      const data = await action()
-      if (data.error) {
-        toast.error(data.message ?? "Error")
+      const result = await action()
+      if (result.error) {
+        toast.error(result.message ?? "Error")
       }
     })
   }
 
   if (requireAreYouSure) {
     return (
-      <AlertDialog open={isLoading ? true : undefined}>
+      <AlertDialog open={isPending ? true : undefined}>
         <AlertDialogTrigger render={<Button {...props} />} />
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>{areYouSureTitle}</AlertDialogTitle>
             <AlertDialogDescription>
               {areYouSureDescription}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction disabled={isLoading} onClick={performAction}>
-              <LoadingSwap isLoading={isLoading}>Yes</LoadingSwap>
+            <AlertDialogAction disabled={isPending} onClick={performAction}>
+              <LoadingSwap isLoading={isPending}>Yes</LoadingSwap>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -61,7 +67,7 @@ export function ActionButton({
   return (
     <Button
       {...props}
-      disabled={props.disabled ?? isLoading}
+      disabled={props.disabled ?? isPending}
       onClick={(e) => {
         performAction()
         props.onClick?.(e)
@@ -69,7 +75,7 @@ export function ActionButton({
     >
       <LoadingSwap
         className="inline-flex items-center gap-2"
-        isLoading={isLoading}
+        isLoading={isPending}
       >
         {props.children}
       </LoadingSwap>
