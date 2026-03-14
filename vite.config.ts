@@ -19,10 +19,11 @@ const config = defineConfig({
     sortTailwindcss: {},
     sortPackageJson: true,
   },
-  oxc: {
-    exclude: ["**/routeTree.gen.ts"],
+
+  lint: {
+    options: { typeAware: true, typeCheck: true },
+    ignorePatterns: ["dist/**", "**/routeTree.gen.ts"],
   },
-  lint: { options: { typeAware: true, typeCheck: true } },
   plugins: [
     nitro(),
     tailwindcss(),

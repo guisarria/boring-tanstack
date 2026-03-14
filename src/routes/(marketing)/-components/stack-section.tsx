@@ -1,3 +1,5 @@
+import type { ComponentType } from "react"
+
 import { buttonVariants } from "@/components/ui/button"
 import {
   Card,
@@ -7,8 +9,16 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Container, GlowText, Section } from "@/components/ui/design-system"
-import { Icons } from "@/components/ui/icons"
+import { Icons, type IconProps } from "@/components/ui/icons"
 import { cn } from "@/lib/utils"
+
+//TODO: Vite+ Oxc Oxfmt Nitro Resend React-email
+type Library = {
+  name: string
+  description: string
+  icon: ComponentType<IconProps>
+  documentationUrl: `https://${string}`
+}
 
 const stack = [
   {
@@ -70,7 +80,13 @@ const stack = [
     icon: Icons.shadcn,
     documentationUrl: "https://ui.shadcn.com/docs",
   },
-]
+  {
+    name: "Vite+",
+    description: "test",
+    icon: Icons.viteplus,
+    documentationUrl: "https://",
+  },
+] satisfies Library[]
 
 function StackSection() {
   return (
@@ -83,25 +99,22 @@ function StackSection() {
             shipping.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:[&_div]:last:col-span-2 lg:[&_div]:last:col-span-1">
-          {stack.map((item) => (
-            <Card
-              className="w-ful flex flex-col justify-between"
-              key={item.name}
-            >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:[&>*:last-child]:col-span-2 lg:[&>*:last-child]:col-span-1">
+          {stack.map(({ name, description, icon: Icon, documentationUrl }) => (
+            <Card className="flex w-full flex-col justify-between" key={name}>
               <CardHeader className="gap-y-2">
                 <div className="flex items-center gap-x-3">
-                  <item.icon className="size-6 shrink-0" />
-                  <CardTitle className="text-base">{item.name}</CardTitle>
+                  <Icon className="size-6 shrink-0" />
+                  <CardTitle className="text-base">{name}</CardTitle>
                 </div>
                 <CardDescription className="text-sm">
-                  {item.description}
+                  {description}
                 </CardDescription>
               </CardHeader>
               <CardContent className="self-end">
                 <a
                   className={cn(buttonVariants({ variant: "link" }), "px-0")}
-                  href={item.documentationUrl}
+                  href={documentationUrl}
                   rel="noopener noreferrer"
                   target="_blank"
                 >

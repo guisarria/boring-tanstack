@@ -1,10 +1,16 @@
-type IconProps = React.HTMLAttributes<SVGElement>
+import type { ComponentProps } from "react"
+
+export type IconProps = ComponentProps<"svg"> & {
+  size?: number | string
+}
+
+const ICON_SIZE = 32
 
 export const Icons = {
-  nextJs: (props: IconProps) => (
+  nextJs: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      width={24}
-      height={24}
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -24,10 +30,10 @@ export const Icons = {
       </g>
     </svg>
   ),
-  drizzle: (props: IconProps) => (
+  drizzle: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      width={32}
-      height={32}
+      width={size}
+      height={size}
       viewBox="0 0 32 32"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -38,10 +44,10 @@ export const Icons = {
       />
     </svg>
   ),
-  betterAuth: (props: IconProps) => (
+  betterAuth: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      width={24}
-      height={24}
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -52,10 +58,10 @@ export const Icons = {
       />
     </svg>
   ),
-  tanStack: (props: IconProps) => (
+  tanStack: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      width={24}
-      height={24}
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -66,10 +72,10 @@ export const Icons = {
       />
     </svg>
   ),
-  resend: (props: IconProps) => (
+  resend: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      width={24}
-      height={24}
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -80,10 +86,10 @@ export const Icons = {
       />
     </svg>
   ),
-  neon: (props: IconProps) => (
+  neon: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      width="24"
-      height="24"
+      width={size}
+      height={size}
       viewBox="0 0 64 64"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -95,12 +101,12 @@ export const Icons = {
       />
     </svg>
   ),
-  typeScript: (props: IconProps) => (
+  typeScript: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
+      width={size}
+      height={size}
       fill="none"
-      height="24"
       viewBox="0 0 27 26"
-      width="24"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
@@ -110,8 +116,8 @@ export const Icons = {
       ></path>
     </svg>
   ),
-  tailwind: (props: IconProps) => (
-    <svg viewBox="0 0 54 33" fill="none" {...props}>
+  tailwind: ({ size = ICON_SIZE, ...props }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 54 33" fill="none" {...props}>
       <title>Tailwind CSS</title>
       <path
         fillRule="evenodd"
@@ -121,10 +127,10 @@ export const Icons = {
       />
     </svg>
   ),
-  zod: (props: IconProps) => (
+  zod: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      width={24}
-      height={24}
+      width={size}
+      height={size}
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -139,10 +145,10 @@ export const Icons = {
       />
     </svg>
   ),
-  motion: (props: IconProps) => (
+  motion: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      width={128}
-      height={128}
+      width={size}
+      height={size}
       viewBox="0 0 128 128"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -150,18 +156,25 @@ export const Icons = {
       <path d="M48.379 39.997L23.063 88.003H0L19.77 50.52c3.064-5.814 10.708-10.523 17.078-10.523zM104.937 52c0-6.631 5.162-12.002 11.531-12.002S128 45.368 128 52c0 6.629-5.162 12-11.532 12-6.369 0-11.531-5.37-11.531-12.001M52.703 39.997h23.063L50.45 88.003H27.387zm27.238 0h23.063L83.241 77.48c-3.065 5.814-10.715 10.523-17.084 10.523H54.625z" />
     </svg>
   ),
-  discord: (props: IconProps) => (
-    <svg className="size-4" fill="currentColor" viewBox="0 0 24 24" {...props}>
+  discord: ({ size = ICON_SIZE, ...props }: IconProps) => (
+    <svg
+      width={size}
+      height={size}
+      className="size-4"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+      {...props}
+    >
       <title>Discord</title>
       <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z" />
     </svg>
   ),
-  gitHub: (props: IconProps) => (
+  gitHub: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      height="16"
+      width={size}
+      height={size}
       strokeLinejoin="round"
       viewBox="0 0 16 16"
-      width="16"
       {...props}
     >
       <title>Github</title>
@@ -173,12 +186,12 @@ export const Icons = {
       />
     </svg>
   ),
-  x: (props: IconProps) => (
+  x: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      height="16"
+      width={size}
+      height={size}
       strokeLinejoin="round"
       viewBox="0 0 16 16"
-      width="16"
       {...props}
     >
       <title>X</title>
@@ -190,12 +203,12 @@ export const Icons = {
       />
     </svg>
   ),
-  linkedIn: (props: IconProps) => (
+  linkedIn: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      height="16"
+      width={size}
+      height={size}
       strokeLinejoin="round"
       viewBox="0 0 16 16"
-      width="16"
       {...props}
     >
       <title>LinkedIn</title>
@@ -207,11 +220,11 @@ export const Icons = {
       />
     </svg>
   ),
-  google: (props: IconProps) => (
+  google: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      height={16}
+      width={size}
+      height={size}
       viewBox="0 0 16 16"
-      width={16}
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
@@ -240,9 +253,14 @@ export const Icons = {
       </g>
     </svg>
   ),
-  shadcn: (props: IconProps) => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" {...props}>
-      <rect width="256" height="256" fill="none" />
+  shadcn: ({ size = ICON_SIZE, ...props }: IconProps) => (
+    <svg
+      width={size}
+      height={size}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 256 256"
+      {...props}
+    >
       <line
         x1="208"
         y1="128"
@@ -267,10 +285,10 @@ export const Icons = {
       />
     </svg>
   ),
-  baseui: (props: IconProps) => (
+  baseui: ({ size = ICON_SIZE, ...props }: IconProps) => (
     <svg
-      width="17"
-      height="24"
+      width={size}
+      height={size}
       viewBox="0 0 17 24"
       fill="currentcolor"
       aria-label="Base UI"
@@ -278,6 +296,402 @@ export const Icons = {
     >
       <path d="M9.5001 7.01537C9.2245 6.99837 9 7.22385 9 7.49999V23C13.4183 23 17 19.4183 17 15C17 10.7497 13.6854 7.27351 9.5001 7.01537Z"></path>
       <path d="M8 9.8V12V23C3.58172 23 0 19.0601 0 14.2V12V1C4.41828 1 8 4.93989 8 9.8Z"></path>
+    </svg>
+  ),
+  viteplus: ({ size = ICON_SIZE, ...props }: IconProps) => (
+    <svg
+      width={size}
+      height={size}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 36 20"
+      {...props}
+    >
+      <path
+        fill="#6254fe"
+        d="M17.85 19.535a.483.483 0 0 1-.864-.298v-4.403a.967.967 0 0 0-.967-.967h-4.862a.483.483 0 0 1-.393-.764l3.197-4.475a.967.967 0 0 0-.788-1.53H7.29a.483.483 0 0 1-.393-.764L11.04.533a.48.48 0 0 1 .394-.203h12.348c.393 0 .622.445.393.764L20.978 5.57c-.457.64 0 1.53.788 1.53h4.861c.404 0 .63.464.38.782L17.85 19.536"
+      />
+      <mask
+        id="a"
+        x="6"
+        y="0"
+        maskUnits="userSpaceOnUse"
+        style={{ maskType: "alpha" }}
+      >
+        <path
+          fill="#833bff"
+          d="M17.85 19.535a.483.483 0 0 1-.864-.298v-4.403a.967.967 0 0 0-.967-.967h-4.862a.483.483 0 0 1-.393-.764l3.197-4.475a.967.967 0 0 0-.788-1.53H7.29a.483.483 0 0 1-.393-.764L11.04.533a.48.48 0 0 1 .394-.203h12.348c.393 0 .622.445.393.764L20.978 5.57c-.457.64 0 1.53.788 1.53h4.861c.404 0 .63.464.38.782L17.85 19.536"
+        />
+      </mask>
+      <g mask="url(#a)">
+        <g filter="url(#b)">
+          <ellipse
+            cx="2.354"
+            cy="6.284"
+            fill="#ede6ff"
+            rx="2.354"
+            ry="6.284"
+            transform="rotate(89.814 -4.496 9.333)scale(1 -1)"
+          />
+        </g>
+        <g filter="url(#c)">
+          <ellipse
+            cx="4.444"
+            cy="12.758"
+            fill="#ede6ff"
+            rx="4.444"
+            ry="12.758"
+            transform="rotate(89.814 -6.879 -3.19)scale(1 -1)"
+          />
+        </g>
+        <g filter="url(#d)">
+          <ellipse
+            cx="2.354"
+            cy="13.029"
+            fill="#4e14ff"
+            rx="2.354"
+            ry="13.029"
+            transform="rotate(89.814 -7.86 -2.7)scale(1 -1)"
+          />
+        </g>
+        <g filter="url(#e)">
+          <ellipse
+            cx="2.354"
+            cy="13.077"
+            fill="#4e14ff"
+            rx="2.354"
+            ry="13.077"
+            transform="matrix(.00324 1 1 -.00324 -8.57 12.86)"
+          />
+        </g>
+        <g filter="url(#f)">
+          <ellipse
+            cx="2.354"
+            cy="13.077"
+            fill="#4e14ff"
+            rx="2.354"
+            ry="13.077"
+            transform="rotate(269.814 2.697 10.62)scale(-1 1)"
+          />
+        </g>
+        <g filter="url(#g)">
+          <ellipse
+            cx="6.014"
+            cy="9.436"
+            fill="#ede6ff"
+            rx="6.014"
+            ry="9.436"
+            transform="rotate(93.35 13.698 24.078)scale(-1 1)"
+          />
+        </g>
+        <g filter="url(#h)">
+          <ellipse
+            cx="1.483"
+            cy="9.189"
+            fill="#4e14ff"
+            rx="1.483"
+            ry="9.189"
+            transform="rotate(89.009 15.481 23.943)scale(-1 1)"
+          />
+        </g>
+        <g filter="url(#i)">
+          <ellipse
+            cx="1.483"
+            cy="9.189"
+            fill="#4e14ff"
+            rx="1.483"
+            ry="9.189"
+            transform="rotate(89.009 15.481 23.943)scale(-1 1)"
+          />
+        </g>
+        <g filter="url(#j)">
+          <ellipse
+            cx="6.926"
+            cy="4.164"
+            fill="#4e14ff"
+            rx="1.883"
+            ry="12.44"
+            transform="rotate(39.51 6.926 4.164)"
+          />
+        </g>
+        <g filter="url(#k)">
+          <ellipse
+            cx="27.071"
+            cy="-2.273"
+            fill="#4e14ff"
+            rx="1.883"
+            ry="12.44"
+            transform="rotate(37.892 27.07 -2.273)"
+          />
+        </g>
+        <g filter="url(#l)">
+          <ellipse
+            cx="24.229"
+            cy="4.526"
+            fill="#2bfdd2"
+            rx="3.539"
+            ry="5.339"
+            transform="rotate(37.892 24.23 4.526)"
+          />
+        </g>
+        <g filter="url(#m)">
+          <ellipse
+            cx="5.958"
+            cy="16.712"
+            fill="#4e14ff"
+            rx="1.883"
+            ry="12.44"
+            transform="rotate(37.892 5.958 16.712)"
+          />
+        </g>
+        <g filter="url(#n)">
+          <ellipse
+            cx="5.958"
+            cy="16.712"
+            fill="#4e14ff"
+            rx="1.883"
+            ry="12.44"
+            transform="rotate(37.892 5.958 16.712)"
+          />
+        </g>
+        <g filter="url(#o)">
+          <ellipse
+            cx="21.904"
+            cy="13.039"
+            fill="#4e14ff"
+            rx="2.001"
+            ry="12.44"
+            transform="rotate(37.892 21.904 13.039)"
+          />
+        </g>
+        <g filter="url(#p)">
+          <ellipse
+            cx="23.816"
+            cy="14.434"
+            fill="#2bfdd2"
+            rx="3.437"
+            ry="9.003"
+            transform="rotate(37.892 23.816 14.434)"
+          />
+        </g>
+      </g>
+      <path
+        className="fill-[#08060d] dark:fill-white"
+        fill="#08060d"
+        d="M3.644 0c-3.932 5.628-3.955 14.351 0 20H6.3C2.346 14.35 2.37 5.627 6.3 0zM30.625 10h2.657c-.001-3.593-.99-7.184-2.957-10h-2.656c1.966 2.816 2.955 6.407 2.957 10zM35.314 14.907h-2.665a19 19 0 0 0 .453-2.251h-2.657a19 19 0 0 1-.453 2.251h-2.669a17 17 0 0 1-.944 2.658h2.669A15 15 0 0 1 27.668 20h2.656a15 15 0 0 0 1.38-2.435h2.665c.386-.851.7-1.742.944-2.658"
+      />
+      <defs>
+        <filter
+          id="b"
+          x="-1.688"
+          y="7.232"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="3.273"
+          />
+        </filter>
+        <filter
+          id="c"
+          x="-16.579"
+          y="-2.889"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="3.273"
+          />
+        </filter>
+        <filter
+          id="d"
+          x="-14.454"
+          y="1.198"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="1.964"
+          />
+        </filter>
+        <filter
+          id="e"
+          x="-12.49"
+          y="8.89"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="1.964"
+          />
+        </filter>
+        <filter
+          id="f"
+          x="-11.835"
+          y="9.381"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="1.964"
+          />
+        </filter>
+        <filter
+          id="g"
+          x="13.495"
+          y="-7.32"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="3.273"
+          />
+        </filter>
+        <filter
+          id="h"
+          x="16.825"
+          y="1.306"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="1.964"
+          />
+        </filter>
+        <filter
+          id="i"
+          x="16.825"
+          y="1.306"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="1.964"
+          />
+        </filter>
+        <filter
+          id="j"
+          x="-5.05"
+          y="-9.437"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="1.964"
+          />
+        </filter>
+        <filter
+          id="k"
+          x="15.358"
+          y="-16.087"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="1.964"
+          />
+        </filter>
+        <filter
+          id="l"
+          x="15.994"
+          y="-4.143"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="1.964"
+          />
+        </filter>
+        <filter
+          id="m"
+          x="-5.755"
+          y="2.898"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="1.964"
+          />
+        </filter>
+        <filter
+          id="n"
+          x="-5.755"
+          y="2.898"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="1.964"
+          />
+        </filter>
+        <filter
+          id="o"
+          x="10.173"
+          y="-.784"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="1.964"
+          />
+        </filter>
+        <filter
+          id="p"
+          x="13.728"
+          y="3.092"
+          color-interpolation-filters="sRGB"
+          filterUnits="userSpaceOnUse"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            result="effect1_foregroundBlur_318_26118"
+            stdDeviation="1.964"
+          />
+        </filter>
+      </defs>
     </svg>
   ),
 }
