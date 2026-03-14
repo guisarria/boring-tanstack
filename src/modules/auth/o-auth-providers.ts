@@ -1,4 +1,5 @@
 import type { ComponentProps, ElementType } from "react"
+
 import { Icons } from "@/components/ui/icons"
 
 type OAuthProviderConfig = {

@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start"
 import { getCookie, getRequestHeaders } from "@tanstack/react-start/server"
+
 import {
   type AuthServiceError,
   getSessionResult,
@@ -50,15 +51,15 @@ async function resolveRequiredSession() {
 }
 
 export const sessionAction = createServerFn({ method: "GET" }).handler(
-  resolveSession
+  resolveSession,
 )
 
 export const sessionsAction = createServerFn({ method: "GET" }).handler(
-  resolveSessions
+  resolveSessions,
 )
 
 export const getSession = sessionAction
 
 export const ensureSession = createServerFn({ method: "GET" }).handler(
-  resolveRequiredSession
+  resolveRequiredSession,
 )

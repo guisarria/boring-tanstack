@@ -1,6 +1,8 @@
 import { createRouter as createTanStackRouter } from "@tanstack/react-router"
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query"
+
 import { createAppRouterContext } from "@/components/providers/root-provider"
+
 import { DefaultCatchBoundary } from "./components/default-catch-boundary"
 import { DefaultNotFound } from "./components/default-not-found"
 import { routeTree } from "./routeTree.gen"
@@ -28,7 +30,6 @@ export function getRouter() {
 }
 
 declare module "@tanstack/react-router" {
-  // biome-ignore lint/style/useConsistentTypeDefinitions: module augmentation requires interface declaration merging
   interface Register {
     router: ReturnType<typeof getRouter>
   }

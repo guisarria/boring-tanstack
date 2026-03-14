@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from "react"
+
 import { useTheme } from "@/components/providers/theme-provider"
 import { cn } from "@/lib/utils"
 
@@ -123,7 +124,7 @@ export function DitherCanvas({ className }: { className?: string }) {
             x * GRID_SIZE,
             y * GRID_SIZE,
             GRID_SIZE - 1,
-            GRID_SIZE - 1
+            GRID_SIZE - 1,
           )
         }
       }
@@ -185,7 +186,7 @@ export function DitherCanvas({ className }: { className?: string }) {
         "absolute top-0 right-0 -z-10 h-full max-w-5xl opacity-40 backdrop-blur-xs",
         "mask-[linear-gradient(to_right,transparent,black)]",
         "[-webkit-mask-image:linear-gradient(to_right,transparent,black)]",
-        className
+        className,
       )}
       ref={canvasRef}
     />

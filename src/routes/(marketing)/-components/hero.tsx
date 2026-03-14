@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router"
 import { ChevronRight } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import { Container, GlowText, Section } from "@/components/ui/design-system"
+
 import { Route } from "../route"
 import { DitherCanvas } from "./dither-canvas"
 

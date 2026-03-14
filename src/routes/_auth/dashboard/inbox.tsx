@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { CheckIcon, InboxIcon } from "lucide-react"
 import { type LayoutStorage, useDefaultLayout } from "react-resizable-panels"
+
 import {
   Avatar,
   AvatarBadge,

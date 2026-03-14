@@ -1,7 +1,6 @@
-/** biome-ignore-all lint/performance/useTopLevelRegex: <a> */
-
 import { Link, useMatches } from "@tanstack/react-router"
 import React from "react"
+
 import {
   Breadcrumb,
   BreadcrumbItem,

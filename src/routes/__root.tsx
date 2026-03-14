@@ -3,6 +3,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router"
+
 import { DefaultNotFound } from "@/components/default-not-found"
 import {
   type AppRouterContext,
@@ -11,6 +12,7 @@ import {
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { getSession } from "@/modules/auth/auth.functions"
+
 import appCss from "../styles.css?url"
 
 export const Route = createRootRouteWithContext<AppRouterContext>()({

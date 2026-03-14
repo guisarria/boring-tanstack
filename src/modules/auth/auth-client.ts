@@ -1,5 +1,6 @@
 import { adminClient } from "better-auth/client/plugins"
 import { createAuthClient } from "better-auth/react"
+
 import { env } from "@/config/env/client"
 
 export const authClient = createAuthClient({

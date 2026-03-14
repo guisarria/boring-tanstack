@@ -6,6 +6,7 @@ import {
   useMatch,
   useRouter,
 } from "@tanstack/react-router"
+
 import { Button } from "./ui/button"
 
 export function DefaultCatchBoundary({ error }: Readonly<ErrorComponentProps>) {
@@ -24,7 +25,7 @@ export function DefaultCatchBoundary({ error }: Readonly<ErrorComponentProps>) {
       <div className="flex flex-wrap items-center gap-2">
         <Button
           onClick={() => {
-            router.invalidate()
+            void router.invalidate()
           }}
           type="button"
         >

@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
+
 import { SignUpForm } from "@/modules/auth/components/sign-up-form"
 
 export const Route = createFileRoute("/(marketing)/(auth)/sign-up/")({

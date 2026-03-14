@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest"
+import { describe, expect, it, vi } from "vite-plus/test"
 
 vi.mock("./auth", () => ({
   auth: {
@@ -30,6 +30,7 @@ function createMockSession() {
       name: "Test User",
       email: "test@example.com",
       emailVerified: true,
+      banned: null,
       image: null,
       createdAt: now,
       updatedAt: now,

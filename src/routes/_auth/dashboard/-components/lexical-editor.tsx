@@ -35,6 +35,7 @@ import {
   useMemo,
   useRef,
 } from "react"
+
 import { cn } from "@/lib/utils"
 
 const DEFAULT_NAMESPACE = "lexical-editor"
@@ -189,7 +190,7 @@ function LexicalEditorInner({
       },
       getValue: () => snapshotRef.current,
     }),
-    [editor]
+    [editor],
   )
 
   return (
@@ -241,7 +242,7 @@ export const LexicalEditor = function LexicalEditor({
         throw error
       },
     }),
-    [value]
+    [value],
   )
 
   return (

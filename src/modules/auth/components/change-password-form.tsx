@@ -1,5 +1,6 @@
 import { toast } from "sonner"
 import { z } from "zod"
+
 import { useAppForm } from "@/components/forms/form-context"
 import {
   Card,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
+
 import { authClient } from "../auth-client"
 
 const changePasswordFormSchema = z

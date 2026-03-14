@@ -1,4 +1,5 @@
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+
 import { AppSidebar, type NavGroup } from "./app-sidebar"
 
 export function AppSidebarLayout({

@@ -7,6 +7,7 @@ import {
   ScanIcon,
   Settings2,
 } from "lucide-react"
+
 import {
   Avatar,
   AvatarBadge,
@@ -80,7 +81,7 @@ const emails = [
 export function DashboardMockup() {
   return (
     <div className="relative w-full max-w-5xl overflow-hidden rounded-xl border border-border bg-background shadow-2xl">
-      <div className="h-[600px] overflow-hidden">
+      <div className="h-150 overflow-hidden">
         <SidebarProvider className="h-full">
           <Sidebar
             className="h-full border-border border-r"
@@ -147,7 +148,7 @@ export function DashboardMockup() {
                       <Item
                         className={cn(
                           "cursor-default transition-colors hover:bg-muted",
-                          i === 0 && "bg-muted"
+                          i === 0 && "bg-muted",
                         )}
                         key={mail.title}
                       >

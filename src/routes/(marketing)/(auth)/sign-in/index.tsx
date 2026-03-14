@@ -1,5 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { z } from "zod"
+
 import { SignInForm } from "@/modules/auth/components/sign-in-form"
 
 const searchSchema = z.object({

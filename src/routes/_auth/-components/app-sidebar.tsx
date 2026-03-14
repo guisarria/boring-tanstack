@@ -1,5 +1,6 @@
 import { useRouteContext } from "@tanstack/react-router"
 import type * as React from "react"
+
 import {
   Sidebar,
   SidebarContent,
@@ -8,6 +9,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
+
 import { type NavItem, SidebarNavGroup } from "./sidebar-nav-group"
 
 export type NavGroup = {

@@ -1,11 +1,12 @@
 import { render } from "@react-email/render"
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import { createServerFn } from "@tanstack/react-start"
+
 import VerificationEmail from "@/modules/auth/emails/verification-email"
 
 const getEmailPreview = createServerFn({ method: "GET" }).handler(async () => {
   return await render(
-    VerificationEmail({ name: "John Doe", url: "http://localhost:300" })
+    VerificationEmail({ name: "John Doe", url: "http://localhost:300" }),
   )
 })
 

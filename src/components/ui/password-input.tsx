@@ -1,29 +1,26 @@
-;
+import { EyeIcon, EyeOffIcon } from "lucide-react"
+import { useState } from "react"
 
-import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { useState } from "react";
-
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
-} from "@/components/ui/input-group";
+} from "@/components/ui/input-group"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip"
 
-export  function PasswordInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
-  const [showPassword, setShowPassword] = useState(false);
+export function PasswordInput(
+  props: React.InputHTMLAttributes<HTMLInputElement>,
+) {
+  const [showPassword, setShowPassword] = useState(false)
 
   return (
     <InputGroup>
-      <InputGroupInput
-        type={showPassword ? "text" : "password"}
-        {...props}
-      />
+      <InputGroupInput type={showPassword ? "text" : "password"} {...props} />
       <InputGroupAddon align="inline-end">
         <Tooltip>
           <TooltipTrigger
@@ -44,5 +41,5 @@ export  function PasswordInput(props: React.InputHTMLAttributes<HTMLInputElement
         </Tooltip>
       </InputGroupAddon>
     </InputGroup>
-  );
+  )
 }

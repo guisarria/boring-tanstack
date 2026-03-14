@@ -15,7 +15,6 @@
 - **Zod v4**
 - **Lexical**
 
-
 ### Backend & Auth
 
 - **Better Auth**
@@ -26,8 +25,8 @@
 
 ### DX & Infrastructure
 
-- **Vite 7**
-- **Biome** + **Ultracite**
+- **Vite 8+**
+- **Oxc && Oxfmt**
 
 ## Getting Started
 

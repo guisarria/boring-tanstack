@@ -1,8 +1,10 @@
 import { Link } from "@tanstack/react-router"
+
 import { ThemeToggle } from "@/components/theme-toggle"
 import { buttonVariants } from "@/components/ui/button"
 import { Container, GlowText, Nav } from "@/components/ui/design-system"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
+
 import { Route } from "../route"
 
 export function Header() {

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react"
+
 import { cn } from "@/lib/utils"
 
 const BLUR_LEVELS = [1, 2, 3, 6, 12]

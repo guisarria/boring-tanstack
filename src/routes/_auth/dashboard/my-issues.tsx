@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { CircleDashed } from "lucide-react"
+
 import { Empty, EmptyTitle } from "@/components/ui/empty"
 
 export const Route = createFileRoute("/_auth/dashboard/my-issues")({

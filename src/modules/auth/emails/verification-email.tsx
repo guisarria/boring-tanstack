@@ -22,7 +22,7 @@ type EmailVerificationData = {
 function getInitials(
   firstName?: string,
   lastName?: string,
-  name?: string
+  name?: string,
 ): string {
   if (firstName && lastName) {
     return `${firstName[0]}${lastName[0]}`.toUpperCase()

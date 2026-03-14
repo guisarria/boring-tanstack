@@ -62,7 +62,7 @@ export const ThemeProvider = (props: ThemeProviderProps): ReactNode => {
 
 const applyClassAttribute = (
   name: string | undefined,
-  attrValues: string[]
+  attrValues: string[],
 ) => {
   const d = document.documentElement
   d.classList.remove(...attrValues)
@@ -84,7 +84,7 @@ const applyAttributes = (
   resolved: string,
   attributeList: Attribute[],
   attrValues: string[],
-  value?: ValueObject
+  value?: ValueObject,
 ) => {
   const name = value ? value[resolved] : resolved
 
@@ -104,7 +104,7 @@ const isColorScheme = (value: string): value is ColorScheme =>
 const applyColorScheme = (
   resolved: string,
   defaultTheme: string,
-  enableColorScheme: boolean
+  enableColorScheme: boolean,
 ) => {
   if (!enableColorScheme) {
     return
@@ -136,8 +136,8 @@ const disableAnimation = () => {
   const css = document.createElement("style")
   css.appendChild(
     document.createTextNode(
-      "*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}"
-    )
+      "*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important}",
+    ),
   )
   document.head.appendChild(css)
 
@@ -175,19 +175,19 @@ const Theme = ({
   children,
 }: ThemeProviderProps) => {
   const [theme, setThemeState] = useState(() =>
-    getTheme(storageKey, defaultTheme)
+    getTheme(storageKey, defaultTheme),
   )
 
   const systemTheme = useSystemTheme()
 
   const attributeList = useMemo(
     () => (Array.isArray(attribute) ? attribute : [attribute]),
-    [attribute]
+    [attribute],
   )
 
   const attrValues = useMemo(
     () => (value ? Object.values(value) : themes),
-    [value, themes]
+    [value, themes],
   )
 
   const applyTheme = useCallback(
@@ -215,7 +215,7 @@ const Theme = ({
       value,
       enableColorScheme,
       defaultTheme,
-    ]
+    ],
   )
 
   const setTheme = useCallback(
@@ -233,7 +233,7 @@ const Theme = ({
         return newTheme
       })
     },
-    [storageKey]
+    [storageKey],
   )
 
   useEffect(() => {
@@ -260,7 +260,7 @@ const Theme = ({
       theme,
       themes: enableSystem ? [...themes, "system"] : themes,
     }),
-    [theme, forcedTheme, enableSystem, themes, setTheme, systemTheme]
+    [theme, forcedTheme, enableSystem, themes, setTheme, systemTheme],
   )
 
   return (
@@ -312,7 +312,7 @@ const themeScript = (
   themes: string[],
   value: ValueObject | undefined,
   enableSystem: boolean,
-  enableColorScheme: boolean
+  enableColorScheme: boolean,
 ) => {
   const el = document.documentElement
   const systemThemes = ["light", "dark"]

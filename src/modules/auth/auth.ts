@@ -2,9 +2,11 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { betterAuth } from "better-auth/minimal"
 import { admin } from "better-auth/plugins/admin"
 import { tanstackStartCookies } from "better-auth/tanstack-start"
+
 import { env } from "@/config/env/server"
 import { db } from "@/db"
 import { schema } from "@/db/index"
+
 import { resend } from "./emails/resend"
 import VerificationEmail from "./emails/verification-email"
 

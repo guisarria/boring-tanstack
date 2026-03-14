@@ -1,4 +1,5 @@
 import { errAsync, okAsync, ResultAsync } from "neverthrow"
+
 import { auth } from "./auth"
 import type { Session, User } from "./schema"
 
@@ -30,7 +31,7 @@ function toProviderFailure(cause: unknown): AuthServiceError {
 export function getSessionResult(headers: Headers) {
   return ResultAsync.fromPromise(
     auth.api.getSession({ headers }),
-    toProviderFailure
+    toProviderFailure,
   ).map<SessionPayload>((response) => ({
     user: response?.user
       ? {
@@ -46,7 +47,7 @@ export function getSessionResult(headers: Headers) {
 export function requireSessionResult(headers: Headers) {
   return ResultAsync.fromPromise(
     auth.api.getSession({ headers }),
-    toProviderFailure
+    toProviderFailure,
   ).andThen((response) => {
     if (!response) {
       return errAsync<Session, AuthServiceError>({
@@ -61,13 +62,13 @@ export function requireSessionResult(headers: Headers) {
 
 export function listSessionsResult(
   headers: Headers,
-  rawSessionToken: string | undefined
+  rawSessionToken: string | undefined,
 ) {
   const sessionId = rawSessionToken?.split(".")[0]
 
   return ResultAsync.fromPromise(
     auth.api.listSessions({ headers }),
-    toProviderFailure
+    toProviderFailure,
   ).map<SessionListPayload>((sessions) => ({
     sessions,
     sessionId,

@@ -11,6 +11,7 @@ import {
   Settings2Icon,
 } from "lucide-react"
 import { toast } from "sonner"
+
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
@@ -23,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
+
 import { authClient } from "../auth-client"
 
 function getInitials(name: string) {
@@ -48,9 +50,9 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
   const handleSignOut = async () => {
     await authClient.signOut({
       fetchOptions: {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast.success("Signed out")
-          router.invalidate()
+          await router.invalidate()
         },
       },
     })

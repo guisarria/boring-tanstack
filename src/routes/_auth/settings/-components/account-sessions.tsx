@@ -10,6 +10,7 @@ import {
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 import { UAParser } from "ua-parser-js"
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -64,9 +65,9 @@ function SessionItem({
       startTransition(async () => {
         await authClient.signOut({
           fetchOptions: {
-            onSuccess: () => {
+            onSuccess: async () => {
               toast.success("Signed out")
-              router.invalidate({ sync: true })
+              await router.invalidate({ sync: true })
             },
           },
         })
@@ -85,7 +86,7 @@ function SessionItem({
         toast.error(error.message)
       } else {
         toast.success("Session revoked successfully")
-        router.invalidate({ sync: true })
+        void router.invalidate({ sync: true })
       }
     })
   }
@@ -182,7 +183,7 @@ function RevokeAllDialog({ disabled }: { disabled: boolean }) {
         fetchOptions: {
           onSuccess: () => {
             toast.success("Signed out")
-            router.invalidate()
+            void router.invalidate()
           },
         },
       })

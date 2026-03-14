@@ -1,5 +1,6 @@
-import { cn } from "@/lib/utils"
 import type { ComponentPropsWithoutRef, ElementType } from "react"
+
+import { cn } from "@/lib/utils"
 
 function Main({ className, ...props }: ComponentPropsWithoutRef<"main">) {
   return <main data-slot="main" className={className} {...props} />
@@ -15,10 +16,7 @@ function Nav({ className, ...props }: ComponentPropsWithoutRef<"nav">) {
   )
 }
 
-function Section({
-  className,
-  ...props
-}: ComponentPropsWithoutRef<"section">) {
+function Section({ className, ...props }: ComponentPropsWithoutRef<"section">) {
   return (
     <section
       data-slot="section"
@@ -28,10 +26,7 @@ function Section({
   )
 }
 
-function Container({
-  className,
-  ...props
-}: ComponentPropsWithoutRef<"div">) {
+function Container({ className, ...props }: ComponentPropsWithoutRef<"div">) {
   return (
     <div
       data-slot="container"

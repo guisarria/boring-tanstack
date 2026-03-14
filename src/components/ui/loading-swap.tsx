@@ -1,5 +1,7 @@
 import type { ReactNode } from "react"
+
 import { cn } from "@/lib/utils"
+
 import { Spinner } from "./spinner"
 
 export function LoadingSwap({
@@ -17,7 +19,7 @@ export function LoadingSwap({
         className={cn(
           "col-start-1 col-end-2 row-start-1 row-end-2 w-full",
           isLoading ? "invisible" : "visible",
-          className
+          className,
         )}
       >
         {children}
@@ -26,10 +28,10 @@ export function LoadingSwap({
         className={cn(
           "col-start-1 col-end-2 row-start-1 row-end-2",
           isLoading ? "visible" : "invisible",
-          className
+          className,
         )}
       >
-        <Spinner className="grid"/>
+        <Spinner className="grid" />
       </div>
     </div>
   )

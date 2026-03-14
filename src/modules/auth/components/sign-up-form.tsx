@@ -2,6 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router"
 import { useTransition } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
+
 import { PasswordFieldsGroup } from "@/components/forms/fields/password-fields-group"
 import { useAppForm } from "@/components/forms/form-context"
 import { buttonVariants } from "@/components/ui/button"
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/card"
 import { Field, FieldGroup, FieldSeparator } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
+
 import { authClient } from "../auth-client"
 import { SocialAuthButtons } from "./social-auth-buttons"
 
