@@ -71,15 +71,15 @@ export default function PasswordResetEmail({
             <Text style={greetingText}>{name ? `Hi, ${name}!` : "Hi!"}</Text>
 
             <Text style={paragraph}>
-              We received a request to reset your password. Click the button
-              below to choose a new password. If you didn&apos;t make this
-              request, you can safely ignore this email.
+              A password reset was requested for your account. Click the button
+              below to choose a new password. If you didn&apos;t request this,
+              you can safely ignore this email.
             </Text>
           </Section>
 
           <Section style={buttonSection}>
             <Button href={url} style={button}>
-              Reset my password
+              Reset Password
             </Button>
           </Section>
 

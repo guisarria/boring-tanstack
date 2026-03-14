@@ -17,6 +17,7 @@ export function PasswordField(props: InputFieldProps) {
         onBlur={field.handleBlur}
         onChange={(e) => field.handleChange(e.target.value)}
         placeholder={props.placeholder}
+        spellCheck={false}
         value={field.state.value}
       />
     </FieldBase>

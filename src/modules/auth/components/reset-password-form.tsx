@@ -27,7 +27,7 @@ const resetPasswordSchema = z
       .max(50)
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
         message:
-          "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+          "Password must contain at least 1 uppercase letter, 1 lowercase letter, & 1 number",
       }),
     confirmPassword: z
       .string()

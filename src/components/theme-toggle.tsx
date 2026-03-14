@@ -20,6 +20,7 @@ export function ThemeToggle({
 
   return (
     <Button
+      aria-label="Toggle theme"
       className={cn("items-center", className)}
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       size={size}

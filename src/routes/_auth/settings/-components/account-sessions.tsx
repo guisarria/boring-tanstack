@@ -76,7 +76,7 @@ function SessionItem({
       return { error: true, message: error.message }
     }
 
-    toast.success("Session revoked successfully")
+    toast.success("Session revoked")
     void router.invalidate({ sync: true })
     return { error: false }
   }
@@ -104,13 +104,15 @@ function SessionItem({
             </p>
             <p className="text-muted-foreground mt-1 text-xs">
               IP: {session.ipAddress ?? "Unknown"} •{" "}
-              {session.createdAt.toDateString()}
+              {session.createdAt.toLocaleDateString(undefined, {
+                dateStyle: "medium",
+              })}
             </p>
           </div>
         </div>
         <ActionButton
           action={revokeAction}
-          areYouSureDescription="Are you sure you want to revoke this session? This will sign out the device and require re-authentication."
+          areYouSureDescription="This will sign out the device & require re-authentication."
           requireAreYouSure={!isCurrent}
           size="sm"
           variant="destructive-outline"
@@ -137,7 +139,7 @@ function RevokeAllDialog({ disabled }: { disabled: boolean }) {
       return { error: true, message: error.message }
     }
 
-    toast.success("All sessions revoked successfully")
+    toast.success("All sessions revoked")
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
@@ -152,7 +154,7 @@ function RevokeAllDialog({ disabled }: { disabled: boolean }) {
   return (
     <ActionButton
       action={revokeAllAction}
-      areYouSureDescription="This will sign you out from all devices. You'll need to sign in again on those devices."
+      areYouSureDescription="This signs you out of all devices. Sign in again on each device to continue."
       disabled={disabled}
       requireAreYouSure
       size="sm"
@@ -187,7 +189,9 @@ export function AccountSessions({
         {sessions.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <AlertCircle className="text-muted-foreground mb-2 h-10 w-10" />
-            <p className="text-muted-foreground">No active sessions found</p>
+            <p className="text-muted-foreground">
+              No active sessions to display
+            </p>
           </div>
         ) : (
           sessions.map((session) => (
@@ -201,7 +205,8 @@ export function AccountSessions({
       </CardContent>
       <CardFooter className="flex justify-between">
         <p className="text-muted-foreground text-xs">
-          Last checked: {new Date().toDateString()}
+          Last checked:{" "}
+          {new Date().toLocaleDateString(undefined, { dateStyle: "medium" })}
         </p>
         <RevokeAllDialog disabled={sessions.length === 0} />
       </CardFooter>

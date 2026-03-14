@@ -42,7 +42,7 @@ export function SignInForm() {
       password,
       fetchOptions: {
         onSuccess: async () => {
-          toast.success("Logged in successfully")
+          toast.success("Signed in successfully")
           await navigate({
             to: redirect ?? "/dashboard",
           })
@@ -71,7 +71,7 @@ export function SignInForm() {
       <CardHeader>
         <CardTitle>Sign in</CardTitle>
         <CardDescription>
-          Enter your email and password to sign in
+          Enter your email &amp; password to sign in
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -107,6 +107,7 @@ export function SignInForm() {
               >
                 {(field) => (
                   <field.PasswordField
+                    autoComplete="current-password"
                     label="Password"
                     placeholder="••••••••"
                   />
@@ -136,7 +137,7 @@ export function SignInForm() {
       </CardContent>
       <CardFooter>
         <span className="text-muted-foreground flex w-full items-center justify-center gap-x-1 text-center text-sm">
-          Don&apos; t have an account?
+          Don&apos;t have an account?
           <Link
             className={cn(buttonVariants({ variant: "link" }), "px-0 text-sm")}
             to="/sign-up"

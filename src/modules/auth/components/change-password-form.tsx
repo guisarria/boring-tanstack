@@ -56,13 +56,16 @@ function ChangePasswordForm() {
         })
 
         if (response.error) {
-          toast.error(response.error.message ?? "Failed to change password")
+          toast.error(
+            response.error.message ??
+              "Unable to change password—try again or check your current password.",
+          )
         } else {
           toast.success("Password changed successfully")
           form.reset()
         }
       } catch {
-        toast.error("Failed to change password")
+        toast.error("Something went wrong—try again or contact support.")
       }
     },
   })

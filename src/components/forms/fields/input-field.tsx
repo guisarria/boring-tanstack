@@ -18,6 +18,7 @@ export function InputField(props: InputFieldProps) {
         onBlur={field.handleBlur}
         onChange={(e) => field.handleChange(e.target.value)}
         placeholder={props.placeholder}
+        spellCheck={props.type === "email" ? false : undefined}
         type={props.type}
         value={field.state.value}
       />

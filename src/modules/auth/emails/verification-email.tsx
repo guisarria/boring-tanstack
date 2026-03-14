@@ -74,15 +74,15 @@ export default function VerificationEmail({
             </Text>
 
             <Text style={paragraph}>
-              Click the button below to verify your email address and activate
-              your account. Once verified, you'll have full access to all
+              Click the button below to verify your email address &amp; activate
+              your account. Once verified, you&apos;ll have full access to all
               features.
             </Text>
           </Section>
 
           <Section style={buttonSection}>
             <Button href={url} style={button}>
-              Verify my email
+              Verify Email
             </Button>
           </Section>
 

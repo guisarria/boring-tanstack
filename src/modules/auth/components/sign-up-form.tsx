@@ -33,7 +33,7 @@ const signUpFormSchema = z
       .max(50)
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
         message:
-          "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+          "Password must contain at least 1 uppercase letter, 1 lowercase letter, & 1 number",
       }),
     confirmPassword: z
       .string()
@@ -66,7 +66,7 @@ export function SignUpForm() {
       callbackURL: "/dashboard",
       fetchOptions: {
         onSuccess: async () => {
-          toast.success("Sign up successfully")
+          toast.success("Account created successfully")
           await navigate({
             to: "/dashboard",
           })
@@ -93,7 +93,7 @@ export function SignUpForm() {
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle>Let's create your account</CardTitle>
+        <CardTitle>Create Your Account</CardTitle>
         <CardDescription>
           Enter your information to create an account
         </CardDescription>
@@ -118,7 +118,11 @@ export function SignUpForm() {
                 }}
               >
                 {(field) => (
-                  <field.InputField label="Name" placeholder="Jane Doe" />
+                  <field.InputField
+                    autoComplete="name"
+                    label="Name"
+                    placeholder="Jane Doe"
+                  />
                 )}
               </form.AppField>
               <form.AppField

@@ -19,7 +19,7 @@ function useCopyToClipboard() {
 
   const copy = useCallback(async (text: string) => {
     if (!navigator?.clipboard) {
-      toast.error("Clipboard API not supported.")
+      toast.error("Clipboard is unavailable in this browser.")
       return false
     }
 
@@ -39,7 +39,7 @@ function useCopyToClipboard() {
 
       return true
     } catch {
-      toast.error("Failed to copy to clipboard.")
+      toast.error("Unable to copy—try selecting the text manually.")
       return false
     }
   }, [])
