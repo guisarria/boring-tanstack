@@ -1,6 +1,8 @@
+import { useTransition } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 
+import { PasswordFieldsGroup } from "@/components/forms/fields/password-fields-group"
 import { useAppForm } from "@/components/forms/form-context"
 import {
   Card,
@@ -10,63 +12,60 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Field, FieldGroup } from "@/components/ui/field"
 import { Label } from "@/components/ui/label"
 
 import { authClient } from "../auth-client"
 
-const changePasswordFormSchema = z
-  .object({
-    currentPassword: z.string().min(1, "Current password is required"),
-    newPassword: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .max(50),
-    confirmPassword: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .max(50),
-    revokeOtherSessions: z.boolean(),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  })
+const changePasswordFormSchema = z.object({
+  currentPassword: z.string().min(1, "Current password is required"),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long" })
+    .max(50),
+  confirmPassword: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long" })
+    .max(50),
+  revokeOtherSessions: z.boolean(),
+})
 
 type ChangePasswordForm = z.infer<typeof changePasswordFormSchema>
 
 const defaultValues: ChangePasswordForm = {
   currentPassword: "",
-  newPassword: "",
+  password: "",
   confirmPassword: "",
   revokeOtherSessions: false,
 }
 
-function ChangePasswordForm() {
+export function ChangePasswordForm() {
+  const [isPending, startTransition] = useTransition()
+
   const form = useAppForm({
     defaultValues,
     validators: {
-      onChange: changePasswordFormSchema,
+      onSubmit: changePasswordFormSchema,
     },
-    onSubmit: async ({ value }) => {
-      try {
-        const response = await authClient.changePassword({
+    onSubmit: ({ value }) => {
+      startTransition(async () => {
+        const { error } = await authClient.changePassword({
           currentPassword: value.currentPassword,
-          newPassword: value.newPassword,
+          newPassword: value.password,
           revokeOtherSessions: value.revokeOtherSessions,
         })
 
-        if (response.error) {
+        if (error) {
           toast.error(
-            response.error.message ??
+            error.message ??
               "Unable to change password—try again or check your current password.",
           )
-        } else {
-          toast.success("Password changed successfully")
-          form.reset()
+          return
         }
-      } catch {
-        toast.error("Something went wrong—try again or contact support.")
-      }
+
+        toast.success("Password changed successfully")
+        form.reset()
+      })
     },
   })
 
@@ -79,13 +78,19 @@ function ChangePasswordForm() {
       <CardContent>
         <form.AppForm>
           <form
-            onSubmit={async (e) => {
+            id="change-password"
+            onSubmit={(e) => {
               e.preventDefault()
-              await form.handleSubmit()
+              void form.handleSubmit()
             }}
           >
-            <div className="grid gap-2">
-              <form.AppField name="currentPassword">
+            <FieldGroup>
+              <form.AppField
+                name="currentPassword"
+                validators={{
+                  onBlur: changePasswordFormSchema.shape.currentPassword,
+                }}
+              >
                 {(field) => (
                   <field.PasswordField
                     autoComplete="current-password"
@@ -94,49 +99,32 @@ function ChangePasswordForm() {
                   />
                 )}
               </form.AppField>
-              <form.AppField name="newPassword">
-                {(field) => (
-                  <field.PasswordField
-                    autoComplete="new-password"
-                    label="New Password"
-                    placeholder="••••••••"
-                  />
-                )}
-              </form.AppField>
-              <form.AppField name="confirmPassword">
-                {(field) => (
-                  <field.PasswordField
-                    autoComplete="new-password"
-                    label="Confirm Password"
-                    placeholder="••••••••"
-                  />
-                )}
-              </form.AppField>
-              <form.AppField name="revokeOtherSessions">
-                {(field) => (
-                  <div className="flex items-center gap-2">
-                    <Checkbox
-                      checked={field.state.value}
-                      id="sign-out-devices"
-                      onCheckedChange={(checked) =>
-                        field.handleChange(!!checked)
-                      }
-                    />
-                    <Label htmlFor="sign-out-devices">
-                      Sign out all devices
-                    </Label>
-                  </div>
-                )}
-              </form.AppField>
-            </div>
-            <div className="mt-4 flex justify-end">
-              <form.SubmitButton>Change Password</form.SubmitButton>
-            </div>
+              <PasswordFieldsGroup
+                fields={{
+                  password: "password",
+                  confirmPassword: "confirmPassword",
+                }}
+                form={form}
+              />
+              <Field orientation="horizontal">
+                <Checkbox
+                  checked={form.getFieldValue("revokeOtherSessions")}
+                  id="sign-out-devices"
+                  onCheckedChange={(checked) =>
+                    form.setFieldValue("revokeOtherSessions", !!checked)
+                  }
+                />
+                <Label htmlFor="sign-out-devices">Sign out all devices</Label>
+              </Field>
+              <Field>
+                <form.SubmitButton isPending={isPending}>
+                  Change Password
+                </form.SubmitButton>
+              </Field>
+            </FieldGroup>
           </form>
         </form.AppForm>
       </CardContent>
     </Card>
   )
 }
-
-export { ChangePasswordForm as ChangePassword }

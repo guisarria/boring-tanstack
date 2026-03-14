@@ -12,9 +12,5 @@ export const Route = createFileRoute("/(marketing)/(auth)/sign-up/")({
 })
 
 function RouteComponent() {
-  return (
-    <div className="flex h-full w-full items-center justify-center">
-      <SignUpForm />
-    </div>
-  )
+  return <SignUpForm />
 }

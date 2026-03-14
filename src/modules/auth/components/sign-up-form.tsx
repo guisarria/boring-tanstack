@@ -1,11 +1,11 @@
-import { Link, useNavigate } from "@tanstack/react-router"
+import { useNavigate } from "@tanstack/react-router"
 import { useTransition } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 
 import { PasswordFieldsGroup } from "@/components/forms/fields/password-fields-group"
 import { useAppForm } from "@/components/forms/form-context"
-import { buttonVariants } from "@/components/ui/button"
+import { ButtonLink } from "@/components/ui/button-link"
 import {
   Card,
   CardContent,
@@ -15,7 +15,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Field, FieldGroup, FieldSeparator } from "@/components/ui/field"
-import { cn } from "@/lib/utils"
 
 import { authClient } from "../auth-client"
 import { SocialAuthButtons } from "./social-auth-buttons"
@@ -160,12 +159,9 @@ export function SignUpForm() {
       <CardFooter>
         <div className="text-muted-foreground flex w-full items-center justify-center gap-x-1 text-center text-sm">
           <p>Already have an account?</p>
-          <Link
-            className={cn(buttonVariants({ variant: "link" }), "px-0 text-sm")}
-            to="/sign-in"
-          >
+          <ButtonLink variant="link" className="px-0 text-sm" to="/sign-in">
             Sign in
-          </Link>
+          </ButtonLink>
         </div>
       </CardFooter>
     </Card>

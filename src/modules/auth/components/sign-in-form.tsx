@@ -1,10 +1,10 @@
-import { Link, useNavigate, useSearch } from "@tanstack/react-router"
+import { useNavigate, useSearch } from "@tanstack/react-router"
 import { useTransition } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 
 import { useAppForm } from "@/components/forms/form-context"
-import { buttonVariants } from "@/components/ui/button"
+import { ButtonLink } from "@/components/ui/button-link"
 import {
   Card,
   CardContent,
@@ -14,7 +14,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { FieldGroup, FieldSeparator } from "@/components/ui/field"
-import { cn } from "@/lib/utils"
 
 import { authClient } from "../auth-client"
 import { SocialAuthButtons } from "./social-auth-buttons"
@@ -113,21 +112,19 @@ export function SignInForm() {
                   />
                 )}
               </form.AppField>
-              <div className="flex justify-end">
-                <Link
-                  className={cn(
-                    buttonVariants({ variant: "link" }),
-                    "h-auto px-0 text-xs",
-                  )}
+              <div className="-mt-3 flex justify-end">
+                <ButtonLink
+                  variant="link"
+                  className="px-0 text-xs"
                   to="/forgot-password"
                 >
                   Forgot password?
-                </Link>
+                </ButtonLink>
               </div>
               <form.SubmitButton isPending={isPending}>
                 Continue with Email
               </form.SubmitButton>
-              <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
+              <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card my-0.5">
                 Or continue with
               </FieldSeparator>
               <SocialAuthButtons />
@@ -138,19 +135,13 @@ export function SignInForm() {
       <CardFooter>
         <span className="text-muted-foreground flex w-full items-center justify-center gap-x-1 text-center text-sm">
           Don&apos;t have an account?
-          <Link
-            className={cn(buttonVariants({ variant: "link" }), "px-0 text-sm")}
-            to="/sign-up"
-          >
+          <ButtonLink variant="link" className="px-0 text-sm" to="/sign-up">
             Sign up
-          </Link>
+          </ButtonLink>
           or
-          <Link
-            className={cn(buttonVariants({ variant: "link" }), "px-0 text-sm")}
-            to="/"
-          >
+          <ButtonLink variant="link" className="px-0 text-sm" to="/">
             Learn more
-          </Link>
+          </ButtonLink>
         </span>
       </CardFooter>
     </Card>

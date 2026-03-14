@@ -1,10 +1,10 @@
-import { Link } from "@tanstack/react-router"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 
 import { useAppForm } from "@/components/forms/form-context"
 import { buttonVariants } from "@/components/ui/button"
+import { ButtonLink } from "@/components/ui/button-link"
 import {
   Card,
   CardContent,
@@ -126,12 +126,9 @@ export function ForgotPasswordForm() {
       <CardFooter>
         <div className="text-muted-foreground flex w-full items-center justify-center gap-x-1 text-center text-sm">
           <p>Remember your password?</p>
-          <Link
-            className={cn(buttonVariants({ variant: "link" }), "px-0 text-sm")}
-            to="/sign-in"
-          >
+          <ButtonLink variant="link" className="px-0 text-sm" to="/sign-in">
             Sign in
-          </Link>
+          </ButtonLink>
         </div>
       </CardFooter>
     </Card>

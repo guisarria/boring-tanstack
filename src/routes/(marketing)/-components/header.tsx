@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router"
 
 import { ThemeToggle } from "@/components/theme-toggle"
-import { buttonVariants } from "@/components/ui/button"
+import { ButtonLink } from "@/components/ui/button-link"
 import { Container, GlowText, Nav } from "@/components/ui/design-system"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
 
@@ -24,20 +24,14 @@ export function Header() {
             ) : (
               <ul className="flex items-center gap-x-2">
                 <li>
-                  <Link
-                    className={buttonVariants({ variant: "outline" })}
-                    to="/sign-in"
-                  >
+                  <ButtonLink variant="outline" to="/sign-in">
                     Sign in
-                  </Link>
+                  </ButtonLink>
                 </li>
                 <li>
-                  <Link
-                    className={buttonVariants({ variant: "default" })}
-                    to="/sign-up"
-                  >
+                  <ButtonLink variant="default" to="/sign-up">
                     Sign Up
-                  </Link>
+                  </ButtonLink>
                 </li>
               </ul>
             )}

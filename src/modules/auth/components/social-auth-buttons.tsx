@@ -1,4 +1,5 @@
 import { Field, FieldGroup } from "@/components/ui/field"
+import { cn } from "@/lib/utils"
 
 import { authClient } from "../auth-client"
 import { OAUTH_PROVIDERS, type OAuthProvider } from "../o-auth-providers"
@@ -12,9 +13,14 @@ function handleSocialLogin(provider: OAuthProvider) {
     })
 }
 
-export function SocialAuthButtons() {
+export function SocialAuthButtons({ className }: { className?: string }) {
   return (
-    <FieldGroup className="flex flex-col items-center justify-center gap-2 sm:flex-row">
+    <FieldGroup
+      className={cn(
+        "flex flex-col items-center justify-center gap-2 sm:flex-row",
+        className,
+      )}
+    >
       {OAUTH_PROVIDERS.map(({ id, name, Icon }) => (
         <Field key={id}>
           <AuthActionButton action={handleSocialLogin(id)}>
