@@ -15,9 +15,9 @@ export function SignOutButton({ className }: { className?: string }) {
     startTransition(async () => {
       await authClient.signOut({
         fetchOptions: {
-          onSuccess: () => {
+          onSuccess: async () => {
             toast.success("Signed out")
-            router.invalidate()
+            await router.invalidate()
           },
         },
       })

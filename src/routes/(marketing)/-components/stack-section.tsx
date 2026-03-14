@@ -78,7 +78,7 @@ function StackSection() {
       <Container className="flex flex-col gap-y-6">
         <div className="flex flex-col gap-y-2">
           <GlowText className="text-4xl lg:text-5xl">The Stack</GlowText>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-muted-foreground text-lg">
             Built with modern, production-ready tools so you can focus on
             shipping.
           </p>
@@ -86,7 +86,7 @@ function StackSection() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:[&_div]:last:col-span-2 lg:[&_div]:last:col-span-1">
           {stack.map((item) => (
             <Card
-              className="flex w-ful flex-col justify-between"
+              className="w-ful flex flex-col justify-between"
               key={item.name}
             >
               <CardHeader className="gap-y-2">

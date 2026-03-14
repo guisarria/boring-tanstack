@@ -76,9 +76,9 @@ function ChangePasswordForm() {
       <CardContent>
         <form.AppForm>
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault()
-              form.handleSubmit()
+              await form.handleSubmit()
             }}
           >
             <div className="grid gap-2">

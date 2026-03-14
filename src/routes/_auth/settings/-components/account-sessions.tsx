@@ -95,7 +95,7 @@ function SessionItem({
     <div>
       <div className="flex max-w-sm items-start justify-between">
         <div className="flex items-start gap-3">
-          <div className="rounded-md bg-secondary p-2">
+          <div className="bg-secondary rounded-md p-2">
             {getDeviceIcon(userAgent?.getDevice().type ?? "laptop")}
           </div>
           <div className="flex flex-col">
@@ -110,10 +110,10 @@ function SessionItem({
                 </Badge>
               )}
             </div>
-            <p className="mt-1 text-muted-foreground text-sm">
+            <p className="text-muted-foreground mt-1 text-sm">
               {userAgent?.getBrowser().name} • {userAgent?.getBrowser().version}
             </p>
-            <p className="mt-1 text-muted-foreground text-xs">
+            <p className="text-muted-foreground mt-1 text-xs">
               IP: {session.ipAddress ?? "Unknown"} •{" "}
               {session.createdAt.toDateString()}
             </p>
@@ -252,7 +252,7 @@ export function AccountSessions({
       <CardContent className="space-y-4">
         {sessions.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-center">
-            <AlertCircle className="mb-2 h-10 w-10 text-muted-foreground" />
+            <AlertCircle className="text-muted-foreground mb-2 h-10 w-10" />
             <p className="text-muted-foreground">No active sessions found</p>
           </div>
         ) : (

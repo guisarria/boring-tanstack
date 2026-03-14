@@ -7,7 +7,7 @@ export function CloneRepository() {
     <Section className="pt-28 pb-48">
       <Container className="flex flex-col items-center gap-y-4 text-center">
         <GlowText className="text-4xl md:text-5xl">Ready to build?</GlowText>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-muted-foreground text-lg">
           Clone the repository and start shipping in minutes.
         </p>
         <Item
@@ -16,7 +16,7 @@ export function CloneRepository() {
           variant="outline"
         >
           <pre>
-            <code className="w-full select-all text-left font-mono text-foreground text-xs sm:text-sm">
+            <code className="text-foreground w-full text-left font-mono text-xs select-all sm:text-sm">
               git clone github.com/guisarria/boring-tanstack
             </code>
           </pre>

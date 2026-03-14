@@ -80,20 +80,20 @@ const emails = [
 
 export function DashboardMockup() {
   return (
-    <div className="relative w-full max-w-5xl overflow-hidden rounded-xl border border-border bg-background shadow-2xl">
+    <div className="border-border bg-background relative w-full max-w-5xl overflow-hidden rounded-xl border shadow-2xl">
       <div className="h-150 overflow-hidden">
         <SidebarProvider className="h-full">
           <Sidebar
-            className="h-full border-border border-r"
+            className="border-border h-full border-r"
             collapsible="none"
             variant="inset"
           >
             <SidebarHeader className="px-4 pt-4">
               <div className="mb-4 flex items-center gap-2">
-                <div className="h-8 w-8 rounded-lg bg-primary" />
+                <div className="bg-primary h-8 w-8 rounded-lg" />
                 <div className="flex flex-col">
-                  <span className="font-semibold text-sm">Boring Inc.</span>
-                  <span className="text-[10px] text-muted-foreground">
+                  <span className="text-sm font-semibold">Boring Inc.</span>
+                  <span className="text-muted-foreground text-[10px]">
                     Pro Plan
                   </span>
                 </div>
@@ -126,9 +126,9 @@ export function DashboardMockup() {
           </Sidebar>
 
           <SidebarInset className="bg-background">
-            <header className="flex h-14 items-center gap-4 border-border border-b px-6">
+            <header className="border-border flex h-14 items-center gap-4 border-b px-6">
               <SidebarTrigger className="size-8" />
-              <div className="h-4 w-px bg-border" />
+              <div className="bg-border h-4 w-px" />
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-muted-foreground">Dashboard</span>
                 <span className="text-muted-foreground">/</span>
@@ -179,9 +179,9 @@ export function DashboardMockup() {
                 </ResizablePanel>
                 <ResizableHandle />
                 <ResizablePanel defaultSize={60}>
-                  <div className="flex h-full flex-col items-center justify-center bg-muted/30">
+                  <div className="bg-muted/30 flex h-full flex-col items-center justify-center">
                     <Empty className="text-center">
-                      <InboxIcon className="mx-auto mb-4 size-12 text-muted-foreground/50" />
+                      <InboxIcon className="text-muted-foreground/50 mx-auto mb-4 size-12" />
                       <EmptyTitle className="text-muted-foreground">
                         Select an item to view
                       </EmptyTitle>

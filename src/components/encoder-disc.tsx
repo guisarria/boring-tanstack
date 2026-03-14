@@ -43,7 +43,7 @@ export function EncoderDisc({
       </g>
 
       {/* Circle outlines */}
-      <g className="fill-transparent stroke-foreground" strokeWidth="16">
+      <g className="stroke-foreground fill-transparent" strokeWidth="16">
         <circle r="420" />
         <circle r="280" />
         <circle r="170" />
@@ -51,7 +51,7 @@ export function EncoderDisc({
       </g>
 
       {/* Radial lines */}
-      <g className="fill-transparent stroke-foreground" strokeWidth="16">
+      <g className="stroke-foreground fill-transparent" strokeWidth="16">
         <line x1="0" x2="0" y1="-420" y2="420" />
         <line x1="-420" x2="420" y1="0" y2="0" />
         <line x1="-297" x2="297" y1="-297" y2="297" />

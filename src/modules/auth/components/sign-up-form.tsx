@@ -65,9 +65,9 @@ export function SignUpForm() {
       password,
       callbackURL: "/dashboard",
       fetchOptions: {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast.success("Sign up successfully")
-          navigate({
+          await navigate({
             to: "/dashboard",
           })
         },
@@ -105,7 +105,7 @@ export function SignUpForm() {
             id="sign-up"
             onSubmit={(e) => {
               e.preventDefault()
-              form.handleSubmit()
+              void form.handleSubmit()
             }}
           >
             <FieldGroup>
@@ -154,7 +154,7 @@ export function SignUpForm() {
       </CardContent>
 
       <CardFooter>
-        <div className="flex w-full items-center justify-center gap-x-1 text-center text-muted-foreground text-sm">
+        <div className="text-muted-foreground flex w-full items-center justify-center gap-x-1 text-center text-sm">
           <p>Already have an account?</p>
           <Link
             className={cn(buttonVariants({ variant: "link" }), "px-0 text-sm")}

@@ -41,9 +41,9 @@ export function SignInForm() {
       email,
       password,
       fetchOptions: {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast.success("Logged in successfully")
-          navigate({
+          await navigate({
             to: redirect ?? "/dashboard",
           })
         },
@@ -80,7 +80,7 @@ export function SignInForm() {
             id="sign-in"
             onSubmit={(e) => {
               e.preventDefault()
-              form.handleSubmit()
+              void form.handleSubmit()
             }}
           >
             <FieldGroup>
@@ -124,7 +124,7 @@ export function SignInForm() {
         </form.AppForm>
       </CardContent>
       <CardFooter>
-        <span className="flex w-full items-center justify-center gap-x-1 text-center text-muted-foreground text-sm">
+        <span className="text-muted-foreground flex w-full items-center justify-center gap-x-1 text-center text-sm">
           Don&apos; t have an account?
           <Link
             className={cn(buttonVariants({ variant: "link" }), "px-0 text-sm")}
