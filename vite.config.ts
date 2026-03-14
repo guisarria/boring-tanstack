@@ -15,9 +15,9 @@ const config = defineConfig({
     useTabs: false,
     tabWidth: 2,
     tailwindcss: true,
-    experimentalSortPackageJson: true,
     sortImports: {},
     sortTailwindcss: {},
+    sortPackageJson: true,
   },
   oxc: {
     exclude: ["**/routeTree.gen.ts"],
