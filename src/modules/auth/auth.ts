@@ -46,6 +46,12 @@ export const auth = betterAuth({
     },
     autoSignInAfterVerification: true,
   },
+  socialProviders: {
+    google: {
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    },
+  },
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user: { email, name }, url }) => {
