@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { FieldGroup, FieldSeparator } from "@/components/ui/field"
+import { Route } from "@/routes/(marketing)/(auth)/sign-in"
 
 import { authClient } from "../auth-client"
 import { SocialAuthButtons } from "./social-auth-buttons"
@@ -35,12 +36,25 @@ export function SignInForm() {
   const navigate = useNavigate()
   const { redirect } = useSearch({ from: "/(marketing)/(auth)/sign-in/" })
 
+  const session = Route.useRouteContext()
+
+  const user = session.user
+
   const signIn = (email: string, password: string) => {
     return authClient.signIn.email({
       email,
       password,
       fetchOptions: {
         onSuccess: async () => {
+          if (!user?.emailVerified) {
+            toast.warning(
+              "Signed in sucessfully, please confirm your email to unlock all features.",
+            )
+            await navigate({
+              to: redirect ?? "/dashboard",
+            })
+            return
+          }
           toast.success("Signed in successfully")
           await navigate({
             to: redirect ?? "/dashboard",

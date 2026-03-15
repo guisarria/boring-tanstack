@@ -2,7 +2,7 @@ import type { UIMessage } from "@tanstack/ai-react"
 import { useRouteContext } from "@tanstack/react-router"
 
 import { useStickToBottom } from "@/hooks/use-stick-to-bottom"
-import { AiBotAvatar } from "@/routes/_auth/dashboard/-components/chat/ai-avatar"
+import { AiBotAvatar } from "@/modules/ai/components/ai-avatar"
 
 import { ChatMessageItem } from "./chat-message-item"
 

@@ -3,7 +3,10 @@ import { errAsync, okAsync, ResultAsync } from "neverthrow"
 import { auth } from "./auth"
 import type { Session, User } from "./schema"
 
-export type PublicUser = Pick<User, "id" | "name" | "email" | "image" | "role">
+export type PublicUser = Pick<
+  User,
+  "id" | "name" | "email" | "image" | "role" | "emailVerified"
+>
 
 export type SessionPayload = {
   user: PublicUser | null
@@ -40,6 +43,7 @@ export function getSessionResult(headers: Headers) {
           email: response.user.email,
           image: response.user.image,
           role: response.user.role,
+          emailVerified: response.user.emailVerified,
         }
       : null,
   }))

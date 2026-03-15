@@ -158,7 +158,7 @@ function StackSection() {
                   {!isLast ? (
                     <CardHeader className="gap-y-2">
                       <div className="flex items-center gap-x-3">
-                        <Icon className="size-6.5 shrink-0" />
+                        <Icon className="size-6 shrink-0" />
                         <CardTitle className="text-base">{name}</CardTitle>
                       </div>
                       <CardDescription className="text-sm">

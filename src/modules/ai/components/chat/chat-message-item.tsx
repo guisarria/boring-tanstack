@@ -1,8 +1,8 @@
 import type { UIMessage } from "@tanstack/ai-react"
 
-import { UserAvatar } from "@/components/user-avatar"
 import { cn } from "@/lib/utils"
-import { AiBotAvatar } from "@/routes/_auth/dashboard/-components/chat/ai-avatar"
+import { AiBotAvatar } from "@/modules/ai/components/ai-avatar"
+import { UserAvatar } from "@/modules/auth/components/user-avatar"
 
 import { AssistantMarkdown } from "./chat-markdown"
 

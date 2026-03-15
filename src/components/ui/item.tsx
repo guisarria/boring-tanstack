@@ -42,6 +42,10 @@ const itemVariants = cva(
         default: "border-transparent",
         outline: "border-border",
         muted: "border-transparent bg-muted/50",
+        success: "border-success-border bg-success-bg text-success-text",
+        info: "border-info-border bg-info-bg text-info-text",
+        warning: "border-warning-border bg-warning-bg text-warning-text",
+        error: "border-error-border bg-error-bg text-error-text",
       },
       size: {
         default: "gap-2.5 px-3 py-2.5",

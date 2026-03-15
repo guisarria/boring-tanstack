@@ -21,7 +21,8 @@ function RouteComponent() {
 
   return (
     <Section>
-      <Container>
+      <Container className="flex max-w-lg flex-col gap-y-6">
+        <h1 className="text-2xl">Security</h1>
         <AccountSessions sessionId={sessionId} sessions={sessions} />
       </Container>
     </Section>

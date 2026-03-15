@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router"
-import { UserIcon, UserKeyIcon } from "lucide-react"
+import { ShieldIcon, UserIcon } from "lucide-react"
 
 import type { NavGroup } from "@/routes/_auth/-components/app-sidebar"
 import { AppHeader } from "@/routes/_auth/-components/app-sidebar-header"
@@ -12,9 +12,9 @@ const navGroups: NavGroup[] = [
     items: [
       { title: "Profile", url: "/settings", icon: UserIcon },
       {
-        title: "Security & access",
+        title: "Security",
         url: "/settings/security",
-        icon: UserKeyIcon,
+        icon: ShieldIcon,
       },
     ],
   },

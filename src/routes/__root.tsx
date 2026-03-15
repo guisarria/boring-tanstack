@@ -27,6 +27,7 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
 
   shellComponent: RootDocument,
   notFoundComponent: DefaultNotFound,
+
   beforeLoad: async () => {
     const { user } = await getSession()
     return { user }
@@ -52,19 +53,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             {children}
             <Toaster richColors />
           </ThemeProvider>
-
-          {/* <TanStackDevtools
-            config={{
-              position: "bottom-right",
-            }}
-            plugins={[
-              {
-                name: "Tanstack Router",
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-              TanStackQueryDevtools,
-            ]}
-          /> */}
         </TanStackQueryProvider>
         <Scripts />
       </body>

@@ -12,7 +12,6 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 
-import { ThemeToggle } from "@/components/theme-toggle"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,8 +21,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { UserAvatar } from "@/components/user-avatar"
 import { cn } from "@/lib/utils"
+import { UserAvatar } from "@/modules/auth/components/user-avatar"
 
 import { authClient } from "../auth-client"
 
@@ -34,19 +33,18 @@ type UserDropdownProps = {
 
 export function UserDropdown({ label, className }: UserDropdownProps) {
   const { user } = useRouteContext({ from: "__root__" })
-
   const { pathname } = useLocation()
   const router = useRouter()
 
+  if (!user) return null
+
   const handleSignOut = async () => {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: async () => {
-          toast.success("Signed out")
-          await router.invalidate()
-        },
-      },
-    })
+    await authClient.signOut()
+
+    toast.success("Signed out")
+
+    await router.invalidate()
+    void router.navigate({ to: "/" })
   }
 
   return (
@@ -55,16 +53,16 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
         className={cn("flex items-center gap-x-2", className)}
       >
         <UserAvatar size={25.5} />
-        {label && <span className="text-sm">{user?.name}</span>}
+        {label && <span className="text-sm">{user.name}</span>}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="center" className="mt-4">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm leading-none font-medium">{user?.name}</p>
+              <p className="text-sm leading-none font-medium">{user.name}</p>
               <p className="text-muted-foreground size-xs truncate leading-none">
-                {user?.email}
+                {user.email}
               </p>
             </div>
           </DropdownMenuLabel>
@@ -104,15 +102,6 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem
-            render={
-              <ThemeToggle
-                className="flex w-full items-start justify-start px-0"
-                label
-                variant="ghost"
-              />
-            }
-          />
           <DropdownMenuItem onClick={handleSignOut}>
             <LogOutIcon />
             Sign out

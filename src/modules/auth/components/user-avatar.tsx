@@ -1,9 +1,8 @@
 import { useRouteContext } from "@tanstack/react-router"
 import Avatar from "boring-avatars"
 
+import { Avatar as AvatarRoot, AvatarImage } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
-
-import { Avatar as AvatarRoot, AvatarImage } from "./ui/avatar"
 
 export function UserAvatar({
   className,
