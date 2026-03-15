@@ -3,7 +3,7 @@ import Avatar from "boring-avatars"
 
 import { cn } from "@/lib/utils"
 
-import { AvatarImage } from "./ui/avatar"
+import { Avatar as AvatarRoot, AvatarImage } from "./ui/avatar"
 
 export function UserAvatar({
   className,
@@ -22,11 +22,9 @@ export function UserAvatar({
       )}
     >
       {user?.image ? (
-        <AvatarImage
-          alt={user?.name}
-          className={cn("rounded-md")}
-          src={user?.image ?? ""}
-        />
+        <AvatarRoot className={cn("rounded-full")}>
+          <AvatarImage alt={user?.name} src={user?.image ?? ""} />
+        </AvatarRoot>
       ) : (
         <Avatar
           size={size}
