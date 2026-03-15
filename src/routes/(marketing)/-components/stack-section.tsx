@@ -117,7 +117,7 @@ const stack = [
   {
     name: "",
     description: "",
-    icon: Icons.voidZeroLogo,
+    icon: Icons.voidLogo,
   },
 ] satisfies Library[]
 
