@@ -92,8 +92,6 @@ function Prose({
   )
 }
 
-// ─── GlowText ────────────────────────────────────────────────────────
-
 type GlowTextProps<T extends ElementType = "span"> = {
   as?: T
   variant?: "default" | "strong"

@@ -19,7 +19,6 @@ const config = defineConfig({
     sortTailwindcss: {},
     sortPackageJson: true,
   },
-
   lint: {
     options: { typeAware: true, typeCheck: true },
     ignorePatterns: ["dist/**", "**/routeTree.gen.ts"],

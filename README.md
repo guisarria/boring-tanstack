@@ -25,7 +25,7 @@
 
 ### DX & Infrastructure
 
-- **Vite 8+**
+- **Vite+**
 - **Oxc && Oxfmt**
 
 ## Getting Started

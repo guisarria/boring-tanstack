@@ -1,5 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "streamdown/styles.css";
+@source "../node_modules/streamdown/dist/*.js";
 
 @font-face {
   font-family: "Geist Pixel Line";
@@ -12,16 +14,6 @@
 }
 
 @custom-variant dark (&:is(.dark *));
-
-@keyframes move-background {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
 
 :root {
   color-scheme: light;
@@ -229,6 +221,16 @@
 
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@keyframes move-background {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }
 

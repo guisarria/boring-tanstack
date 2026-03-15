@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router"
 import {
+  BotIcon,
   Frame,
   InboxIcon,
   MapIcon,
@@ -19,6 +20,7 @@ const navGroups: NavGroup[] = [
     items: [
       { title: "Inbox", url: "/dashboard/inbox", icon: InboxIcon },
       { title: "My Issues", url: "/dashboard/my-issues", icon: ScanIcon },
+      { title: "Chat", url: "/dashboard/chat", icon: BotIcon },
       { title: "Account", url: "/settings", icon: Settings2 },
     ],
   },

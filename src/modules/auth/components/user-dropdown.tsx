@@ -13,7 +13,6 @@ import {
 import { toast } from "sonner"
 
 import { ThemeToggle } from "@/components/theme-toggle"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,18 +22,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { UserAvatar } from "@/components/user-avatar"
 import { cn } from "@/lib/utils"
 
 import { authClient } from "../auth-client"
-
-function getInitials(name: string) {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2)
-}
 
 type UserDropdownProps = {
   label?: boolean
@@ -63,25 +54,16 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
       <DropdownMenuTrigger
         className={cn("flex items-center gap-x-2", className)}
       >
-        <Avatar className={cn("flex size-7 after:border-transparent")}>
-          <AvatarImage
-            alt={user?.name}
-            className={cn("rounded-md")}
-            src={user?.image ?? ""}
-          />
-          <AvatarFallback className={cn("rounded-md")}>
-            {getInitials(user?.name ?? "")}
-          </AvatarFallback>
-        </Avatar>
+        <UserAvatar size={25.5} />
         {label && <span className="text-sm">{user?.name}</span>}
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="center" className="mt-4">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="text-sm leading-none font-medium">{user?.name}</p>
-              <p className="text-muted-foreground leading-none">
+              <p className="text-muted-foreground size-xs truncate leading-none">
                 {user?.email}
               </p>
             </div>
