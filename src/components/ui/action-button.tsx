@@ -22,6 +22,7 @@ type ActionButtonProps = ComponentProps<typeof Button> & {
   requireAreYouSure?: boolean
   areYouSureTitle?: ReactNode
   areYouSureDescription?: ReactNode
+  actionTag?: ReactNode
 }
 
 export function ActionButton({
@@ -29,6 +30,7 @@ export function ActionButton({
   requireAreYouSure = false,
   areYouSureTitle = "Are you sure?",
   areYouSureDescription = "This action cannot be undone.",
+  actionTag = "Yes",
   ...props
 }: ActionButtonProps) {
   const [isPending, startTransition] = useTransition()
@@ -56,7 +58,7 @@ export function ActionButton({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction disabled={isPending} onClick={performAction}>
-              <LoadingSwap isLoading={isPending}>Yes</LoadingSwap>
+              <LoadingSwap isLoading={isPending}>{actionTag}</LoadingSwap>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

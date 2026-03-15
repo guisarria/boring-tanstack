@@ -1,5 +1,4 @@
 import { useRouteContext } from "@tanstack/react-router"
-import type * as React from "react"
 
 import {
   Sidebar,

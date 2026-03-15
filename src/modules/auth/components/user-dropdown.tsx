@@ -56,7 +56,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
         {label && <span className="text-sm">{user.name}</span>}
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="center" className="mt-4">
+      <DropdownMenuContent align="center" className="mt-1">
         <DropdownMenuGroup>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">

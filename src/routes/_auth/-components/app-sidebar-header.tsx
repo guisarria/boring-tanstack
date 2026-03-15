@@ -48,6 +48,7 @@ export function AppHeader({
               {rootLabel}
             </BreadcrumbLink>
           </BreadcrumbItem>
+
           {breadcrumbs.map((crumb) => (
             <React.Fragment key={crumb.path}>
               <BreadcrumbSeparator />

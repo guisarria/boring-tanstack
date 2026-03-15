@@ -94,7 +94,7 @@ function SessionItem({
                 {device?.model} ({device?.vendor ?? "Unknown"})
               </p>
               {isCurrent && (
-                <Badge className="text-xs" variant="outline">
+                <Badge className="text-xs" variant="success">
                   Current
                 </Badge>
               )}
@@ -113,8 +113,9 @@ function SessionItem({
         <ActionButton
           action={revokeAction}
           areYouSureDescription="This will sign out the device & require re-authentication."
-          requireAreYouSure={!isCurrent}
+          requireAreYouSure={isCurrent}
           size="sm"
+          actionTag="Sign Out"
           variant="destructive-outline"
         >
           <LogOut />

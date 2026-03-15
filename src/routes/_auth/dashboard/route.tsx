@@ -1,13 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router"
-import {
-  BotIcon,
-  Frame,
-  InboxIcon,
-  MapIcon,
-  PieChart,
-  ScanIcon,
-  Settings2,
-} from "lucide-react"
+import { BotIcon, InboxIcon, ScanIcon, Settings2 } from "lucide-react"
 
 import type { NavGroup } from "@/routes/_auth/-components/app-sidebar"
 import { AppHeader } from "@/routes/_auth/-components/app-sidebar-header"
@@ -22,14 +14,6 @@ const navGroups: NavGroup[] = [
       { title: "My Issues", url: "/dashboard/my-issues", icon: ScanIcon },
       { title: "Chat", url: "/dashboard/chat", icon: BotIcon },
       { title: "Account", url: "/settings", icon: Settings2 },
-    ],
-  },
-  {
-    label: "Projects",
-    items: [
-      { title: "Design Engineering", url: "/settings", icon: Frame },
-      { title: "Sales & Marketing", url: "/settings", icon: PieChart },
-      { title: "Travel", url: "/settings", icon: MapIcon },
     ],
   },
 ]

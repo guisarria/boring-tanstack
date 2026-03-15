@@ -19,6 +19,7 @@ export function getRouter() {
     defaultStructuralSharing: true,
     defaultErrorComponent: DefaultCatchBoundary,
     defaultNotFoundComponent: DefaultNotFound,
+    defaultViewTransition: true,
   })
 
   setupRouterSsrQueryIntegration({
