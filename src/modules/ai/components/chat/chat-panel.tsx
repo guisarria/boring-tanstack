@@ -16,7 +16,7 @@ const PENDING_ASSISTANT: UIMessage = {
 }
 
 export function ChatPanel() {
-  const { messages, sendMessage, isLoading, error } = useChat({
+  const { messages, sendMessage, isLoading } = useChat({
     connection: chatConnection,
   })
 
@@ -32,14 +32,17 @@ export function ChatPanel() {
     ? [...messages, PENDING_ASSISTANT]
     : messages
 
-  function submit() {
+  async function submit() {
     const text = draft.trim()
     if (!text || isLoading) return
 
     setDraft("")
-    void sendMessage(text)
-    if (error) {
-      return toast.error(error.message, {
+    try {
+      await sendMessage(text)
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong"
+      toast.error(message, {
         position: "top-right",
       })
     }

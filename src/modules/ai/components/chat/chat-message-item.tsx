@@ -54,25 +54,21 @@ export function ChatMessageItem({
 }) {
   const isUser = message.role === "user"
 
+  const parts = message.parts.map((part, idx) => (
+    <MessagePartView
+      key={`${message.id}:${part.type}:${idx}`}
+      part={part}
+      role={message.role}
+      isStreaming={isStreaming}
+    />
+  ))
+
   return (
     <Message from={message.role}>
       <div className="flex gap-3">
         {isUser ? (
           <>
-            <MessageContent>
-              {message.parts.map((part, idx) => (
-                <MessagePartView
-                  key={
-                    part.type === "text"
-                      ? `${message.id}:text:${idx}`
-                      : `${message.id}:${part.type}:${idx}`
-                  }
-                  part={part}
-                  role={message.role}
-                  isStreaming={isStreaming}
-                />
-              ))}
-            </MessageContent>
+            <MessageContent>{parts}</MessageContent>
             <UserAvatar size={36} />
           </>
         ) : (
@@ -82,20 +78,7 @@ export function ChatMessageItem({
             ) : (
               <div className="w-9" />
             )}
-            <MessageContent>
-              {message.parts.map((part, idx) => (
-                <MessagePartView
-                  key={
-                    part.type === "text"
-                      ? `${message.id}:text:${idx}`
-                      : `${message.id}:${part.type}:${idx}`
-                  }
-                  part={part}
-                  role={message.role}
-                  isStreaming={isStreaming}
-                />
-              ))}
-            </MessageContent>
+            <MessageContent>{parts}</MessageContent>
           </>
         )}
       </div>

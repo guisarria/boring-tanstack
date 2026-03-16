@@ -1,14 +1,11 @@
 import { Collapsible } from "@base-ui/react/collapsible"
-import { cjk } from "@streamdown/cjk"
-import { code } from "@streamdown/code"
-import { math } from "@streamdown/math"
-import { mermaid } from "@streamdown/mermaid"
 import { ChevronDownIcon } from "lucide-react"
 import type { ComponentProps, ReactNode } from "react"
 import { createContext, use, useEffect, useRef, useState } from "react"
 import { Streamdown } from "streamdown"
 
 import { cn } from "@/lib/utils"
+import { streamdownPlugins } from "@/modules/ai/lib/streamdown-plugins"
 
 import { Shimmer } from "./shimmer"
 
@@ -149,7 +146,7 @@ export function ReasoningTrigger({
   return (
     <Collapsible.Trigger
       className={cn(
-        "flex w-full items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground",
+        "text-muted-foreground hover:text-foreground flex w-full items-center gap-2 text-sm transition-colors",
         className,
       )}
       {...props}
@@ -173,8 +170,6 @@ export type ReasoningContentProps = ComponentProps<typeof Collapsible.Panel> & {
   children: string
 }
 
-const streamdownPlugins = { cjk, code, math, mermaid }
-
 export function ReasoningContent({
   className,
   children,
@@ -183,7 +178,7 @@ export function ReasoningContent({
   return (
     <Collapsible.Panel
       className={cn(
-        "mt-4 text-sm overflow-hidden",
+        "mt-4 overflow-hidden text-sm",
         "data-[state=closed]:animate-out data-[state=open]:animate-in text-muted-foreground outline-none",
         className,
       )}
