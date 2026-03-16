@@ -49,9 +49,7 @@ function BlurLayer({ pos, size }: { pos: "top" | "bottom"; size: number }) {
     }
 
     function onScroll() {
-      if (rafId == null) {
-        rafId = requestAnimationFrame(updateOpacity)
-      }
+      rafId ??= requestAnimationFrame(updateOpacity)
     }
 
     updateOpacity()

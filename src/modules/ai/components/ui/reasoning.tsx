@@ -73,13 +73,15 @@ export function Reasoning({
   useEffect(() => {
     if (isStreaming) {
       hasEverStreamedRef.current = true
-      if (startTimeRef.current === null) startTimeRef.current = Date.now()
-    } else if (startTimeRef.current !== null) {
-      setInternalDuration(
-        Math.ceil((Date.now() - startTimeRef.current) / MS_IN_S),
-      )
-      startTimeRef.current = null
+      startTimeRef.current ??= Date.now()
+      return
     }
+
+    const start = startTimeRef.current
+    if (start == null) return
+
+    setInternalDuration(Math.ceil((Date.now() - start) / MS_IN_S))
+    startTimeRef.current = null
   }, [isStreaming])
 
   useEffect(() => {

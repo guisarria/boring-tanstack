@@ -150,9 +150,7 @@ export function DitherCanvas({ className }: { className?: string }) {
     observer.observe(canvas)
 
     const start = () => {
-      if (frameRef.current == null) {
-        frameRef.current = requestAnimationFrame(drawFrame)
-      }
+      frameRef.current ??= requestAnimationFrame(drawFrame)
     }
 
     const stop = () => {
@@ -164,10 +162,9 @@ export function DitherCanvas({ className }: { className?: string }) {
 
     const onVisibilityChange = () => {
       if (document.hidden) {
-        stop()
-      } else {
-        start()
+        return stop()
       }
+      return start()
     }
 
     start()

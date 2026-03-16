@@ -36,7 +36,9 @@ export const getUnit = (
 
   if (index && getDigit(number, index) % 2 === 0) {
     return -value
-  } else return value
+  }
+
+  return value
 }
 
 export const getRandomColor = (
