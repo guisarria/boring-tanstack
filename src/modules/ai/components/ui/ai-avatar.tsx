@@ -328,15 +328,8 @@ export function AiBotAvatar({
         </radialGradient>
       </defs>
 
-      <mask
-        id={maskID}
-        maskUnits="userSpaceOnUse"
-        x={0}
-        y={0}
-        width={SIZE}
-        height={SIZE}
-      >
-        <rect width={SIZE} height={SIZE} rx={SIZE * 2} fill="#FFFFFF" />
+      <mask id={maskID} x="0" y="0" width={SIZE} height={SIZE}>
+        <circle cx={SIZE / 2} cy={SIZE / 2} r={(SIZE / 2) - 0.5} fill="#FFFFFF" />
       </mask>
 
       <g mask={`url(#${maskID})`}>

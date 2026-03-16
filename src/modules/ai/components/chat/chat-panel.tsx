@@ -3,6 +3,8 @@ import { fetchServerSentEvents, useChat } from "@tanstack/ai-react"
 import { useState } from "react"
 import { toast } from "sonner"
 
+import { Container } from "@/components/ui/design-system"
+
 import { ChatComposer } from "./chat-composer"
 import { ChatMessageList } from "./chat-message-list"
 
@@ -49,7 +51,7 @@ export function ChatPanel() {
   }
 
   return (
-    <div className="relative flex h-full flex-col justify-between overflow-auto">
+    <Container className="h-full overflow-auto items-stretch justify-between flex flex-col">
       <ChatMessageList
         messages={displayMessages}
         streamingMessageId={streamingMessageId}
@@ -60,6 +62,6 @@ export function ChatPanel() {
         onSubmit={submit}
         disabled={isLoading}
       />
-    </div>
+    </Container>
   )
 }

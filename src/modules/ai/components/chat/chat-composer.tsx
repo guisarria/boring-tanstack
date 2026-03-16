@@ -15,7 +15,7 @@ export function ChatComposer({
   disabled: boolean
 }) {
   return (
-    <div className="border-t py-4">
+    <div className="py-2">
       <form
         onSubmit={(e) => {
           e.preventDefault()
