@@ -2,7 +2,13 @@ import type { UIMessage } from "@tanstack/ai-react"
 import { useRouteContext } from "@tanstack/react-router"
 
 import { useStickToBottom } from "@/hooks/use-stick-to-bottom"
-import { AiBotAvatar } from "@/modules/ai/components/ai-avatar"
+import { AiBotAvatar } from "@/modules/ai/components/ui/ai-avatar"
+import {
+  Conversation,
+  ConversationContent,
+  ConversationEmptyState,
+  ConversationScrollButton,
+} from "@/modules/ai/components/ui/conversation"
 
 import { ChatMessageItem } from "./chat-message-item"
 
@@ -14,20 +20,21 @@ export function ChatMessageList({
   streamingMessageId: string | null
 }) {
   const { user } = useRouteContext({ from: "__root__" })
-  const { scrollRef, bottomRef } = useStickToBottom()
+  const { scrollRef, bottomRef, isAtBottom, scrollToBottom } =
+    useStickToBottom()
 
   const lastAssistantId = [...messages]
     .reverse()
     .find((m) => m.role === "assistant")?.id
 
   return (
-    <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto">
-      <div role="log" aria-live="polite" className="mx-auto space-y-4 p-4">
+    <Conversation scrollRef={scrollRef}>
+      <ConversationContent bottomRef={bottomRef} className="mx-auto space-y-4">
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center gap-y-4 py-20">
+          <ConversationEmptyState>
             <AiBotAvatar className="size-40" />
             <p className="text-2xl">How can I help, {user?.name}?</p>
-          </div>
+          </ConversationEmptyState>
         )}
 
         {messages.map((message) => {
@@ -44,9 +51,12 @@ export function ChatMessageList({
             />
           )
         })}
+      </ConversationContent>
 
-        <div ref={bottomRef} />
-      </div>
-    </div>
+      <ConversationScrollButton
+        isAtBottom={isAtBottom}
+        scrollToBottom={scrollToBottom}
+      />
+    </Conversation>
   )
 }

@@ -72,7 +72,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
           {!pathname.startsWith("/dashboard") && (
             <DropdownMenuItem
               render={
-                <Link to="/dashboard">
+                <Link preload="render" to="/dashboard">
                   <LayoutDashboard />
                   Dashboard
                 </Link>
@@ -82,7 +82,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
           {!pathname.startsWith("/settings") && (
             <DropdownMenuItem
               render={
-                <Link to="/settings">
+                <Link preload="render" to="/settings">
                   <Settings2Icon />
                   Settings
                 </Link>

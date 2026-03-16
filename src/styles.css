@@ -282,6 +282,15 @@
   }
 }
 
+@utility rounded-* {
+  @supports (corner-shape: superellipse(1)) {
+    corner-shape: superellipse(var(--superellipse-curve, 1.6));
+    border-radius: calc(
+      --value(--radius- *, [length]) * var(--radius-scale, 1.6)
+    ) !important;
+  }
+}
+
 @keyframes move-background {
   0%,
   100% {
@@ -292,11 +301,11 @@
   }
 }
 
-@utility rounded-* {
-  @supports (corner-shape: superellipse(1)) {
-    corner-shape: superellipse(var(--superellipse-curve, 1.6));
-    border-radius: calc(
-      --value(--radius- *, [length]) * var(--radius-scale, 1.6)
-    ) !important;
+@keyframes text-shimmer {
+  0% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: 0% center;
   }
 }

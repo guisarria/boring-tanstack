@@ -2,8 +2,6 @@ import type { UIMessage } from "@tanstack/ai-react"
 import { fetchServerSentEvents, useChat } from "@tanstack/ai-react"
 import { useState } from "react"
 
-import { ScrollArea } from "@/components/ui/scroll-area"
-
 import { ChatComposer } from "./chat-composer"
 import { ChatMessageList } from "./chat-message-list"
 
@@ -43,12 +41,10 @@ export function ChatPanel() {
 
   return (
     <div className="flex h-full flex-col">
-      <ScrollArea className="max-h-[calc(100vh-9rem)]" scrollFade>
-        <ChatMessageList
-          messages={displayMessages}
-          streamingMessageId={streamingMessageId}
-        />
-      </ScrollArea>
+      <ChatMessageList
+        messages={displayMessages}
+        streamingMessageId={streamingMessageId}
+      />
       <ChatComposer
         value={draft}
         onChange={setDraft}

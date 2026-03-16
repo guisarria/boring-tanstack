@@ -1,10 +1,17 @@
 import type { UIMessage } from "@tanstack/ai-react"
 
-import { cn } from "@/lib/utils"
-import { AiBotAvatar } from "@/modules/ai/components/ai-avatar"
+import { AiBotAvatar } from "@/modules/ai/components/ui/ai-avatar"
+import {
+  Message,
+  MessageContent,
+  MessageResponse,
+} from "@/modules/ai/components/ui/message"
+import {
+  Reasoning,
+  ReasoningContent,
+  ReasoningTrigger,
+} from "@/modules/ai/components/ui/reasoning"
 import { UserAvatar } from "@/modules/auth/components/user-avatar"
-
-import { AssistantMarkdown } from "./chat-markdown"
 
 function MessagePartView({
   part,
@@ -17,12 +24,17 @@ function MessagePartView({
 }) {
   switch (part.type) {
     case "thinking":
-      return <p className="text-muted-foreground text-xs">{part.content}</p>
+      return (
+        <Reasoning isStreaming={isStreaming}>
+          <ReasoningTrigger />
+          <ReasoningContent>{part.content}</ReasoningContent>
+        </Reasoning>
+      )
     case "text":
       return role === "assistant" ? (
-        <AssistantMarkdown isStreaming={isStreaming}>
+        <MessageResponse isAnimating={isStreaming}>
           {part.content}
-        </AssistantMarkdown>
+        </MessageResponse>
       ) : (
         <p className="whitespace-pre-wrap">{part.content}</p>
       )
@@ -43,32 +55,28 @@ export function ChatMessageItem({
   const isUser = message.role === "user"
 
   return (
-    <div className={cn("flex gap-3", isUser && "flex-row-reverse")}>
-      <div className="w-9 shrink-0">
-        {isUser ? (
-          <UserAvatar size={36} />
-        ) : showAvatar ? (
-          <AiBotAvatar isStreaming={isStreaming} />
-        ) : (
-          <div className="w-9" />
-        )}
+    <Message from={message.role}>
+      <div className="flex gap-3">
+        <div className="w-9 shrink-0">
+          {isUser ? (
+            <UserAvatar size={36} />
+          ) : showAvatar ? (
+            <AiBotAvatar isStreaming={isStreaming} />
+          ) : (
+            <div className="w-9" />
+          )}
+        </div>
+        <MessageContent>
+          {message.parts.map((part, idx) => (
+            <MessagePartView
+              key={`${message.id}:${part.type}:${idx}`}
+              part={part}
+              role={message.role}
+              isStreaming={isStreaming}
+            />
+          ))}
+        </MessageContent>
       </div>
-      <div
-        className={cn(
-          "max-w-[80%] space-y-1 rounded-lg px-3 py-2 text-sm",
-          isUser ? "bg-primary text-primary-foreground" : " text-foreground",
-          message.id === "__pending__" && "opacity-70",
-        )}
-      >
-        {message.parts.map((part, idx) => (
-          <MessagePartView
-            key={`${message.id}:${part.type}:${idx}`}
-            part={part}
-            role={message.role}
-            isStreaming={isStreaming}
-          />
-        ))}
-      </div>
-    </div>
+    </Message>
   )
 }
