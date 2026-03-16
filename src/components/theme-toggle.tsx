@@ -1,4 +1,4 @@
-import { Moon, Sun } from "lucide-react"
+import { type LucideIcon, Monitor, Moon, Sun } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -11,6 +11,14 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu"
 import { Item, ItemActions, ItemContent, ItemTitle } from "./ui/item"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select"
 
 export function ThemeToggle({
   variant = "outline",
@@ -40,32 +48,75 @@ export function ThemeToggle({
   )
 }
 
-export function ThemeDropdown() {
-  const { setTheme } = useTheme()
+const items = [
+  {
+    label: "Light",
+    value: "light",
+    icon: Sun,
+    richClassName:
+      "text-amber-400 group-hover:text-amber-500 dark:text-amber-500 dark:group-hover:text-amber-400",
+  },
+  {
+    label: "Dark",
+    value: "dark",
+    icon: Moon,
+    richClassName:
+      "text-indigo-400 group-hover:text-indigo-500 dark:text-indigo-500 dark:group-hover:text-indigo-400",
+  },
+  {
+    label: "System",
+    value: "system",
+    icon: Monitor,
+    richClassName: "text-foreground/80 group-hover:text-muted-foreground",
+  },
+] satisfies {
+  label: string
+  value: string
+  icon: LucideIcon
+  richClassName: string
+}[]
+
+export function ThemeSelect({ richColors = false }: { richColors?: boolean }) {
+  const { theme, setTheme } = useTheme()
+
+  const activeItem = items.find((item) => item.value === theme)
+  const ActiveIcon: LucideIcon | undefined = activeItem?.icon
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button variant="outline" size="icon">
-            <Sun className="dark:hidden" />
-            <Moon className="hidden dark:block" />
-            <span className="sr-only">Toggle theme</span>
-          </Button>
-        }
-      ></DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Select onValueChange={(value) => value && setTheme(value)} value={theme}>
+      <SelectTrigger>
+        <SelectValue className="flex w-16 items-center gap-x-2">
+          {ActiveIcon && (
+            <ActiveIcon
+              className={cn(
+                "size-3",
+                richColors
+                  ? activeItem?.richClassName
+                  : "text-muted-foreground",
+              )}
+            />
+          )}
+          {activeItem?.label}
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          {items.map((item) => (
+            <SelectItem key={item.value} className="group" value={item.value}>
+              <div className="flex items-center gap-x-1.5">
+                <item.icon
+                  className={cn(
+                    "size-3",
+                    richColors ? item.richClassName : "text-muted-foreground",
+                  )}
+                />
+                {item.label}
+              </div>
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   )
 }
 

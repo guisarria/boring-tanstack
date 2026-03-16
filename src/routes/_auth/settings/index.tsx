@@ -3,7 +3,7 @@ import { MailWarningIcon } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 
-import { ThemeDropdown } from "@/components/theme-toggle"
+import { ThemeSelect } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Container, Section } from "@/components/ui/design-system"
 import {
@@ -92,10 +92,13 @@ function RouteComponent() {
         <Item variant="outline">
           <ItemContent>
             <ItemTitle>Change Theme</ItemTitle>
+            <ItemDescription>
+              Select your interface color scheme.
+            </ItemDescription>
           </ItemContent>
 
           <ItemActions>
-            <ThemeDropdown />
+            <ThemeSelect richColors />
           </ItemActions>
         </Item>
       </Container>
