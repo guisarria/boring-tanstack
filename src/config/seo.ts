@@ -4,7 +4,7 @@ const BASE_URL = "https://boring-tanstack.vercel.app"
 const SITE_NAME = "Boring TanStack"
 const DEFAULT_DESCRIPTION =
   "A modern full-stack starter built with TanStack Start, React, and Drizzle."
-const DEFAULT_IMAGE = "/og-image.jpg"
+const DEFAULT_IMAGE = "/og-image.png"
 const TWITTER_HANDLE = "@example"
 
 export interface SeoResult {
