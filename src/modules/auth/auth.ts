@@ -17,6 +17,9 @@ export const auth = betterAuth({
   trustedOrigins: [env.BASE_URL],
   secret: env.BETTER_AUTH_SECRET,
   experimental: { joins: true },
+  telemetry: {
+    enabled: false,
+  },
   database: drizzleAdapter(db, {
     provider: "pg",
     usePlural: true,

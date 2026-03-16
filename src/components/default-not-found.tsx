@@ -1,7 +1,7 @@
 import { Container } from "@react-email/components"
-import { Link } from "@tanstack/react-router"
 
 import { Button } from "./ui/button"
+import { ButtonLink } from "./ui/button-link"
 import {
   Card,
   CardAction,
@@ -34,14 +34,9 @@ export function DefaultNotFound() {
               >
                 Go Back
               </Button>
-              <Button
-                size="lg"
-                nativeButton={false}
-                render={<Link to="/" />}
-                variant="secondary"
-              >
+              <ButtonLink size="lg" variant="secondary" to="/">
                 Home
-              </Button>
+              </ButtonLink>
             </CardAction>
           </CardContent>
         </Card>

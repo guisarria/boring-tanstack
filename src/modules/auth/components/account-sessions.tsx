@@ -6,7 +6,7 @@ import {
   SmartphoneIcon,
   TabletIcon,
 } from "lucide-react"
-import { useMemo } from "react"
+import { startTransition, useMemo } from "react"
 import { toast } from "sonner"
 import { UAParser } from "ua-parser-js"
 
@@ -49,6 +49,10 @@ function SessionItem({
 
   const device = userAgent?.getDevice()
   const browser = userAgent?.getBrowser()
+  const os = userAgent?.getOS()
+
+  const deviceName = device?.model || os?.name || "Unknown Device"
+  const browserName = browser?.name || "Unknown Browser"
 
   async function revokeAction(): Promise<{
     error: boolean
@@ -59,7 +63,9 @@ function SessionItem({
         fetchOptions: {
           onSuccess: async () => {
             toast.success("Signed out")
-            await router.invalidate({ sync: true })
+            startTransition(() => {
+              void router.invalidate({ sync: true })
+            })
           },
         },
       })
@@ -75,36 +81,39 @@ function SessionItem({
     }
 
     toast.success("Session revoked")
-    void router.invalidate({ sync: true })
+    startTransition(() => {
+      void router.invalidate({ sync: true })
+    })
     return { error: false }
   }
 
   return (
     <div>
-      <div className="flex max-w-sm items-start justify-between">
-        <div className="flex items-start gap-3">
+      <div className="flex justify-between">
+        <div className="flex items-start gap-x-3">
           <div className="bg-secondary rounded-md p-2">
             {getDeviceIcon(device?.type ?? "laptop")}
           </div>
+
           <div className="flex flex-col">
-            <div className="flex items-center gap-x-2">
-              <p className="font-medium">
-                {browser?.name} on {device?.model}
-              </p>
-            </div>
+            <p className="font-medium">
+              {browserName} on {deviceName}
+            </p>
+
             {isCurrent && (
-              <span className="text-success-text flex items-center gap-x-1">
-                <span className="-mt-1 text-2xl">•</span> Current session
+              <span className="text-success-text -mt-1 flex items-center justify-start gap-x-1">
+                <span className="-mt-1 -ml-px text-2xl">•</span> Current session
               </span>
             )}
 
-            <p className="text-muted-foreground mt-1 text-xs">
+            <p className="text-muted-foreground mt-1 text-xs tabular-nums">
               {session.createdAt.toLocaleDateString(undefined, {
                 dateStyle: "medium",
               })}
             </p>
           </div>
         </div>
+
         <ActionButton
           action={revokeAction}
           areYouSureDescription="This will sign out the device & require re-authentication."
@@ -113,7 +122,7 @@ function SessionItem({
           actionTag="Sign Out"
           variant="destructive-outline"
         >
-          <LogOut />
+          <LogOut className="mb-0.5" />
           Revoke
         </ActionButton>
       </div>
@@ -176,6 +185,7 @@ export function AccountSessions({
           Manage your active sessions across devices
         </CardDescription>
       </CardHeader>
+
       <CardContent className="space-y-4">
         {sessions.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-center">
@@ -194,8 +204,9 @@ export function AccountSessions({
           ))
         )}
       </CardContent>
+
       <CardFooter className="flex justify-between">
-        <p className="text-muted-foreground text-xs">
+        <p className="text-muted-foreground text-xs tabular-nums">
           Last checked:{" "}
           {new Date().toLocaleDateString(undefined, { dateStyle: "medium" })}
         </p>

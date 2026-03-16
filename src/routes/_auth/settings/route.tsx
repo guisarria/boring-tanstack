@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router"
 import { ShieldIcon, UserIcon } from "lucide-react"
 
+import { Main } from "@/components/ui/design-system"
 import type { NavGroup } from "@/routes/_auth/-components/app-sidebar"
 import { AppHeader } from "@/routes/_auth/-components/app-sidebar-header"
 
@@ -28,7 +29,9 @@ function RouteComponent() {
   return (
     <AppSidebarLayout navGroups={navGroups}>
       <AppHeader basePath="/settings" rootLabel="Settings" />
-      <Outlet />
+      <Main className="py-4">
+        <Outlet />
+      </Main>
     </AppSidebarLayout>
   )
 }

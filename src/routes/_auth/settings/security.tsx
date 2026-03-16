@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router"
 
 import { Container, Section } from "@/components/ui/design-system"
-import { sessionsAction } from "@/modules/auth/auth.functions"
 import { AccountSessions } from "@/modules/auth/components/account-sessions"
+import { sessionsAction } from "@/modules/auth/functions"
 
 export const Route = createFileRoute("/_auth/settings/security")({
   beforeLoad: async ({ context }) => {
@@ -21,7 +21,7 @@ function RouteComponent() {
   return (
     <Section>
       <Container className="flex max-w-lg flex-col gap-y-6">
-        <h1 className="text-2xl">Security</h1>
+        <h2 className="text-2xl">Security</h2>
         <AccountSessions sessionId={sessionId} sessions={sessions} />
       </Container>
     </Section>

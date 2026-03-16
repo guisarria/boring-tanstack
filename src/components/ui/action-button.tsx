@@ -47,7 +47,10 @@ export function ActionButton({
   if (requireAreYouSure) {
     return (
       <AlertDialog open={isPending ? true : undefined}>
-        <AlertDialogTrigger render={<Button {...props} />} />
+        <AlertDialogTrigger
+          className="inline-flex items-center gap-x-2"
+          render={<Button {...props} />}
+        />
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{areYouSureTitle}</AlertDialogTitle>
@@ -76,7 +79,7 @@ export function ActionButton({
       }}
     >
       <LoadingSwap
-        className="inline-flex items-center gap-2"
+        className="inline-flex items-center gap-x-2"
         isLoading={isPending}
       >
         {props.children}

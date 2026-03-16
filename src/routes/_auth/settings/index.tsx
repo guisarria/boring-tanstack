@@ -36,19 +36,22 @@ function RouteComponent() {
   return (
     <Section>
       <Container className="flex max-w-lg flex-col gap-y-6">
-        <h1 className="text-2xl">Profile</h1>
+        <h2 className="text-2xl">Profile</h2>
         {!user?.emailVerified && (
           <Item variant="warning">
             <ItemMedia variant="icon">
               <MailWarningIcon />
             </ItemMedia>
+
             <ItemContent>
               <ItemTitle>Verify Your Email Address</ItemTitle>
+
               <ItemDescription>
                 Please verify your email address. Check your inbox for the
                 verification email. If you haven't received the email, click the
                 button below to resend.
               </ItemDescription>
+
               <ItemActions className="mt-1 ml-auto">
                 <Button
                   disabled={emailVerificationPending}
@@ -83,11 +86,14 @@ function RouteComponent() {
             </ItemContent>
           </Item>
         )}
+
         <ChangePasswordForm />
+
         <Item variant="outline">
           <ItemContent>
             <ItemTitle>Change Theme</ItemTitle>
           </ItemContent>
+
           <ItemActions>
             <ThemeDropdown />
           </ItemActions>

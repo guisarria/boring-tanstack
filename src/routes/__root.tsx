@@ -11,7 +11,7 @@ import {
 } from "@/components/providers/root-provider"
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
-import { getSession } from "@/modules/auth/auth.functions"
+import { getSession } from "@/modules/auth/functions"
 
 import appCss from "../styles.css?url"
 
