@@ -84,12 +84,14 @@ function RouteComponent() {
                   </AvatarBadge>
                 </Avatar>
               </ItemMedia>
+
               <ItemContent>
                 <ItemTitle className="line-clamp-1">{mail.title}</ItemTitle>
                 <ItemDescription className="line-clamp-1">
                   {mail.description}
                 </ItemDescription>
               </ItemContent>
+
               <ItemActions>
                 <Button>Action</Button>
               </ItemActions>
@@ -97,7 +99,9 @@ function RouteComponent() {
           ))}
         </ItemGroup>
       </ResizablePanel>
+
       <ResizableHandle />
+
       <ResizablePanel>
         <Empty className="text-muted-foreground flex h-full flex-1 flex-col items-center justify-center">
           <InboxIcon absoluteStrokeWidth className="size-40" strokeWidth={1} />

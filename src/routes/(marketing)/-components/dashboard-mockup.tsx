@@ -99,6 +99,7 @@ export function DashboardMockup() {
                 </div>
               </div>
             </SidebarHeader>
+
             <SidebarContent className="px-2">
               {navGroups.map((group) => (
                 <SidebarGroup key={group.label}>
@@ -177,7 +178,9 @@ export function DashboardMockup() {
                     ))}
                   </ItemGroup>
                 </ResizablePanel>
+
                 <ResizableHandle />
+
                 <ResizablePanel defaultSize={60}>
                   <div className="bg-muted/30 flex h-full flex-col items-center justify-center">
                     <Empty className="text-center">

@@ -32,6 +32,7 @@ export function AppSidebar({
           size={"lg"}
         />
       </SidebarHeader>
+
       <SidebarContent>
         {navGroups.map((group) => (
           <SidebarNavGroup
@@ -41,6 +42,7 @@ export function AppSidebar({
           />
         ))}
       </SidebarContent>
+
       <SidebarRail />
     </Sidebar>
   )

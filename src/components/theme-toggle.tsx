@@ -145,9 +145,11 @@ export function ThemeItem() {
         <DropdownMenuItem onClick={() => setTheme("light")}>
           Light
         </DropdownMenuItem>
+
         <DropdownMenuItem onClick={() => setTheme("dark")}>
           Dark
         </DropdownMenuItem>
+
         <DropdownMenuItem onClick={() => setTheme("system")}>
           System
         </DropdownMenuItem>

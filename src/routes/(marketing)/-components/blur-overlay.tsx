@@ -97,6 +97,7 @@ export function BlurOverlay({
       {(position === "top" || position === "both") && (
         <BlurLayer pos="top" size={size} />
       )}
+
       {(position === "bottom" || position === "both") && (
         <BlurLayer pos="bottom" size={size} />
       )}

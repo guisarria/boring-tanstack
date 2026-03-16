@@ -1,5 +1,3 @@
-import { Container } from "@react-email/components"
-
 import { Button } from "./ui/button"
 import { ButtonLink } from "./ui/button-link"
 import {
@@ -10,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card"
-import { Main } from "./ui/design-system"
+import { Main, Container } from "./ui/design-system"
 
 export function DefaultNotFound() {
   return (

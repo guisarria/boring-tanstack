@@ -13,6 +13,7 @@ export function AppSidebarLayout({
   return (
     <SidebarProvider className="h-screen overflow-hidden md:p-2">
       <AppSidebar navGroups={navGroups} />
+
       <SidebarInset className="rounded-none md:peer-data-[variant=inset]:mt-0 md:peer-data-[variant=inset]:rounded-md">
         <Section className="border-border bg-muted/30 flex h-full flex-col items-stretch border md:rounded-md">
           {children}
