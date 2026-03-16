@@ -12,6 +12,7 @@ export function SubmitButton({
   isPending?: boolean
 }) {
   const form = useFormContext()
+
   return (
     <Field>
       <form.Subscribe

@@ -33,9 +33,14 @@ function createStableNoise(cols: number, rows: number) {
 export function DitherCanvas({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
+
   const frameRef = useRef<number | null>(null)
+  const runningRef = useRef(false)
+
   const timeRef = useRef(0)
   const noiseRef = useRef<Float32Array>(new Float32Array(0))
+  const waveYRef = useRef<Float32Array>(new Float32Array(0))
+
   const { theme } = useTheme()
 
   const bgRef = useRef(theme === "dark" ? "oklch(21% 0 0)" : "oklch(1 0 0)")
@@ -55,16 +60,12 @@ export function DitherCanvas({ className }: { className?: string }) {
   const resizeCanvas = useCallback(() => {
     const canvas = canvasRef.current
     const ctx = ctxRef.current
-    if (!(canvas && ctx)) {
-      return
-    }
+    if (!(canvas && ctx)) return
 
     const rect = canvas.getBoundingClientRect()
     const width = Math.round(rect.width)
     const height = Math.round(rect.height)
-    if (!(width && height)) {
-      return
-    }
+    if (!(width && height)) return
 
     const dpr = 1
     const prev = sizeRef.current
@@ -73,8 +74,8 @@ export function DitherCanvas({ className }: { className?: string }) {
       return
     }
 
-    canvas.width = Math.round(width * dpr)
-    canvas.height = Math.round(height * dpr)
+    canvas.width = width * dpr
+    canvas.height = height * dpr
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
@@ -82,20 +83,22 @@ export function DitherCanvas({ className }: { className?: string }) {
     const rows = Math.ceil(height / GRID_SIZE)
 
     sizeRef.current = { width, height, cols, rows, dpr }
+
     noiseRef.current = createStableNoise(cols, rows)
+    waveYRef.current = new Float32Array(cols)
   }, [])
 
   const drawFrame = useCallback(() => {
+    if (!runningRef.current) return
+
     const ctx = ctxRef.current
     const { width, height, cols, rows } = sizeRef.current
-    if (!(ctx && width && height)) {
-      return
-    }
+    if (!(ctx && width && height)) return
 
     const t = timeRef.current
     const waveCenterY = rows / 2
     const waveAmplitude = rows / 4
-    const waveYByCol = new Float32Array(cols)
+    const waveYByCol = waveYRef.current
 
     for (let x = 0; x < cols; x++) {
       const wave1 = Math.sin(x * FREQUENCY + t) * waveAmplitude
@@ -107,6 +110,7 @@ export function DitherCanvas({ className }: { className?: string }) {
     ctx.fillRect(0, 0, width, height)
 
     ctx.fillStyle = FG
+
     for (let y = 0; y < rows; y++) {
       const rowOffset = y * cols
 
@@ -115,6 +119,7 @@ export function DitherCanvas({ className }: { className?: string }) {
 
         const distFromWave = Math.abs(y - waveYByCol[x])
         const baseIntensity = Math.max(0, 1 - distFromWave / 26)
+
         let intensity = baseIntensity ** 0.5
         intensity =
           (intensity + noiseRef.current[rowOffset + x]) * horizontalFade
@@ -129,20 +134,18 @@ export function DitherCanvas({ className }: { className?: string }) {
         }
       }
     }
+
     timeRef.current = t + SPEED
+
     frameRef.current = requestAnimationFrame(drawFrame)
   }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas) {
-      return
-    }
+    if (!canvas) return
 
     ctxRef.current = canvas.getContext("2d", { alpha: false })
-    if (!ctxRef.current) {
-      return
-    }
+    if (!ctxRef.current) return
 
     resizeCanvas()
 
@@ -150,10 +153,14 @@ export function DitherCanvas({ className }: { className?: string }) {
     observer.observe(canvas)
 
     const start = () => {
-      frameRef.current ??= requestAnimationFrame(drawFrame)
+      if (runningRef.current) return
+      runningRef.current = true
+      frameRef.current = requestAnimationFrame(drawFrame)
     }
 
     const stop = () => {
+      runningRef.current = false
+
       if (frameRef.current != null) {
         cancelAnimationFrame(frameRef.current)
         frameRef.current = null
@@ -161,13 +168,12 @@ export function DitherCanvas({ className }: { className?: string }) {
     }
 
     const onVisibilityChange = () => {
-      if (document.hidden) {
-        return stop()
-      }
-      return start()
+      if (document.hidden) stop()
+      else start()
     }
 
     start()
+
     document.addEventListener("visibilitychange", onVisibilityChange)
 
     return () => {
@@ -179,13 +185,13 @@ export function DitherCanvas({ className }: { className?: string }) {
 
   return (
     <canvas
+      ref={canvasRef}
       className={cn(
         "absolute top-0 right-0 -z-10 h-full max-w-5xl opacity-40 backdrop-blur-xs",
         "mask-[linear-gradient(to_right,transparent,black)]",
         "[-webkit-mask-image:linear-gradient(to_right,transparent,black)]",
         className,
       )}
-      ref={canvasRef}
     />
   )
 }
