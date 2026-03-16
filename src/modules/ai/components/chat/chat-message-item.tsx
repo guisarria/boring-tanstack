@@ -78,7 +78,7 @@ export function ChatMessageItem({
         ) : (
           <>
             {showAvatar ? (
-              <AiBotAvatar isStreaming={isStreaming} />
+              <AiBotAvatar className="min-w-9" isStreaming={isStreaming} />
             ) : (
               <div className="w-9" />
             )}
