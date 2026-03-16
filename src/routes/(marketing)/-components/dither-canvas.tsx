@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 const GRID_SIZE = 4
 const FG = "oklch(75.7% 0 0)"
 const FREQUENCY = 0.05
-const SPEED = 0.023
+const SPEED = 0.005
 
 const BAYER_4X4 = [
   0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5,
@@ -97,7 +97,7 @@ export function DitherCanvas({ className }: { className?: string }) {
 
     const t = timeRef.current
     const waveCenterY = rows / 2
-    const waveAmplitude = rows / 4
+    const waveAmplitude = rows / 8
     const waveYByCol = waveYRef.current
 
     for (let x = 0; x < cols; x++) {
@@ -118,7 +118,7 @@ export function DitherCanvas({ className }: { className?: string }) {
         const horizontalFade = (x / cols) ** 0.8
 
         const distFromWave = Math.abs(y - waveYByCol[x])
-        const baseIntensity = Math.max(0, 1 - distFromWave / 26)
+        const baseIntensity = Math.max(0, 1 - distFromWave / 40)
 
         let intensity = baseIntensity ** 0.5
         intensity =
@@ -187,7 +187,7 @@ export function DitherCanvas({ className }: { className?: string }) {
     <canvas
       ref={canvasRef}
       className={cn(
-        "absolute top-0 right-0 -z-10 h-full max-w-5xl opacity-40 backdrop-blur-xs",
+        "absolute top-0 right-0 -z-10 h-full max-w-5xl opacity-25 backdrop-blur-xs",
         "mask-[linear-gradient(to_right,transparent,black)]",
         "[-webkit-mask-image:linear-gradient(to_right,transparent,black)]",
         className,

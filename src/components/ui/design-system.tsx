@@ -120,7 +120,7 @@ function GlowText<T extends ElementType = "span">({
       <span
         aria-hidden
         className={cn(
-          "pointer-events-none absolute inset-0 select-none blur-xs animate-pulse",
+          "pointer-events-none absolute inset-0 select-none blur-xs",
           variant === "strong" && "blur-sm",
         )}
       >

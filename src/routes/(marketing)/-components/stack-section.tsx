@@ -149,7 +149,7 @@ function StackSection() {
 
                       "before:absolute before:-inset-px before:-z-2 before:animate-[move-background_16s_ease-in-out_infinite] before:rounded-lg before:bg-[url('./assets/void-background.jpg')] before:bg-size-[150%_150%] before:bg-center before:content-['']",
 
-                      "after:bg-card border-transparent after:absolute after:inset-1 after:-z-1 after:rounded-[7px] after:content-[''] dark:after:bg-[#1F1F1F]",
+                      "after:bg-card border-transparent after:absolute after:inset-1 after:-z-1 after:rounded-[7px] after:content-[''] dark:after:bg-card",
 
                       "items-center justify-center",
                     ],
@@ -167,7 +167,7 @@ function StackSection() {
                     </CardHeader>
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center lg:-top-4">
-                      <Icon className="dark:fill-foreground size-12 fill-[#1F1F1F]" />
+                      <Icon className="dark:fill-foreground size-12 fill-card" />
                     </div>
                   )}
 

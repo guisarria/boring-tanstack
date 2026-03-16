@@ -24,7 +24,7 @@
   --card-foreground: oklch(32.5% 0 0);
   --popover: oklch(98.5% 0 0);
   --popover-foreground: oklch(32.5% 0 0);
-  --primary: oklch(0.483 0.075 187.623);
+  --primary: oklch(0.52 0.04 187.623);
   --primary-foreground: oklch(100% 0 0);
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(21% 0 0);
@@ -46,7 +46,7 @@
 
   --sidebar: oklch(100% 0 0);
   --sidebar-foreground: oklch(32.5% 0 0);
-  --sidebar-primary: oklch(0.609 0.126 221.723);
+  --sidebar-primary: oklch(0.65 0.06 221.723);
   --sidebar-primary-foreground: oklch(0.984 0.019 200.873);
   --sidebar-accent: oklch(94.9% 0 0deg);
   --sidebar-accent-foreground: oklch(24% 0 0);
@@ -78,7 +78,7 @@
   --card-foreground: oklch(100% 0 0);
   --popover: oklch(24% 0 0);
   --popover-foreground: oklch(100% 0 0);
-  --primary: oklch(0.483 0.075 187.623);
+  --primary: oklch(0.52 0.04 187.623);
   --primary-foreground: oklch(100% 0 0);
   --secondary: oklch(28.5% 0 0);
   --secondary-foreground: oklch(100% 0 0);
@@ -91,15 +91,15 @@
   --input: oklch(28.5% 0 0);
   --ring: oklch(0.556 0 0);
 
-  --chart-1: oklch(0.865 0.127 207.078);
-  --chart-2: oklch(0.715 0.143 215.221);
-  --chart-3: oklch(0.609 0.126 221.723);
-  --chart-4: oklch(0.52 0.105 223.128);
-  --chart-5: oklch(0.483 0.075 187.623);
+  --chart-1: oklch(0.865 0.06 207.078);
+  --chart-2: oklch(0.715 0.07 215.221);
+  --chart-3: oklch(0.65 0.06 221.723);
+  --chart-4: oklch(0.55 0.05 223.128);
+  --chart-5: oklch(0.52 0.04 187.623);
 
   --sidebar: oklch(24% 0 0);
   --sidebar-foreground: oklch(100% 0 0);
-  --sidebar-primary: oklch(0.715 0.143 215.221);
+  --sidebar-primary: oklch(0.72 0.07 215.221);
   --sidebar-primary-foreground: oklch(0.302 0.056 229.695);
   --sidebar-accent: oklch(0.269 0 0);
   --sidebar-accent-foreground: oklch(100% 0 0);
@@ -308,16 +308,4 @@
   100% {
     background-position: 0% center;
   }
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.02;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
 }
