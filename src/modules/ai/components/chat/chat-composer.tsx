@@ -15,7 +15,7 @@ export function ChatComposer({
   disabled: boolean
 }) {
   return (
-    <div className="mt-auto border-t py-4">
+    <div className="border-t py-4">
       <form
         onSubmit={(e) => {
           e.preventDefault()

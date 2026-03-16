@@ -7,9 +7,5 @@ export const Route = createFileRoute("/_auth/dashboard/chat")({
 })
 
 function RouteComponent() {
-  return (
-    <div className="flex h-[calc(100vh-3rem)] flex-col">
-      <ChatPanel />
-    </div>
-  )
+  return <ChatPanel />
 }

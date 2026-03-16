@@ -1,6 +1,7 @@
 import type { UIMessage } from "@tanstack/ai-react"
 import { fetchServerSentEvents, useChat } from "@tanstack/ai-react"
 import { useState } from "react"
+import { toast } from "sonner"
 
 import { ChatComposer } from "./chat-composer"
 import { ChatMessageList } from "./chat-message-list"
@@ -37,10 +38,15 @@ export function ChatPanel() {
 
     setDraft("")
     void sendMessage(text)
+    if (error) {
+      return toast.error(error.message, {
+        position: "top-right",
+      })
+    }
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="relative flex h-full flex-col justify-between overflow-auto">
       <ChatMessageList
         messages={displayMessages}
         streamingMessageId={streamingMessageId}
@@ -51,9 +57,6 @@ export function ChatPanel() {
         onSubmit={submit}
         disabled={isLoading}
       />
-      {error && (
-        <p className="text-destructive px-4 pb-2 text-sm">{error.message}</p>
-      )}
     </div>
   )
 }
