@@ -57,25 +57,47 @@ export function ChatMessageItem({
   return (
     <Message from={message.role}>
       <div className="flex gap-3">
-        <div className="w-9 shrink-0">
-          {isUser ? (
+        {isUser ? (
+          <>
+            <MessageContent>
+              {message.parts.map((part, idx) => (
+                <MessagePartView
+                  key={
+                    part.type === "text"
+                      ? `${message.id}:text:${idx}`
+                      : `${message.id}:${part.type}:${idx}`
+                  }
+                  part={part}
+                  role={message.role}
+                  isStreaming={isStreaming}
+                />
+              ))}
+            </MessageContent>
             <UserAvatar size={36} />
-          ) : showAvatar ? (
-            <AiBotAvatar isStreaming={isStreaming} />
-          ) : (
-            <div className="w-9" />
-          )}
-        </div>
-        <MessageContent>
-          {message.parts.map((part, idx) => (
-            <MessagePartView
-              key={`${message.id}:${part.type}:${idx}`}
-              part={part}
-              role={message.role}
-              isStreaming={isStreaming}
-            />
-          ))}
-        </MessageContent>
+          </>
+        ) : (
+          <>
+            {showAvatar ? (
+              <AiBotAvatar isStreaming={isStreaming} />
+            ) : (
+              <div className="w-9" />
+            )}
+            <MessageContent>
+              {message.parts.map((part, idx) => (
+                <MessagePartView
+                  key={
+                    part.type === "text"
+                      ? `${message.id}:text:${idx}`
+                      : `${message.id}:${part.type}:${idx}`
+                  }
+                  part={part}
+                  role={message.role}
+                  isStreaming={isStreaming}
+                />
+              ))}
+            </MessageContent>
+          </>
+        )}
       </div>
     </Message>
   )
