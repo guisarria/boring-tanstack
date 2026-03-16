@@ -15,8 +15,7 @@ import {
 } from "@/components/ui/card"
 import { FieldGroup } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
-
-import { authClient } from "../auth-client"
+import { authClient } from "@/modules/auth/auth-client"
 
 const forgotPasswordSchema = z.object({
   email: z.email({ message: "Enter a valid email address." }),

@@ -15,9 +15,9 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Field, FieldGroup, FieldSeparator } from "@/components/ui/field"
+import { authClient } from "@/modules/auth/auth-client"
 
-import { authClient } from "../auth-client"
-import { SocialAuthButtons } from "./social-auth-buttons"
+import { SocialAuthButtons } from "../social-auth-buttons"
 
 const signUpFormSchema = z
   .object({

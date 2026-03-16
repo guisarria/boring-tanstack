@@ -14,8 +14,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Label } from "@/components/ui/label"
-
-import { authClient } from "../auth-client"
+import { authClient } from "@/modules/auth/auth-client"
 
 const changePasswordFormSchema = z.object({
   currentPassword: z.string().min(1, "Current password is required"),

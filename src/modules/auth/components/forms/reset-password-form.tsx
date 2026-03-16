@@ -15,8 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Field, FieldGroup } from "@/components/ui/field"
-
-import { authClient } from "../auth-client"
+import { authClient } from "@/modules/auth/auth-client"
 
 const resetPasswordSchema = z
   .object({

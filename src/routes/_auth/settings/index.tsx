@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/item"
 import { LoadingSwap } from "@/components/ui/loading-swap"
 import { authClient } from "@/modules/auth/auth-client"
-import { ChangePasswordForm } from "@/modules/auth/components/change-password-form"
+import { ChangePasswordForm } from "@/modules/auth/components/forms/change-password-form"
 
 export const Route = createFileRoute("/_auth/settings/")({
   component: RouteComponent,
@@ -37,7 +37,7 @@ function RouteComponent() {
     <Section>
       <Container className="flex max-w-lg flex-col gap-y-6">
         <h2 className="text-2xl">Profile</h2>
-        {!user?.emailVerified && (
+        {!user.emailVerified && (
           <Item variant="warning">
             <ItemMedia variant="icon">
               <MailWarningIcon />

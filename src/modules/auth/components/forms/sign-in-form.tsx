@@ -14,10 +14,9 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { FieldGroup, FieldSeparator } from "@/components/ui/field"
-import { Route } from "@/routes/(marketing)/(auth)/sign-in"
+import { authClient } from "@/modules/auth/auth-client"
 
-import { authClient } from "../auth-client"
-import { SocialAuthButtons } from "./social-auth-buttons"
+import { SocialAuthButtons } from "../social-auth-buttons"
 
 const signInFormSchema = z.object({
   email: z.email({ message: "Please enter a valid email address." }),
@@ -36,29 +35,24 @@ export function SignInForm() {
   const navigate = useNavigate()
   const { redirect } = useSearch({ from: "/(marketing)/(auth)/sign-in/" })
 
-  const session = Route.useRouteContext()
-
-  const user = session.user
-
   const signIn = (email: string, password: string) => {
     return authClient.signIn.email({
       email,
       password,
       fetchOptions: {
-        onSuccess: async () => {
+        onSuccess: async (context) => {
+          const { user } = context.data
+          const target = redirect ?? "/dashboard"
+
           if (!user?.emailVerified) {
             toast.warning(
-              "Signed in sucessfully, please confirm your email to unlock all features.",
+              "Signed in successfully, please confirm your email to unlock all features.",
             )
-            await navigate({
-              to: redirect ?? "/dashboard",
-            })
-            return
+            return navigate({ to: target })
           }
+
           toast.success("Signed in successfully")
-          await navigate({
-            to: redirect ?? "/dashboard",
-          })
+          return navigate({ to: target })
         },
         onError: ({ error }) => {
           toast.error(error.message)
@@ -66,7 +60,6 @@ export function SignInForm() {
       },
     })
   }
-
   const form = useAppForm({
     defaultValues,
     validators: {
