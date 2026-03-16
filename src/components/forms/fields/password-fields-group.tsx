@@ -42,6 +42,7 @@ export const PasswordFieldsGroup = withFieldGroup({
             />
           )}
         </group.AppField>
+
         <group.AppField
           name="confirmPassword"
           validators={{

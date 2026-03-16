@@ -25,6 +25,7 @@ export function DefaultNotFound() {
               This page doesn&apos;t exist. Try heading back or returning home.
             </CardDescription>
           </CardHeader>
+
           <CardContent>
             <CardAction className="flex gap-x-2">
               <Button

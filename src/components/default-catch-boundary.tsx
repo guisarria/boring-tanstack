@@ -22,6 +22,7 @@ export function DefaultCatchBoundary({ error }: Readonly<ErrorComponentProps>) {
   return (
     <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-6 p-4">
       <ErrorComponent error={error} />
+
       <div className="flex flex-wrap items-center gap-2">
         <Button
           onClick={async () => {
@@ -31,6 +32,7 @@ export function DefaultCatchBoundary({ error }: Readonly<ErrorComponentProps>) {
         >
           Try Again
         </Button>
+
         {isRoot ? (
           <Button
             nativeButton={false}

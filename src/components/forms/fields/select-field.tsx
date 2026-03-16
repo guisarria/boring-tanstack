@@ -34,6 +34,7 @@ export function SelectField({ children, ...props }: SelectFieldProps) {
         >
           <SelectValue placeholder={props.placeholder} />
         </SelectTrigger>
+
         <SelectContent>{children}</SelectContent>
       </Select>
     </FieldBase>

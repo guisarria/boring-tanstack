@@ -14,12 +14,7 @@ const config = defineConfig({
     semi: false,
     useTabs: false,
     tabWidth: 2,
-    tailwindcss: true,
     sortImports: {},
-    sortTailwindcss: {
-      attributes: ["class", "className"],
-      functions: ["clsx", "cn", "cva", "tw"],
-    },
     sortPackageJson: true,
     ignorePatterns: [
       "pnpm-lock.yaml",
@@ -31,6 +26,7 @@ const config = defineConfig({
       "migrations/",
       ".drizzle/",
       ".cache",
+      "ui/",
       "worker-configuration.d.ts",
       ".vercel",
       ".output",

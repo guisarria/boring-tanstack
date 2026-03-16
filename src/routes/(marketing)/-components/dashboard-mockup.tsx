@@ -147,7 +147,7 @@ export function DashboardMockup() {
                     {emails.map((mail, i) => (
                       <Item
                         className={cn(
-                          "cursor-default transition-colors hover:bg-muted",
+                          "hover:bg-muted cursor-default transition-colors",
                           i === 0 && "bg-muted",
                         )}
                         key={mail.title}

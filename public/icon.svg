@@ -1,0 +1,16 @@
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="circleClip">
+      <circle cx="250" cy="250" r="250" />
+    </clipPath>
+    <filter id="heavyBlur" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="80" />
+    </filter>
+  </defs>
+  <g clip-path="url(#circleClip)">
+    <rect width="500" height="500" fill="#cfae95" />
+    <circle cx="400" cy="150" r="220" fill="#7bded0" filter="url(#heavyBlur)" />
+    <circle cx="100" cy="180" r="200" fill="#eacb88" filter="url(#heavyBlur)" />
+    <circle cx="250" cy="450" r="220" fill="#a27771" filter="url(#heavyBlur)" />
+  </g>
+</svg>

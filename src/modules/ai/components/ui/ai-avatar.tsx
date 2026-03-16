@@ -51,7 +51,7 @@ export function AiBotAvatar({
       width={size}
       height={size}
       shapeRendering="geometricPrecision"
-      className={cn("rounded-full saturate-50 shadow-lg", className)}
+      className={cn("rounded-full shadow-lg saturate-50", className)}
     >
       <defs>
         <filter

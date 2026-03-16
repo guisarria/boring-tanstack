@@ -16,7 +16,7 @@ export function UserAvatar({
   return (
     <div
       className={cn(
-        "flex items-center flex-col justify-center after:border-transparent",
+        "flex flex-col items-center justify-center after:border-transparent",
         className,
       )}
     >
@@ -28,7 +28,7 @@ export function UserAvatar({
         <Avatar
           size={size}
           name={user?.name ?? ""}
-          className={cn("rounded-md size-auto")}
+          className={cn("size-auto rounded-md")}
         />
       )}
     </div>

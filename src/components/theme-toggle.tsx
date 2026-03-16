@@ -99,6 +99,7 @@ export function ThemeSelect({ richColors = false }: { richColors?: boolean }) {
           {activeItem?.label}
         </SelectValue>
       </SelectTrigger>
+
       <SelectContent>
         <SelectGroup>
           {items.map((item) => (
@@ -131,6 +132,7 @@ export function ThemeItem() {
             <ItemContent>
               <ItemTitle>Change Theme</ItemTitle>
             </ItemContent>
+
             <ItemActions className="[&_svg]:size-4">
               <Sun className="dark:hidden" />
               <Moon className="hidden dark:block" />
@@ -138,6 +140,7 @@ export function ThemeItem() {
           </Item>
         }
       />
+
       <DropdownMenuContent>
         <DropdownMenuItem onClick={() => setTheme("light")}>
           Light

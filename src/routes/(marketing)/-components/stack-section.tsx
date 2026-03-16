@@ -143,15 +143,15 @@ function StackSection() {
                 <Card
                   key={name || index}
                   className={cn(
-                    "flex  min-h-40 flex-col justify-between ",
+                    "flex min-h-40 flex-col justify-between",
                     isLast && [
-                      "relative overflow-visible outline-none transform-[translateZ(0)]",
+                      "relative transform-[translateZ(0)] overflow-visible outline-none",
 
-                      "before:content-[''] before:absolute before:-inset-px before:-z-2 before:bg-[url('./assets/void-background.jpg')] before:bg-center before:bg-size-[150%_150%] before:rounded-lg before:animate-[move-background_16s_ease-in-out_infinite]",
+                      "before:absolute before:-inset-px before:-z-2 before:animate-[move-background_16s_ease-in-out_infinite] before:rounded-lg before:bg-[url('./assets/void-background.jpg')] before:bg-size-[150%_150%] before:bg-center before:content-['']",
 
-                      "after:content-[''] border-transparent after:absolute after:inset-1 after:-z-1 after:rounded-[7px] after:bg-card dark:after:bg-[#1F1F1F]",
+                      "after:bg-card border-transparent after:absolute after:inset-1 after:-z-1 after:rounded-[7px] after:content-[''] dark:after:bg-[#1F1F1F]",
 
-                      "justify-center items-center",
+                      "items-center justify-center",
                     ],
                   )}
                 >
@@ -173,8 +173,8 @@ function StackSection() {
 
                   <CardContent
                     className={cn(
-                      "z-10 w-full flex justify-end",
-                      isLast ? "absolute bottom-0 right-0  pb-2.5" : "self-end",
+                      "z-10 flex w-full justify-end",
+                      isLast ? "absolute right-0 bottom-0 pb-2.5" : "self-end",
                     )}
                   >
                     {documentationUrl ? (

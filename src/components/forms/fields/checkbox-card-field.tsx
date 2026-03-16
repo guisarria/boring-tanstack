@@ -38,6 +38,7 @@ export function CheckboxCardField({
             <FieldDescription>{description}</FieldDescription>
           </Activity>
         </FieldContent>
+
         <Checkbox
           aria-describedby={isInvalid ? errorId : undefined}
           aria-invalid={isInvalid}
@@ -48,6 +49,7 @@ export function CheckboxCardField({
           onBlur={field.handleBlur}
           onCheckedChange={(checked) => field.handleChange(!!checked)}
         />
+
         <Activity mode={isInvalid ? "visible" : "hidden"}>
           <FieldError errors={errors} id={errorId} />
         </Activity>
