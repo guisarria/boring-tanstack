@@ -3,7 +3,6 @@ import {
   AlertCircle,
   LaptopIcon,
   LogOut,
-  Shield,
   SmartphoneIcon,
   TabletIcon,
 } from "lucide-react"
@@ -12,7 +11,6 @@ import { toast } from "sonner"
 import { UAParser } from "ua-parser-js"
 
 import { ActionButton } from "@/components/ui/action-button"
-import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardContent,
@@ -91,19 +89,16 @@ function SessionItem({
           <div className="flex flex-col">
             <div className="flex items-center gap-x-2">
               <p className="font-medium">
-                {device?.model} ({device?.vendor ?? "Unknown"})
+                {browser?.name} on {device?.model}
               </p>
-              {isCurrent && (
-                <Badge className="text-xs" variant="success">
-                  Current
-                </Badge>
-              )}
             </div>
-            <p className="text-muted-foreground mt-1 text-sm">
-              {browser?.name} • {browser?.version}
-            </p>
+            {isCurrent && (
+              <span className="text-success-text flex items-center gap-x-1">
+                <span className="-mt-1 text-2xl">•</span> Current session
+              </span>
+            )}
+
             <p className="text-muted-foreground mt-1 text-xs">
-              IP: {session.ipAddress ?? "Unknown"} •{" "}
               {session.createdAt.toLocaleDateString(undefined, {
                 dateStyle: "medium",
               })}
@@ -176,15 +171,10 @@ export function AccountSessions({
   return (
     <Card className="ring-border">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>Active Sessions</CardTitle>
-            <CardDescription>
-              Manage your active sessions across devices
-            </CardDescription>
-          </div>
-          <Shield className="text-muted-foreground" />
-        </div>
+        <CardTitle>Active Sessions</CardTitle>
+        <CardDescription>
+          Manage your active sessions across devices
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {sessions.length === 0 ? (
