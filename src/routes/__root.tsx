@@ -11,6 +11,7 @@ import {
 } from "@/components/providers/root-provider"
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
+import { seo } from "@/config/seo"
 import { getSession } from "@/modules/auth/functions"
 
 import appCss from "../styles.css?url"
@@ -18,9 +19,9 @@ import appCss from "../styles.css?url"
 export const Route = createRootRouteWithContext<AppRouterContext>()({
   head: () => ({
     meta: [
-      { title: "Boring TanStack" },
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      ...seo({ title: "Boring TanStack", url: "/" }).meta,
     ],
     links: [{ href: appCss, rel: "stylesheet" }],
   }),

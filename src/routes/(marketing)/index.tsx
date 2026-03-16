@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
 
 import { Main } from "@/components/ui/design-system"
+import { seo } from "@/config/seo"
 import { Hero } from "@/routes/(marketing)/-components/hero"
 import { StackSection } from "@/routes/(marketing)/-components/stack-section"
 
@@ -8,7 +9,18 @@ import { BlurOverlay } from "./-components/blur-overlay"
 import { CloneRepository } from "./-components/clone-repository-section"
 import { Footer } from "./-components/footer"
 
-export const Route = createFileRoute("/(marketing)/")({ component: Index })
+export const Route = createFileRoute("/(marketing)/")({
+  head: () => ({
+    ...seo({
+      title: "Home",
+      description:
+        "A modern full-stack starter built with TanStack Start, React, and Drizzle.",
+      url: "/",
+      keywords: ["tanstack", "react", "starter", "full-stack"],
+    }),
+  }),
+  component: Index,
+})
 
 function Index() {
   return (
