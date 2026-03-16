@@ -17,7 +17,6 @@ const config = defineConfig({
     tailwindcss: true,
     sortImports: {},
     sortTailwindcss: {
-      stylesheet: "./packages/ui/styles/base.css",
       attributes: ["class", "className"],
       functions: ["clsx", "cn", "cva", "tw"],
     },
