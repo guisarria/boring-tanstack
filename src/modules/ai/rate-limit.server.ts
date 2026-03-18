@@ -61,13 +61,11 @@ export async function checkIpRateLimit(
   const now = new Date()
   const resetAt = new Date(now.getTime() + IP_WINDOW_MS)
 
-  // Prune expired rows opportunistically
   await db
     .delete(ipRateLimits)
     .where(lte(ipRateLimits.resetAt, now))
     .catch(() => {})
 
-  // Upsert: insert or increment count, reset window if expired
   const result = await db
     .insert(ipRateLimits)
     .values({ ip, count: 1, resetAt })
