@@ -13,7 +13,7 @@ import {
   Plus,
   Trash2,
 } from "lucide-react"
-import { useEffect, useMemo, useRef, useState, useTransition } from "react"
+import { useMemo, useState, useTransition, type SubmitEvent } from "react"
 import { toast } from "sonner"
 
 import {
@@ -78,6 +78,170 @@ function getConversationIdFromSearch(search: unknown): string | null {
   return typeof conversationId === "string" ? conversationId : null
 }
 
+type ChatTarget = { id: string; title: string }
+
+interface RenameDialogProps {
+  target: ChatTarget | null
+  onClose: () => void
+  onRenamed: () => void
+}
+
+function RenameDialog({ target, onClose, onRenamed }: RenameDialogProps) {
+  const [title, setTitle] = useState("")
+  const [isPending, startTransition] = useTransition()
+  const queryClient = useQueryClient()
+
+  const isOpen = Boolean(target)
+
+  useMemo(() => {
+    if (target) setTitle(target.title)
+  }, [target])
+
+  function submitRename(e: SubmitEvent) {
+    e.preventDefault()
+    const newTitle = title.trim()
+    if (!target || !newTitle) {
+      toast.error("Chat name can't be empty")
+      return
+    }
+
+    startTransition(() => {
+      void (async () => {
+        try {
+          queryClient.setQueryData<{
+            chats: Array<{ id: string; title: string }>
+          }>(chatListQueryOptions().queryKey, (old) => {
+            if (!old) return old
+            return {
+              ...old,
+              chats: old.chats.map((c) =>
+                c.id === target.id ? { ...c, title: newTitle } : c,
+              ),
+            }
+          })
+          onRenamed()
+          await renameChat({ data: { id: target.id, title: newTitle } })
+          onClose()
+        } catch (err) {
+          void queryClient.invalidateQueries({ queryKey: chatQueryKeys.all })
+          toast.error(
+            err instanceof Error ? err.message : "Something went wrong",
+          )
+        }
+      })()
+    })
+  }
+
+  return (
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Rename chat</DialogTitle>
+          <DialogDescription>
+            Choose a new title for this conversation.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form className="grid gap-3" onSubmit={submitRename}>
+          <Input
+            autoFocus
+            value={title}
+            maxLength={80}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Chat title"
+          />
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              disabled={isPending}
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              disabled={isPending || title.trim().length === 0}
+            >
+              Save
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+interface DeleteDialogProps {
+  target: ChatTarget | null
+  onClose: () => void
+  onDeleted: (deletedId: string) => void
+}
+
+function DeleteDialog({ target, onClose, onDeleted }: DeleteDialogProps) {
+  const [isPending, startTransition] = useTransition()
+  const queryClient = useQueryClient()
+  const isOpen = Boolean(target)
+
+  function confirmDelete() {
+    if (!target) return
+
+    startTransition(() => {
+      void (async () => {
+        try {
+          queryClient.setQueryData<{ chats: Array<{ id: string }> }>(
+            chatListQueryOptions().queryKey,
+            (old) => {
+              if (!old) return old
+              return {
+                ...old,
+                chats: old.chats.filter((c) => c.id !== target.id),
+              }
+            },
+          )
+          const deletedId = target.id
+          onClose()
+          onDeleted(deletedId)
+          await deleteChat({ data: { id: target.id } })
+        } catch (err) {
+          void queryClient.invalidateQueries({ queryKey: chatQueryKeys.all })
+          toast.error(
+            err instanceof Error ? err.message : "Something went wrong",
+          )
+        }
+      })()
+    })
+  }
+
+  return (
+    <AlertDialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete chat?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This will permanently delete{" "}
+            <span className="font-medium text-foreground">
+              {target?.title ?? "this chat"}
+            </span>
+            .
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            disabled={isPending}
+            variant="destructive"
+            onClick={confirmDelete}
+          >
+            Delete
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
+
 export function AppSidebar({
   navGroups,
   ...props
@@ -101,28 +265,8 @@ export function AppSidebar({
   const chatHistory = chatHistoryQuery.data?.chats ?? []
   const isHistoryLoading = isChatRoute && chatHistoryQuery.isPending
 
-  const [renameTarget, setRenameTarget] = useState<{
-    id: string
-    title: string
-  } | null>(null)
-  const [renameTitle, setRenameTitle] = useState("")
-  const renameInputRef = useRef<HTMLInputElement | null>(null)
-  const [isRenaming, startRenaming] = useTransition()
-
-  const [deleteTarget, setDeleteTarget] = useState<{
-    id: string
-    title: string
-  } | null>(null)
-  const [isDeleting, startDeleting] = useTransition()
-
-  useEffect(() => {
-    if (!renameTarget) return
-    const t = setTimeout(() => {
-      renameInputRef.current?.focus()
-      renameInputRef.current?.select()
-    }, 0)
-    return () => clearTimeout(t)
-  }, [renameTarget])
+  const [renameTarget, setRenameTarget] = useState<ChatTarget | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<ChatTarget | null>(null)
 
   function startNewChat() {
     const conversationId = crypto.randomUUID()
@@ -133,66 +277,14 @@ export function AppSidebar({
     })
   }
 
-  function getErrorMessage(err: unknown) {
-    if (err instanceof Error) return err.message
-    if (typeof err === "string") return err
-    return "Something went wrong"
+  function refreshChats() {
+    void queryClient.invalidateQueries({ queryKey: chatQueryKeys.all })
   }
 
-  function openRename(chat: { id: string; title: string }) {
-    setRenameTarget(chat)
-    setRenameTitle(chat.title)
-  }
-
-  function submitRename() {
-    const target = renameTarget
-    const title = renameTitle.trim()
-    if (!target) return
-    if (!title) {
-      toast.error("Chat name can't be empty")
-      return
+  function handleDeleted(deletedId: string) {
+    if (location.pathname === "/chat" && activeConversationId === deletedId) {
+      startNewChat()
     }
-
-    startRenaming(() => {
-      void (async () => {
-        try {
-          await renameChat({ data: { id: target.id, title } })
-          setRenameTarget(null)
-          await queryClient.invalidateQueries({
-            queryKey: chatQueryKeys.all,
-          })
-        } catch (err) {
-          toast.error(getErrorMessage(err))
-        }
-      })()
-    })
-  }
-
-  function confirmDelete() {
-    const target = deleteTarget
-    if (!target) return
-
-    const wasViewingDeletedChat =
-      location.pathname === "/chat" && activeConversationId === target.id
-
-    startDeleting(() => {
-      void (async () => {
-        try {
-          await deleteChat({ data: { id: target.id } })
-          setDeleteTarget(null)
-
-          await queryClient.invalidateQueries({
-            queryKey: chatQueryKeys.all,
-          })
-
-          if (wasViewingDeletedChat) {
-            startNewChat()
-          }
-        } catch (err) {
-          toast.error(getErrorMessage(err))
-        }
-      })()
-    })
   }
 
   return (
@@ -219,7 +311,7 @@ export function AppSidebar({
           </div>
         )}
 
-        {location.pathname.startsWith("/chat") && (
+        {isChatRoute && (
           <>
             <div className="text-xs text-muted-foreground px-2 pt-2">
               <SidebarMenuButton
@@ -288,7 +380,9 @@ export function AppSidebar({
                             sideOffset={8}
                             className="w-40"
                           >
-                            <DropdownMenuItem onClick={() => openRename(chat)}>
+                            <DropdownMenuItem
+                              onClick={() => setRenameTarget(chat)}
+                            >
                               <Pencil />
                               Rename
                             </DropdownMenuItem>
@@ -314,95 +408,29 @@ export function AppSidebar({
           </>
         )}
 
-        {navGroups.map((group) => (
-          <SidebarNavGroup
-            items={group.items}
-            key={group.label}
-            label={group.label}
-          />
-        ))}
+        {!location.pathname.startsWith("/chat") &&
+          navGroups.map((group) => (
+            <SidebarNavGroup
+              items={group.items}
+              key={group.label}
+              label={group.label}
+            />
+          ))}
       </SidebarContent>
 
       <SidebarRail />
 
-      <Dialog
-        open={Boolean(renameTarget)}
-        onOpenChange={(open) => {
-          if (!open) setRenameTarget(null)
-        }}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Rename chat</DialogTitle>
-            <DialogDescription>
-              Choose a new title for this conversation.
-            </DialogDescription>
-          </DialogHeader>
+      <RenameDialog
+        target={renameTarget}
+        onClose={() => setRenameTarget(null)}
+        onRenamed={refreshChats}
+      />
 
-          <form
-            className="grid gap-3"
-            onSubmit={(e) => {
-              e.preventDefault()
-              submitRename()
-            }}
-          >
-            <Input
-              ref={renameInputRef}
-              value={renameTitle}
-              maxLength={80}
-              onChange={(e) => setRenameTitle(e.target.value)}
-              placeholder="Chat title"
-            />
-
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                disabled={isRenaming}
-                onClick={() => setRenameTarget(null)}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={isRenaming || renameTitle.trim().length === 0}
-              >
-                Save
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      <AlertDialog
-        open={Boolean(deleteTarget)}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null)
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete chat?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will permanently delete{" "}
-              <span className="font-medium text-foreground">
-                {deleteTarget?.title ?? "this chat"}
-              </span>
-              .
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              disabled={isDeleting}
-              variant="destructive"
-              onClick={confirmDelete}
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteDialog
+        target={deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onDeleted={handleDeleted}
+      />
     </Sidebar>
   )
 }

@@ -31,7 +31,7 @@ export const chatStreamRequestSchema = z
     messages: z.array(uiMessageSchema),
     data: z.record(z.string(), z.unknown()).optional(),
   })
-  .passthrough()
+  .loose()
 
 export type ChatStreamRequest = z.infer<typeof chatStreamRequestSchema>
 export type ChatStreamRequestMessage = z.infer<typeof uiMessageSchema>

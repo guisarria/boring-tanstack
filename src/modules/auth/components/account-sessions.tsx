@@ -54,8 +54,12 @@ function SessionItem({
   const browser = userAgent?.getBrowser()
   const os = userAgent?.getOS()
 
-  const deviceName = device?.model || os?.name || "Unknown Device"
+  let deviceName = device?.model || os?.name || "Unknown Device"
   const browserName = browser?.name || "Unknown Browser"
+
+  if (deviceName === "Macintosh") {
+    deviceName = "macOS"
+  }
 
   async function revokeAction(): Promise<{
     error: boolean
@@ -85,6 +89,7 @@ function SessionItem({
     }
 
     toast.success("Session revoked")
+
     startTransition(() => {
       void router.invalidate({ sync: true })
     })

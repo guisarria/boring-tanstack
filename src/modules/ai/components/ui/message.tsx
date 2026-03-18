@@ -318,6 +318,8 @@ export type MessageResponseProps = AssistantMarkdownProps
 export const MessageResponse = memo(
   ({ className, ...props }: MessageResponseProps) => (
     <AssistantMarkdown
+      mode="streaming"
+      animated={{ animation: "fadeIn", stagger: 0 }}
       className={cn(
         "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
         className,
