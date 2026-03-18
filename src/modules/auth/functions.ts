@@ -29,7 +29,9 @@ async function resolveSession() {
 
 async function resolveSessions() {
   const headers = getRequestHeaders()
-  const sessionToken = getCookie("better-auth.session_token")
+  const sessionToken =
+    getCookie("__Secure-better-auth.session_token") ??
+    getCookie("better-auth.session_token")
   const result = await listSessionsResult(headers, sessionToken)
 
   if (result.isErr()) {

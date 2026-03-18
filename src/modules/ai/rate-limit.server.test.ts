@@ -18,7 +18,7 @@ import {
 describe("checkRateLimit", () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    resetRateLimitStateForTests()
+    void resetRateLimitStateForTests()
   })
 
   it("allows users below the hourly quota", async () => {
@@ -70,12 +70,12 @@ describe("checkBotId", () => {
 describe("checkIpRateLimit", () => {
   beforeEach(() => {
     vi.useFakeTimers()
-    resetRateLimitStateForTests()
+    void resetRateLimitStateForTests()
   })
 
   afterEach(() => {
     vi.useRealTimers()
-    resetRateLimitStateForTests()
+    void resetRateLimitStateForTests()
   })
 
   it("blocks repeated requests from the same IP inside the time window", async () => {
