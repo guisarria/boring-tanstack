@@ -2,6 +2,7 @@ import { sql, type InferSelectModel } from "drizzle-orm"
 import {
   check,
   index,
+  integer,
   jsonb,
   pgEnum,
   pgTable,
@@ -66,3 +67,9 @@ export const messages = pgTable(
 )
 
 export type DBMessage = InferSelectModel<typeof messages>
+
+export const ipRateLimits = pgTable("ip_rate_limit", {
+  ip: text("ip").primaryKey().notNull(),
+  count: integer("count").notNull().default(1),
+  resetAt: timestamp("reset_at").notNull(),
+})

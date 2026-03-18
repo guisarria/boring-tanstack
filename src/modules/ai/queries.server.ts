@@ -160,56 +160,12 @@ export async function getMessageCountByUserId({
   }
 }
 
-export async function saveChat(chat: {
-  id: string
-  userId: string
-  title: string
-  visibility: string
-}) {
-  try {
-    return await db.insert(chats).values({
-      id: chat.id,
-      userId: chat.userId,
-      title: chat.title,
-      createdAt: new Date(),
-    })
-  } catch {
-    throw new ChatbotError("bad_request:database", "Failed to save chat")
-  }
-}
-
 export async function generateTitleFromUserMessage({
   message: _message,
 }: {
   message: { role: string; content: string }
 }) {
   return "New chat"
-}
-
-export async function createChatIfNotExists({
-  id,
-  userId,
-}: {
-  id: string
-  userId: string
-}) {
-  const existing = await db.query.chats.findFirst({
-    where: (chats, { eq }) => eq(chats.id, id),
-  })
-  if (existing) return existing
-
-  try {
-    return await db.insert(chats).values({
-      id,
-      userId,
-      title: "New chat",
-      createdAt: new Date(),
-    })
-  } catch (e) {
-    const err = e as Error
-    console.error("createChatIfNotExists error:", err.message)
-    throw new ChatbotError("bad_request:database", err.message)
-  }
 }
 
 export async function saveMessage(message: {

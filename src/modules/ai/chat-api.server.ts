@@ -157,7 +157,14 @@ export async function handleChatPost(request: Request): Promise<Response> {
     return new Response("OPENROUTER_API_KEY not configured", { status: 500 })
   }
 
-  const body = chatStreamRequestSchema.parse(await request.json())
+  let rawBody: unknown
+  try {
+    rawBody = await request.json()
+  } catch {
+    return jsonError(400, "Invalid JSON body")
+  }
+
+  const body = chatStreamRequestSchema.parse(rawBody)
   const messages = body.messages
   const data = body.data ?? {}
 

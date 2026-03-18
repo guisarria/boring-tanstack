@@ -73,7 +73,7 @@ export async function loadChatHistory(
     }
 
     if (chat.userId !== user.id) {
-      return { chatId: conversationId, messages: [] }
+      throw new ChatbotError("forbidden:chat").toResponse()
     }
 
     const messages = await getMessagesByChatId({ id: conversationId })

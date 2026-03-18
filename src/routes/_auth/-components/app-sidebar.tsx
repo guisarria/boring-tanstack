@@ -6,6 +6,7 @@ import {
   useRouteContext,
 } from "@tanstack/react-router"
 import {
+  CornerUpLeftIcon,
   MessageSquare,
   MoreHorizontal,
   Pencil,
@@ -204,98 +205,115 @@ export function AppSidebar({
       </SidebarHeader>
 
       <SidebarContent>
-        <div className="px-2 pt-2">
-          <SidebarMenuButton
-            onClick={startNewChat}
-            tooltip="New chat"
-            variant="outline"
-          >
-            <Plus className="text-muted-foreground" strokeWidth={1.5} />
-            <span className="text-foreground/90 text-sm">New chat</span>
-          </SidebarMenuButton>
-        </div>
-        {location.pathname.startsWith("/chat") && (
-          <SidebarGroup className="pt-2">
-            <SidebarGroupLabel>Chats</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {isHistoryLoading ? (
-                  <>
-                    <SidebarMenuSkeleton showIcon />
-                    <SidebarMenuSkeleton showIcon />
-                    <SidebarMenuSkeleton showIcon />
-                  </>
-                ) : chatHistory.length ? (
-                  chatHistory.map((chat) => (
-                    <SidebarMenuItem key={chat.id}>
-                      <SidebarMenuButton
-                        render={
-                          <Link
-                            to="/chat"
-                            search={{ conversationId: chat.id }}
-                          />
-                        }
-                        isActive={
-                          location.pathname === "/chat" &&
-                          activeConversationId === chat.id
-                        }
-                        tooltip={chat.title}
-                      >
-                        <MessageSquare
-                          className="text-muted-foreground"
-                          strokeWidth={1.5}
-                        />
-                        <span className="text-foreground/90 text-sm">
-                          {chat.title}
-                        </span>
-                      </SidebarMenuButton>
-
-                      <DropdownMenu>
-                        <DropdownMenuTrigger
-                          render={
-                            <SidebarMenuAction
-                              aria-label="Chat actions"
-                              showOnHover
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault()
-                                e.stopPropagation()
-                              }}
-                            >
-                              <MoreHorizontal className="text-muted-foreground" />
-                            </SidebarMenuAction>
-                          }
-                        />
-                        <DropdownMenuContent
-                          align="end"
-                          side="right"
-                          sideOffset={8}
-                          className="w-40"
-                        >
-                          <DropdownMenuItem onClick={() => openRename(chat)}>
-                            <Pencil />
-                            Rename
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            variant="destructive"
-                            onClick={() => setDeleteTarget(chat)}
-                          >
-                            <Trash2 />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </SidebarMenuItem>
-                  ))
-                ) : (
-                  <div className="px-2 py-2 text-xs text-muted-foreground">
-                    No chats yet
-                  </div>
-                )}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+        {!location.pathname.startsWith("/dashboard") && (
+          <div className="text-xs text-muted-foreground px-2 pt-2">
+            <SidebarMenuItem>
+              <SidebarMenuButton render={<Link to="/dashboard" />}>
+                <CornerUpLeftIcon
+                  className="text-muted-foreground"
+                  strokeWidth={1.5}
+                />
+                Dashboard
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </div>
         )}
+
+        {location.pathname.startsWith("/chat") && (
+          <>
+            <div className="text-xs text-muted-foreground px-2 pt-2">
+              <SidebarMenuButton
+                onClick={startNewChat}
+                tooltip="New chat"
+                variant="outline"
+              >
+                <Plus className="text-muted-foreground" strokeWidth={1.5} />
+                <span className="text-foreground/90 text-sm">New chat</span>
+              </SidebarMenuButton>
+            </div>
+            <SidebarGroup className="pt-2">
+              <SidebarGroupLabel>Chats</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {isHistoryLoading ? (
+                    <>
+                      <SidebarMenuSkeleton showIcon />
+                      <SidebarMenuSkeleton showIcon />
+                      <SidebarMenuSkeleton showIcon />
+                    </>
+                  ) : chatHistory.length ? (
+                    chatHistory.map((chat) => (
+                      <SidebarMenuItem key={chat.id}>
+                        <SidebarMenuButton
+                          render={
+                            <Link
+                              to="/chat"
+                              search={{ conversationId: chat.id }}
+                            />
+                          }
+                          isActive={
+                            location.pathname === "/chat" &&
+                            activeConversationId === chat.id
+                          }
+                          tooltip={chat.title}
+                        >
+                          <MessageSquare
+                            className="text-muted-foreground"
+                            strokeWidth={1.5}
+                          />
+                          <span className="text-foreground/90 text-sm">
+                            {chat.title}
+                          </span>
+                        </SidebarMenuButton>
+
+                        <DropdownMenu>
+                          <DropdownMenuTrigger
+                            render={
+                              <SidebarMenuAction
+                                aria-label="Chat actions"
+                                showOnHover
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  e.stopPropagation()
+                                }}
+                              >
+                                <MoreHorizontal className="text-muted-foreground" />
+                              </SidebarMenuAction>
+                            }
+                          />
+                          <DropdownMenuContent
+                            align="end"
+                            side="right"
+                            sideOffset={8}
+                            className="w-40"
+                          >
+                            <DropdownMenuItem onClick={() => openRename(chat)}>
+                              <Pencil />
+                              Rename
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              variant="destructive"
+                              onClick={() => setDeleteTarget(chat)}
+                            >
+                              <Trash2 />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </SidebarMenuItem>
+                    ))
+                  ) : (
+                    <div className="px-2 py-2 text-xs text-muted-foreground">
+                      No chats yet
+                    </div>
+                  )}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </>
+        )}
+
         {navGroups.map((group) => (
           <SidebarNavGroup
             items={group.items}

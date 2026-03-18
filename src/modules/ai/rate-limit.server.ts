@@ -1,27 +1,22 @@
+import { lte, sql } from "drizzle-orm"
+
+import { db } from "@/db/index"
+
 import { ENTITLEMENTS_BY_USER_TYPE, getUserType } from "./constants"
 import { ChatbotError } from "./errors"
 import { getMessageCountByUserId } from "./queries.server"
+import { ipRateLimits } from "./schema"
 
 const BOT_USER_AGENT_PATTERN =
   /\b(bot|crawler|spider|curl|wget|postmanruntime|insomnia|python-requests|httpclient|headlesschrome|phantomjs)\b/i
 const IP_WINDOW_MS = 60_000
 const MAX_REQUESTS_PER_IP_WINDOW = 30
 
-const ipRequestBuckets = new Map<string, { count: number; resetAt: number }>()
-
 function normalizeIp(rawIp: string | undefined): string | null {
   if (!rawIp) return null
 
   const firstForwardedIp = rawIp.split(",")[0]?.trim()
   return firstForwardedIp || null
-}
-
-function pruneExpiredIpBuckets(now: number) {
-  for (const [ip, bucket] of ipRequestBuckets.entries()) {
-    if (bucket.resetAt <= now) {
-      ipRequestBuckets.delete(ip)
-    }
-  }
 }
 
 export async function checkRateLimit({
@@ -63,26 +58,35 @@ export async function checkIpRateLimit(
     return
   }
 
-  const now = Date.now()
-  pruneExpiredIpBuckets(now)
+  const now = new Date()
+  const resetAt = new Date(now.getTime() + IP_WINDOW_MS)
 
-  const existingBucket = ipRequestBuckets.get(ip)
+  // Prune expired rows opportunistically
+  await db
+    .delete(ipRateLimits)
+    .where(lte(ipRateLimits.resetAt, now))
+    .catch(() => {})
 
-  if (!existingBucket || existingBucket.resetAt <= now) {
-    ipRequestBuckets.set(ip, {
-      count: 1,
-      resetAt: now + IP_WINDOW_MS,
+  // Upsert: insert or increment count, reset window if expired
+  const result = await db
+    .insert(ipRateLimits)
+    .values({ ip, count: 1, resetAt })
+    .onConflictDoUpdate({
+      target: ipRateLimits.ip,
+      set: {
+        count: sql`CASE WHEN ${ipRateLimits.resetAt} <= ${now} THEN 1 ELSE ${ipRateLimits.count} + 1 END`,
+        resetAt: sql`CASE WHEN ${ipRateLimits.resetAt} <= ${now} THEN ${resetAt} ELSE ${ipRateLimits.resetAt} END`,
+      },
     })
-    return
-  }
+    .returning({ count: ipRateLimits.count })
 
-  if (existingBucket.count >= MAX_REQUESTS_PER_IP_WINDOW) {
+  const count = result.at(0)?.count ?? 0
+
+  if (count > MAX_REQUESTS_PER_IP_WINDOW) {
     throw new ChatbotError("rate_limit:chat").toResponse()
   }
-
-  existingBucket.count += 1
 }
 
-export function resetRateLimitStateForTests() {
-  ipRequestBuckets.clear()
+export async function resetRateLimitStateForTests() {
+  await db.delete(ipRateLimits)
 }

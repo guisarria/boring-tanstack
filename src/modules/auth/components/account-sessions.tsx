@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "@tanstack/react-router"
 import {
   AlertCircle,
@@ -20,6 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { chatQueryKeys } from "@/modules/ai/query-options"
 import { authClient } from "@/modules/auth/auth-client"
 import type { ActiveSessions } from "@/modules/auth/schema"
 
@@ -41,6 +43,7 @@ function SessionItem({
   isCurrent: boolean
 }) {
   const router = useRouter()
+  const queryClient = useQueryClient()
 
   const userAgent = useMemo(
     () => (session.userAgent ? new UAParser(session.userAgent) : null),
@@ -62,6 +65,7 @@ function SessionItem({
       await authClient.signOut({
         fetchOptions: {
           onSuccess: async () => {
+            queryClient.removeQueries({ queryKey: chatQueryKeys.all })
             toast.success("Signed out")
             startTransition(() => {
               void router.invalidate({ sync: true })
@@ -133,6 +137,7 @@ function SessionItem({
 
 function RevokeAllDialog({ disabled }: { disabled: boolean }) {
   const router = useRouter()
+  const queryClient = useQueryClient()
 
   async function revokeAllAction(): Promise<{
     error: boolean
@@ -148,6 +153,7 @@ function RevokeAllDialog({ disabled }: { disabled: boolean }) {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
+          queryClient.removeQueries({ queryKey: chatQueryKeys.all })
           toast.success("Signed out")
           void router.invalidate()
         },
