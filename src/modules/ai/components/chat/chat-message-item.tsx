@@ -9,7 +9,7 @@ import {
   ReasoningContent,
   ReasoningTrigger,
 } from "@/modules/ai/components/ui/reasoning"
-import { getThinkingDuration, type ChatMessage } from "@/modules/ai/contracts"
+import { getThinkingDuration, type ChatMessage } from "@/modules/ai/validation"
 import { UserAvatar } from "@/modules/auth/components/user-avatar"
 
 function MessagePartView({

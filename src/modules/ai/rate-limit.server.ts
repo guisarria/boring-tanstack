@@ -1,6 +1,6 @@
-import { ChatbotError } from "../errors"
-import { getMessageCountByUserId } from "../queries"
 import { ENTITLEMENTS_BY_USER_TYPE, getUserType } from "./constants"
+import { ChatbotError } from "./errors"
+import { getMessageCountByUserId } from "./queries.server"
 
 const BOT_USER_AGENT_PATTERN =
   /\b(bot|crawler|spider|curl|wget|postmanruntime|insomnia|python-requests|httpclient|headlesschrome|phantomjs)\b/i

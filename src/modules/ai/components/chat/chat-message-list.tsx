@@ -8,7 +8,7 @@ import {
   ConversationEmptyState,
   ConversationScrollButton,
 } from "@/modules/ai/components/ui/conversation"
-import type { ChatMessage } from "@/modules/ai/contracts"
+import type { ChatMessage } from "@/modules/ai/validation"
 
 import { ChatMessageItem } from "./chat-message-item"
 

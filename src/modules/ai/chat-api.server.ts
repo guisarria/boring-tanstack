@@ -15,15 +15,19 @@ import {
   loadChatHistory,
   parseOptionalConversationId,
 } from "./chat-history.server"
+import { DEFAULT_CHAT_MODEL, isAllowedModelId } from "./constants"
+import { ChatbotError } from "./errors"
+import { createChat, getChatById, saveMessage } from "./queries.server"
+import {
+  checkBotId,
+  checkIpRateLimit,
+  checkRateLimit,
+} from "./rate-limit.server"
 import {
   chatStreamRequestSchema,
   type ChatMessagePart,
   type ChatStreamRequestMessage,
-} from "./contracts"
-import { ChatbotError } from "./errors"
-import { DEFAULT_CHAT_MODEL, isAllowedModelId } from "./lib/constants"
-import { checkBotId, checkIpRateLimit, checkRateLimit } from "./lib/rate-limit"
-import { createChat, getChatById, saveMessage } from "./queries"
+} from "./validation"
 
 function jsonError(status: number, error: string) {
   return Response.json({ error }, { status })

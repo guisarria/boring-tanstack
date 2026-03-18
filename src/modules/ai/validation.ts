@@ -1,7 +1,9 @@
 import type { UIMessage } from "@tanstack/ai"
 import { z } from "zod"
 
-export const chatRoleSchema = z.enum(["system", "user", "assistant"])
+export const CHAT_ROLES = ["system", "user", "assistant"] as const
+
+export const chatRoleSchema = z.enum(CHAT_ROLES)
 
 const uiMessagePartSchema = z.discriminatedUnion("type", [
   z.object({
@@ -87,3 +89,16 @@ export function getThinkingDuration(part: ChatMessagePart): number | undefined {
   if (part.type !== "thinking") return undefined
   return typeof part.duration === "number" ? part.duration : undefined
 }
+
+export const renameChatSchema = z.object({
+  id: z.uuid(),
+  title: z.string().trim().min(1).max(80),
+})
+
+export type RenameChatInput = z.infer<typeof renameChatSchema>
+
+export const deleteChatSchema = z.object({
+  id: z.uuid(),
+})
+
+export type DeleteChatInput = z.infer<typeof deleteChatSchema>

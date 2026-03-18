@@ -6,15 +6,15 @@ import { toast } from "sonner"
 
 import { Container } from "@/components/ui/design-system"
 import {
+  chatHistoryQueryOptions,
+  chatQueryKeys,
+} from "@/modules/ai/query-options"
+import {
   chatHistoryResponseSchema,
   normalizePersistedMessageParts,
   type ChatMessage,
   type PersistedChatMessage,
-} from "@/modules/ai/contracts"
-import {
-  chatHistoryQueryOptions,
-  chatQueryKeys,
-} from "@/modules/ai/query-options"
+} from "@/modules/ai/validation"
 
 import { ChatComposer } from "./chat-composer"
 import { ChatMessageList } from "./chat-message-list"

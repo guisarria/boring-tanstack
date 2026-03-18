@@ -9,12 +9,11 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core"
-import { z } from "zod"
 
 import { users } from "../auth/schema"
-import type { ChatMessagePart } from "./contracts"
+import { CHAT_ROLES, type ChatMessagePart } from "./validation"
 
-export const chatRoleEnum = pgEnum("chat_role", ["system", "user", "assistant"])
+export const chatRoleEnum = pgEnum("chat_role", CHAT_ROLES)
 
 export const chats = pgTable(
   "chat",
@@ -67,16 +66,3 @@ export const messages = pgTable(
 )
 
 export type DBMessage = InferSelectModel<typeof messages>
-
-export const renameChatSchema = z.object({
-  id: z.uuid(),
-  title: z.string().trim().min(1).max(80),
-})
-
-export type RenameChatInput = z.infer<typeof renameChatSchema>
-
-export const deleteChatSchema = z.object({
-  id: z.uuid(),
-})
-
-export type DeleteChatInput = z.infer<typeof deleteChatSchema>

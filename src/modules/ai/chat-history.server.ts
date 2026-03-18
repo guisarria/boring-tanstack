@@ -2,13 +2,13 @@ import { z } from "zod"
 
 import { requireSessionResult } from "@/modules/auth/auth-service.server"
 
-import type { ChatMessagePart } from "./contracts"
 import { ChatbotError } from "./errors"
 import {
   getChatById,
   getLatestChatByUserId,
   getMessagesByChatId,
-} from "./queries"
+} from "./queries.server"
+import type { ChatMessagePart } from "./validation"
 
 const uuidSchema = z.uuid()
 

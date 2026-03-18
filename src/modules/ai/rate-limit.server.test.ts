@@ -4,7 +4,7 @@ const { getMessageCountByUserId } = vi.hoisted(() => ({
   getMessageCountByUserId: vi.fn(),
 }))
 
-vi.mock("../queries", () => ({
+vi.mock("./queries.server", () => ({
   getMessageCountByUserId,
 }))
 
@@ -13,7 +13,7 @@ import {
   checkIpRateLimit,
   checkRateLimit,
   resetRateLimitStateForTests,
-} from "./rate-limit"
+} from "./rate-limit.server"
 
 describe("checkRateLimit", () => {
   beforeEach(() => {

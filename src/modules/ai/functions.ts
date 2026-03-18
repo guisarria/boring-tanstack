@@ -5,8 +5,12 @@ import { z } from "zod"
 import { getSessionResult } from "../auth/auth-service.server"
 import { loadChatHistory } from "./chat-history.server"
 import { ChatbotError } from "./errors"
-import { deleteChatById, getChatsByUserId, updateChatTitle } from "./queries"
-import { deleteChatSchema, renameChatSchema } from "./schema"
+import {
+  deleteChatById,
+  getChatsByUserId,
+  updateChatTitle,
+} from "./queries.server"
+import { deleteChatSchema, renameChatSchema } from "./validation"
 
 const chatHistoryInputSchema = z.object({
   conversationId: z.uuid().nullable().optional(),

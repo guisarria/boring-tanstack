@@ -2,9 +2,9 @@ import { and, count, eq, gte } from "drizzle-orm"
 
 import { db } from "@/db/index"
 
-import type { ChatMessagePart } from "./contracts"
 import { ChatbotError } from "./errors"
 import { chats, messages } from "./schema"
+import type { ChatMessagePart } from "./validation"
 
 export async function createChat({
   id,
