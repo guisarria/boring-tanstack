@@ -329,7 +329,7 @@ export function AiBotAvatar({
       </defs>
 
       <mask id={maskID} x="0" y="0" width={SIZE} height={SIZE}>
-        <circle cx={SIZE / 2} cy={SIZE / 2} r={(SIZE / 2) - 0.5} fill="#FFFFFF" />
+        <circle cx={SIZE / 2} cy={SIZE / 2} r={SIZE / 2 - 0.5} fill="#FFFFFF" />
       </mask>
 
       <g mask={`url(#${maskID})`}>

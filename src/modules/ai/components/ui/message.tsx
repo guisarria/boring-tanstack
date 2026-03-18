@@ -10,7 +10,6 @@ import {
   useMemo,
   useState,
 } from "react"
-import { Streamdown } from "streamdown"
 
 import { Button } from "@/components/ui/button"
 import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group"
@@ -21,7 +20,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
-import { streamdownPlugins } from "@/modules/ai/lib/streamdown-plugins"
+
+import {
+  AssistantMarkdown,
+  type AssistantMarkdownProps,
+} from "./assistant-markdown"
 
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {
   from: UIMessage["role"]
@@ -47,7 +50,7 @@ export const MessageContent = ({
 }: MessageContentProps) => (
   <div
     className={cn(
-      "is-user:dark flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-hidden text-sm",
+      "is-user:dark wrap-break-word flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-hidden text-sm",
       "group-[.is-user]:bg-secondary group-[.is-user]:text-foreground group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:px-4 group-[.is-user]:py-3",
       "group-[.is-assistant]:text-foreground",
       className,
@@ -227,7 +230,6 @@ export const MessageBranchSelector = ({
 }: MessageBranchSelectorProps) => {
   const { totalBranches } = useMessageBranch()
 
-  // Don't render if there's only one branch
   if (totalBranches <= 1) {
     return null
   }
@@ -311,16 +313,15 @@ export const MessageBranchPage = ({
   )
 }
 
-export type MessageResponseProps = ComponentProps<typeof Streamdown>
+export type MessageResponseProps = AssistantMarkdownProps
 
 export const MessageResponse = memo(
   ({ className, ...props }: MessageResponseProps) => (
-    <Streamdown
+    <AssistantMarkdown
       className={cn(
         "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
         className,
       )}
-      plugins={streamdownPlugins}
       {...props}
     />
   ),

@@ -1,4 +1,5 @@
 import { SendIcon } from "lucide-react"
+import { useCallback, useEffect, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -14,6 +15,19 @@ export function ChatComposer({
   onSubmit: () => void
   disabled: boolean
 }) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  const adjustHeight = useCallback(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto"
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 2}px`
+    }
+  }, [])
+
+  useEffect(() => {
+    adjustHeight()
+  }, [value, adjustHeight])
+
   return (
     <div className="py-2">
       <form
@@ -24,8 +38,12 @@ export function ChatComposer({
         className="mx-auto flex max-w-2xl items-center gap-x-2"
       >
         <Textarea
+          ref={textareaRef}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {
+            onChange(e.target.value)
+            adjustHeight()
+          }}
           placeholder="Type a message… (Enter to send, Shift+Enter for new line)"
           onKeyDown={(e) => {
             if (e.nativeEvent.isComposing) return
@@ -35,7 +53,7 @@ export function ChatComposer({
             }
           }}
           disabled={disabled}
-          className="max-h-32 min-h-9 rounded-sm"
+          className="max-h-32 min-h-9 resize-none overflow-hidden rounded-sm"
         />
         <Button
           type="submit"

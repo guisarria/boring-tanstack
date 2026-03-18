@@ -1,12 +1,18 @@
 import { Collapsible } from "@base-ui/react/collapsible"
 import { ChevronDownIcon } from "lucide-react"
 import type { ComponentProps, ReactNode } from "react"
-import { createContext, use, useEffect, useRef, useState } from "react"
-import { Streamdown } from "streamdown"
+import {
+  createContext,
+  use,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
 
 import { cn } from "@/lib/utils"
-import { streamdownPlugins } from "@/modules/ai/lib/streamdown-plugins"
 
+import { AssistantMarkdown } from "./assistant-markdown"
 import { Shimmer } from "./shimmer"
 
 interface ReasoningContextValue {
@@ -31,8 +37,34 @@ export type ReasoningProps = ComponentProps<typeof Collapsible.Root> & {
   duration?: number
 }
 
+type ReasoningOpenChange = NonNullable<ReasoningProps["onOpenChange"]>
+type ReasoningOpenChangeDetails = Parameters<ReasoningOpenChange>[1]
+
 const AUTO_CLOSE_DELAY = 1000
 const MS_IN_S = 1000
+
+function createProgrammaticChangeDetails(): ReasoningOpenChangeDetails {
+  let isCanceled = false
+  let isPropagationAllowed = false
+
+  return {
+    reason: "none",
+    event: new Event("change"),
+    trigger: undefined,
+    cancel: () => {
+      isCanceled = true
+    },
+    allowPropagation: () => {
+      isPropagationAllowed = true
+    },
+    get isCanceled() {
+      return isCanceled
+    },
+    get isPropagationAllowed() {
+      return isPropagationAllowed
+    },
+  }
+}
 
 export function Reasoning({
   className,
@@ -48,15 +80,15 @@ export function Reasoning({
   const isControlled = openProp !== undefined
   const isOpen = isControlled ? openProp : openState
 
-  const onOpenChangeRef = useRef(onOpenChange)
-  onOpenChangeRef.current = onOpenChange
-
-  const setIsOpen = (nextOpen: boolean) => {
-    if (!isControlled) {
-      setOpenState(nextOpen)
-    }
-    onOpenChangeRef.current?.(nextOpen, { source: "programmatic" } as any)
-  }
+  const setIsOpen = useCallback(
+    (nextOpen: boolean) => {
+      if (!isControlled) {
+        setOpenState(nextOpen)
+      }
+      onOpenChange?.(nextOpen, createProgrammaticChangeDetails())
+    },
+    [isControlled, onOpenChange],
+  )
 
   const [internalDuration, setInternalDuration] = useState<number | undefined>(
     undefined,
@@ -86,7 +118,7 @@ export function Reasoning({
     if (isStreaming && !isOpen && !isExplicitlyClosed) {
       setIsOpen(true)
     }
-  }, [isStreaming, isOpen, defaultOpen])
+  }, [isStreaming, isOpen, defaultOpen, setIsOpen])
 
   useEffect(() => {
     if (
@@ -101,7 +133,7 @@ export function Reasoning({
       }, AUTO_CLOSE_DELAY)
       return () => clearTimeout(timer)
     }
-  }, [isStreaming, isOpen, hasAutoClosed])
+  }, [isStreaming, isOpen, hasAutoClosed, setIsOpen])
 
   const contextValue = { duration, isOpen, isStreaming, setIsOpen }
 
@@ -126,13 +158,21 @@ export type ReasoningTriggerProps = ComponentProps<
 }
 
 const defaultGetThinkingMessage = (isStreaming: boolean, duration?: number) => {
-  if (isStreaming || duration === 0 || duration === undefined) {
+  if (isStreaming) {
     return <Shimmer duration={1}>Thinking...</Shimmer>
   }
 
-  if (duration > 1) {
-    return <p>Thought for {duration} seconds</p>
+  if (typeof duration === "number") {
+    if (duration === 1) {
+      return <p>Thought for 1 second</p>
+    }
+
+    if (duration > 1) {
+      return <p>Thought for {duration} seconds</p>
+    }
   }
+
+  return <p>Reasoning</p>
 }
 
 export function ReasoningTrigger({
@@ -184,7 +224,7 @@ export function ReasoningContent({
       )}
       {...props}
     >
-      <Streamdown plugins={streamdownPlugins}>{children}</Streamdown>
+      <AssistantMarkdown>{children}</AssistantMarkdown>
     </Collapsible.Panel>
   )
 }

@@ -18,14 +18,14 @@ export type SessionListPayload = {
 }
 
 export type AuthServiceError = {
-  code: "UNAUTHORIZED" | "AUTH_PROVIDER_FAILURE"
+  code: "unauthorized" | "auth_provider_failure"
   cause?: unknown
   message: string
 }
 
 function toProviderFailure(cause: unknown): AuthServiceError {
   return {
-    code: "AUTH_PROVIDER_FAILURE",
+    code: "auth_provider_failure",
     cause,
     message: "Auth provider request failed",
   }
@@ -55,7 +55,7 @@ export function requireSessionResult(headers: Headers) {
   ).andThen((response) => {
     if (!response) {
       return errAsync<Session, AuthServiceError>({
-        code: "UNAUTHORIZED",
+        code: "unauthorized",
         message: "Unauthorized",
       })
     }

@@ -6,13 +6,13 @@ import { AppHeader } from "@/routes/_auth/-components/app-sidebar-header"
 
 import { AppSidebarLayout } from "../-components/app-sidebar-layout"
 
-const navGroups: NavGroup[] = [
+export const navGroups: NavGroup[] = [
   {
     label: "Main",
     items: [
       { title: "Inbox", url: "/dashboard/inbox", icon: InboxIcon },
       { title: "My Issues", url: "/dashboard/my-issues", icon: ScanIcon },
-      { title: "Chat", url: "/dashboard/chat", icon: BotIcon },
+      { title: "Chat", url: "/chat", icon: BotIcon },
       { title: "Account", url: "/settings", icon: Settings2 },
     ],
   },

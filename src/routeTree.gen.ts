@@ -16,14 +16,15 @@ import { Route as marketingIndexRouteImport } from './routes/(marketing)/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthSettingsRouteRouteImport } from './routes/_auth/settings/route'
 import { Route as AuthDashboardRouteRouteImport } from './routes/_auth/dashboard/route'
+import { Route as AuthChatRouteRouteImport } from './routes/_auth/chat/route'
 import { Route as marketingauthRouteRouteImport } from './routes/(marketing)/(auth)/route'
 import { Route as AuthSettingsIndexRouteImport } from './routes/_auth/settings/index'
 import { Route as AuthDashboardIndexRouteImport } from './routes/_auth/dashboard/index'
+import { Route as AuthChatIndexRouteImport } from './routes/_auth/chat/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthSettingsSecurityRouteImport } from './routes/_auth/settings/security'
 import { Route as AuthDashboardMyIssuesRouteImport } from './routes/_auth/dashboard/my-issues'
 import { Route as AuthDashboardInboxRouteImport } from './routes/_auth/dashboard/inbox'
-import { Route as AuthDashboardChatRouteImport } from './routes/_auth/dashboard/chat'
 import { Route as marketingauthSignUpIndexRouteImport } from './routes/(marketing)/(auth)/sign-up/index'
 import { Route as marketingauthSignInIndexRouteImport } from './routes/(marketing)/(auth)/sign-in/index'
 import { Route as marketingauthResetPasswordIndexRouteImport } from './routes/(marketing)/(auth)/reset-password/index'
@@ -62,6 +63,11 @@ const AuthDashboardRouteRoute = AuthDashboardRouteRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthChatRouteRoute = AuthChatRouteRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const marketingauthRouteRoute = marketingauthRouteRouteImport.update({
   id: '/(auth)',
   getParentRoute: () => marketingRouteRoute,
@@ -75,6 +81,11 @@ const AuthDashboardIndexRoute = AuthDashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthDashboardRouteRoute,
+} as any)
+const AuthChatIndexRoute = AuthChatIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthChatRouteRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -94,11 +105,6 @@ const AuthDashboardMyIssuesRoute = AuthDashboardMyIssuesRouteImport.update({
 const AuthDashboardInboxRoute = AuthDashboardInboxRouteImport.update({
   id: '/inbox',
   path: '/inbox',
-  getParentRoute: () => AuthDashboardRouteRoute,
-} as any)
-const AuthDashboardChatRoute = AuthDashboardChatRouteImport.update({
-  id: '/chat',
-  path: '/chat',
   getParentRoute: () => AuthDashboardRouteRoute,
 } as any)
 const marketingauthSignUpIndexRoute =
@@ -128,15 +134,16 @@ const marketingauthForgotPasswordIndexRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof marketingIndexRoute
+  '/chat': typeof AuthChatRouteRouteWithChildren
   '/dashboard': typeof AuthDashboardRouteRouteWithChildren
   '/settings': typeof AuthSettingsRouteRouteWithChildren
   '/api/chat': typeof ApiChatRoute
   '/debug/': typeof DebugIndexRoute
-  '/dashboard/chat': typeof AuthDashboardChatRoute
   '/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/settings/security': typeof AuthSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/chat/': typeof AuthChatIndexRoute
   '/dashboard/': typeof AuthDashboardIndexRoute
   '/settings/': typeof AuthSettingsIndexRoute
   '/forgot-password/': typeof marketingauthForgotPasswordIndexRoute
@@ -148,11 +155,11 @@ export interface FileRoutesByTo {
   '/': typeof marketingIndexRoute
   '/api/chat': typeof ApiChatRoute
   '/debug': typeof DebugIndexRoute
-  '/dashboard/chat': typeof AuthDashboardChatRoute
   '/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/settings/security': typeof AuthSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/chat': typeof AuthChatIndexRoute
   '/dashboard': typeof AuthDashboardIndexRoute
   '/settings': typeof AuthSettingsIndexRoute
   '/forgot-password': typeof marketingauthForgotPasswordIndexRoute
@@ -165,16 +172,17 @@ export interface FileRoutesById {
   '/(marketing)': typeof marketingRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
   '/(marketing)/(auth)': typeof marketingauthRouteRouteWithChildren
+  '/_auth/chat': typeof AuthChatRouteRouteWithChildren
   '/_auth/dashboard': typeof AuthDashboardRouteRouteWithChildren
   '/_auth/settings': typeof AuthSettingsRouteRouteWithChildren
   '/api/chat': typeof ApiChatRoute
   '/(marketing)/': typeof marketingIndexRoute
   '/debug/': typeof DebugIndexRoute
-  '/_auth/dashboard/chat': typeof AuthDashboardChatRoute
   '/_auth/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/_auth/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/_auth/settings/security': typeof AuthSettingsSecurityRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/_auth/chat/': typeof AuthChatIndexRoute
   '/_auth/dashboard/': typeof AuthDashboardIndexRoute
   '/_auth/settings/': typeof AuthSettingsIndexRoute
   '/(marketing)/(auth)/forgot-password/': typeof marketingauthForgotPasswordIndexRoute
@@ -186,15 +194,16 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/chat'
     | '/dashboard'
     | '/settings'
     | '/api/chat'
     | '/debug/'
-    | '/dashboard/chat'
     | '/dashboard/inbox'
     | '/dashboard/my-issues'
     | '/settings/security'
     | '/api/auth/$'
+    | '/chat/'
     | '/dashboard/'
     | '/settings/'
     | '/forgot-password/'
@@ -206,11 +215,11 @@ export interface FileRouteTypes {
     | '/'
     | '/api/chat'
     | '/debug'
-    | '/dashboard/chat'
     | '/dashboard/inbox'
     | '/dashboard/my-issues'
     | '/settings/security'
     | '/api/auth/$'
+    | '/chat'
     | '/dashboard'
     | '/settings'
     | '/forgot-password'
@@ -222,16 +231,17 @@ export interface FileRouteTypes {
     | '/(marketing)'
     | '/_auth'
     | '/(marketing)/(auth)'
+    | '/_auth/chat'
     | '/_auth/dashboard'
     | '/_auth/settings'
     | '/api/chat'
     | '/(marketing)/'
     | '/debug/'
-    | '/_auth/dashboard/chat'
     | '/_auth/dashboard/inbox'
     | '/_auth/dashboard/my-issues'
     | '/_auth/settings/security'
     | '/api/auth/$'
+    | '/_auth/chat/'
     | '/_auth/dashboard/'
     | '/_auth/settings/'
     | '/(marketing)/(auth)/forgot-password/'
@@ -299,6 +309,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardRouteRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/chat': {
+      id: '/_auth/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof AuthChatRouteRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/(marketing)/(auth)': {
       id: '/(marketing)/(auth)'
       path: ''
@@ -319,6 +336,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof AuthDashboardIndexRouteImport
       parentRoute: typeof AuthDashboardRouteRoute
+    }
+    '/_auth/chat/': {
+      id: '/_auth/chat/'
+      path: '/'
+      fullPath: '/chat/'
+      preLoaderRoute: typeof AuthChatIndexRouteImport
+      parentRoute: typeof AuthChatRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -346,13 +370,6 @@ declare module '@tanstack/react-router' {
       path: '/inbox'
       fullPath: '/dashboard/inbox'
       preLoaderRoute: typeof AuthDashboardInboxRouteImport
-      parentRoute: typeof AuthDashboardRouteRoute
-    }
-    '/_auth/dashboard/chat': {
-      id: '/_auth/dashboard/chat'
-      path: '/chat'
-      fullPath: '/dashboard/chat'
-      preLoaderRoute: typeof AuthDashboardChatRouteImport
       parentRoute: typeof AuthDashboardRouteRoute
     }
     '/(marketing)/(auth)/sign-up/': {
@@ -417,15 +434,25 @@ const marketingRouteRouteWithChildren = marketingRouteRoute._addFileChildren(
   marketingRouteRouteChildren,
 )
 
+interface AuthChatRouteRouteChildren {
+  AuthChatIndexRoute: typeof AuthChatIndexRoute
+}
+
+const AuthChatRouteRouteChildren: AuthChatRouteRouteChildren = {
+  AuthChatIndexRoute: AuthChatIndexRoute,
+}
+
+const AuthChatRouteRouteWithChildren = AuthChatRouteRoute._addFileChildren(
+  AuthChatRouteRouteChildren,
+)
+
 interface AuthDashboardRouteRouteChildren {
-  AuthDashboardChatRoute: typeof AuthDashboardChatRoute
   AuthDashboardInboxRoute: typeof AuthDashboardInboxRoute
   AuthDashboardMyIssuesRoute: typeof AuthDashboardMyIssuesRoute
   AuthDashboardIndexRoute: typeof AuthDashboardIndexRoute
 }
 
 const AuthDashboardRouteRouteChildren: AuthDashboardRouteRouteChildren = {
-  AuthDashboardChatRoute: AuthDashboardChatRoute,
   AuthDashboardInboxRoute: AuthDashboardInboxRoute,
   AuthDashboardMyIssuesRoute: AuthDashboardMyIssuesRoute,
   AuthDashboardIndexRoute: AuthDashboardIndexRoute,
@@ -448,11 +475,13 @@ const AuthSettingsRouteRouteWithChildren =
   AuthSettingsRouteRoute._addFileChildren(AuthSettingsRouteRouteChildren)
 
 interface AuthRouteRouteChildren {
+  AuthChatRouteRoute: typeof AuthChatRouteRouteWithChildren
   AuthDashboardRouteRoute: typeof AuthDashboardRouteRouteWithChildren
   AuthSettingsRouteRoute: typeof AuthSettingsRouteRouteWithChildren
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthChatRouteRoute: AuthChatRouteRouteWithChildren,
   AuthDashboardRouteRoute: AuthDashboardRouteRouteWithChildren,
   AuthSettingsRouteRoute: AuthSettingsRouteRouteWithChildren,
 }

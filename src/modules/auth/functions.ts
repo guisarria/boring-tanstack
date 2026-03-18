@@ -9,7 +9,7 @@ import {
 } from "./auth-service.server"
 
 function toHttpError(error: AuthServiceError): Response {
-  if (error.code === "UNAUTHORIZED") {
+  if (error.code === "unauthorized") {
     return new Response(error.message, { status: 401 })
   }
 

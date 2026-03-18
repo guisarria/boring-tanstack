@@ -52,6 +52,8 @@ describe("getSessionResult", () => {
         name: mockSession.user.name,
         email: mockSession.user.email,
         image: mockSession.user.image,
+        role: undefined,
+        emailVerified: mockSession.user.emailVerified,
       },
     })
   })
@@ -67,14 +69,14 @@ describe("getSessionResult", () => {
     })
   })
 
-  it("returns AUTH_PROVIDER_FAILURE when provider throws", async () => {
+  it("returns auth_provider_failure when provider throws", async () => {
     vi.mocked(auth.api.getSession).mockRejectedValue(new Error("network"))
 
     const result = await getSessionResult(new Headers())
 
     expect(result.isErr()).toBe(true)
     expect(result._unsafeUnwrapErr()).toMatchObject({
-      code: "AUTH_PROVIDER_FAILURE",
+      code: "auth_provider_failure",
       message: "Auth provider request failed",
     })
   })
@@ -91,24 +93,24 @@ describe("requireSessionResult", () => {
     expect(result._unsafeUnwrap()).toEqual(mockSession)
   })
 
-  it("returns UNAUTHORIZED when session is null", async () => {
+  it("returns unauthorized when session is null", async () => {
     vi.mocked(auth.api.getSession).mockResolvedValue(null)
 
     const result = await requireSessionResult(new Headers())
 
     expect(result.isErr()).toBe(true)
     expect(result._unsafeUnwrapErr()).toMatchObject({
-      code: "UNAUTHORIZED",
+      code: "unauthorized",
       message: "Unauthorized",
     })
   })
 
-  it("returns AUTH_PROVIDER_FAILURE when provider throws", async () => {
+  it("returns auth_provider_failure when provider throws", async () => {
     vi.mocked(auth.api.getSession).mockRejectedValue(new Error("fail"))
 
     const result = await requireSessionResult(new Headers())
 
     expect(result.isErr()).toBe(true)
-    expect(result._unsafeUnwrapErr().code).toBe("AUTH_PROVIDER_FAILURE")
+    expect(result._unsafeUnwrapErr().code).toBe("auth_provider_failure")
   })
 })

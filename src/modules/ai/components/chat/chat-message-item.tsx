@@ -1,5 +1,3 @@
-import type { UIMessage } from "@tanstack/ai-react"
-
 import { AiBotAvatar } from "@/modules/ai/components/ui/ai-avatar"
 import {
   Message,
@@ -11,6 +9,7 @@ import {
   ReasoningContent,
   ReasoningTrigger,
 } from "@/modules/ai/components/ui/reasoning"
+import { getThinkingDuration, type ChatMessage } from "@/modules/ai/contracts"
 import { UserAvatar } from "@/modules/auth/components/user-avatar"
 
 function MessagePartView({
@@ -18,14 +17,17 @@ function MessagePartView({
   role,
   isStreaming,
 }: {
-  part: UIMessage["parts"][number]
-  role: UIMessage["role"]
+  part: ChatMessage["parts"][number]
+  role: ChatMessage["role"]
   isStreaming: boolean
 }) {
   switch (part.type) {
     case "thinking":
       return (
-        <Reasoning isStreaming={isStreaming}>
+        <Reasoning
+          isStreaming={isStreaming}
+          duration={getThinkingDuration(part)}
+        >
           <ReasoningTrigger />
           <ReasoningContent>{part.content}</ReasoningContent>
         </Reasoning>
@@ -48,7 +50,7 @@ export function ChatMessageItem({
   isStreaming,
   showAvatar,
 }: {
-  message: UIMessage
+  message: ChatMessage
   isStreaming: boolean
   showAvatar: boolean
 }) {

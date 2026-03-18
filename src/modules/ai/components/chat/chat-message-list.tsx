@@ -1,4 +1,3 @@
-import type { UIMessage } from "@tanstack/ai-react"
 import { useRouteContext } from "@tanstack/react-router"
 
 import { useStickToBottom } from "@/hooks/use-stick-to-bottom"
@@ -9,6 +8,7 @@ import {
   ConversationEmptyState,
   ConversationScrollButton,
 } from "@/modules/ai/components/ui/conversation"
+import type { ChatMessage } from "@/modules/ai/contracts"
 
 import { ChatMessageItem } from "./chat-message-item"
 
@@ -16,7 +16,7 @@ export function ChatMessageList({
   messages,
   streamingMessageId,
 }: {
-  messages: Array<UIMessage>
+  messages: Array<ChatMessage>
   streamingMessageId: string | null
 }) {
   const { user } = useRouteContext({ from: "__root__" })

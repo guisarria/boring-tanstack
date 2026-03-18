@@ -15,6 +15,20 @@
       "when": 1773400883386,
       "tag": "0001_spooky_thunderbolt",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1773718160121,
+      "tag": "0002_kind_magus",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1773856113915,
+      "tag": "0003_bouncy_owl",
+      "breakpoints": true
     }
   ]
 }
