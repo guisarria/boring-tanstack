@@ -40,4 +40,3 @@ export const getRandomColor = (
 ): string => {
   return colors[number % range]
 }
-

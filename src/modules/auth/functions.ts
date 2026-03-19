@@ -3,10 +3,7 @@ import { getCookie, getRequestHeaders } from "@tanstack/react-start/server"
 
 import { AppError } from "@/lib/errors"
 
-import {
-  getSessionResult,
-  listSessionsResult,
-} from "./server/auth-service"
+import { getSessionResult, listSessionsResult } from "./server/auth-service"
 
 async function resolveSession() {
   const headers = getRequestHeaders()

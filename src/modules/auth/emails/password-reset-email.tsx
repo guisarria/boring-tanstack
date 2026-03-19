@@ -5,10 +5,7 @@ type PasswordResetData = {
   url: string
 }
 
-export default function PasswordResetEmail({
-  name,
-  url,
-}: PasswordResetData) {
+export default function PasswordResetEmail({ name, url }: PasswordResetData) {
   return (
     <EmailLayout
       name={name}

@@ -111,7 +111,10 @@ function isSurface(value: string): value is Surface {
   return value in VALID_SURFACES
 }
 
-function parseErrorCode(code: ErrorCode): { type: ErrorType; surface: Surface } {
+function parseErrorCode(code: ErrorCode): {
+  type: ErrorType
+  surface: Surface
+} {
   const [rawType, rawSurface] = code.split(":")
 
   if (!rawType || !isErrorType(rawType)) {

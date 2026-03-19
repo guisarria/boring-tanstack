@@ -1,9 +1,9 @@
 import { lte, sql } from "drizzle-orm"
 
 import { db } from "@/db/index"
+import { AppError } from "@/lib/errors"
 
 import { ENTITLEMENTS_BY_USER_TYPE, getUserType } from "../constants"
-import { AppError } from "@/lib/errors"
 import { ipRateLimits } from "../schema"
 import { getMessageCountByUserId } from "./queries"
 

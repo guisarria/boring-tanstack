@@ -3,8 +3,6 @@ import { useTransition } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 
-import { passwordField, confirmPasswordField } from "@/modules/auth/validation"
-
 import { PasswordFieldsGroup } from "@/components/forms/fields/password-fields-group"
 import { useAppForm } from "@/components/forms/form-context"
 import { ButtonLink } from "@/components/ui/button-link"
@@ -18,6 +16,7 @@ import {
 } from "@/components/ui/card"
 import { Field, FieldGroup, FieldSeparator } from "@/components/ui/field"
 import { authClient } from "@/modules/auth/auth-client"
+import { passwordField, confirmPasswordField } from "@/modules/auth/validation"
 
 import { SocialAuthButtons } from "../social-auth-buttons"
 

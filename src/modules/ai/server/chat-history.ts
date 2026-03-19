@@ -1,8 +1,8 @@
 import { z } from "zod"
 
+import { AppError } from "@/lib/errors"
 import { requireSessionResult } from "@/modules/auth/server/auth-service"
 
-import { AppError } from "@/lib/errors"
 import type { ChatMessagePart } from "../validation"
 import {
   getChatById,
@@ -34,7 +34,8 @@ function serializePersistedMessages(
 ) {
   return messages.map((message) => ({
     ...message,
-    attachments: message.attachments as ChatHistoryPayload["messages"][number]["attachments"],
+    attachments:
+      message.attachments as ChatHistoryPayload["messages"][number]["attachments"],
     createdAt: message.createdAt.toISOString(),
   }))
 }
