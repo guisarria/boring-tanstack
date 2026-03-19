@@ -48,11 +48,11 @@ export async function handleChatPost(request: Request): Promise<Response> {
   } catch (error) {
     return error instanceof Response
       ? error
-      : new Response("Unauthorized", { status: 401 })
+      : jsonError(401, "Unauthorized")
   }
 
   if (!env.OPENROUTER_API_KEY) {
-    return new Response("OPENROUTER_API_KEY not configured", { status: 500 })
+    return jsonError(500, "OPENROUTER_API_KEY not configured")
   }
 
   let rawBody: unknown
@@ -62,7 +62,11 @@ export async function handleChatPost(request: Request): Promise<Response> {
     return jsonError(400, "Invalid JSON body")
   }
 
-  const body = chatStreamRequestSchema.parse(rawBody)
+  const parsed = chatStreamRequestSchema.safeParse(rawBody)
+  if (!parsed.success) {
+    return jsonError(400, "Invalid request body")
+  }
+  const body = parsed.data
   const messages = body.messages
   const data = body.data ?? {}
 
@@ -80,13 +84,13 @@ export async function handleChatPost(request: Request): Promise<Response> {
   const selectedChatModel = selectedChatModelRaw ?? DEFAULT_MODEL_ID
 
   if (!isAllowedModelId(selectedChatModel)) {
-    return new Response("Invalid model", { status: 400 })
+    return jsonError(400, "Invalid model")
   }
 
   const botResult = checkBotId(headers)
 
   if (botResult.isBot) {
-    return new Response("Unauthorized", { status: 401 })
+    return jsonError(401, "Unauthorized")
   }
 
   const ip = headers.get("x-forwarded-for") || headers.get("x-real-ip")
@@ -101,13 +105,13 @@ export async function handleChatPost(request: Request): Promise<Response> {
       return error
     }
 
-    return new Response("Rate limited", { status: 429 })
+    return jsonError(429, "Rate limited")
   }
 
   if (conversationUuid) {
     const existingChat = await getChatById({ id: conversationUuid })
     if (existingChat && existingChat.userId !== user.id) {
-      return new Response("Forbidden", { status: 403 })
+      return jsonError(403, "Forbidden")
     }
     if (!existingChat) {
       await createChat({
@@ -176,8 +180,8 @@ export async function handleChatPost(request: Request): Promise<Response> {
         createdAt: new Date(),
       })
     } catch (e) {
-      const err = e as Error
-      console.error("Failed to persist assistant message:", err.message)
+      const message = e instanceof Error ? e.message : "Unknown error"
+      console.error("Failed to persist assistant message:", message)
     }
   }
 

@@ -8,7 +8,7 @@ export function AppSidebarLayout({
   navGroups,
 }: {
   children: React.ReactNode
-  navGroups: NavGroup[]
+  navGroups?: NavGroup[]
 }) {
   return (
     <SidebarProvider className="h-screen overflow-hidden md:p-2">

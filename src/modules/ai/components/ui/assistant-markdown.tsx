@@ -1,6 +1,6 @@
 import { cjk } from "@streamdown/cjk"
 import type { ComponentProps } from "react"
-import { lazy, Suspense } from "react"
+import { lazy, memo, Suspense } from "react"
 import { Streamdown } from "streamdown"
 
 const EnhancedAssistantMarkdown = lazy(
@@ -16,11 +16,11 @@ function usesEnhancedSyntax(children: AssistantMarkdownProps["children"]) {
   return typeof children === "string" && ENHANCED_SYNTAX_PATTERN.test(children)
 }
 
-function BaseAssistantMarkdown(props: AssistantMarkdownProps) {
+const BaseAssistantMarkdown = memo((props: AssistantMarkdownProps) => {
   return <Streamdown plugins={basePlugins} {...props} />
-}
+})
 
-export function AssistantMarkdown(props: AssistantMarkdownProps) {
+export const AssistantMarkdown = memo((props: AssistantMarkdownProps) => {
   if (!usesEnhancedSyntax(props.children)) {
     return <BaseAssistantMarkdown {...props} />
   }
@@ -30,4 +30,4 @@ export function AssistantMarkdown(props: AssistantMarkdownProps) {
       <EnhancedAssistantMarkdown {...props} />
     </Suspense>
   )
-}
+})

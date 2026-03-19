@@ -1,4 +1,4 @@
-import z from "zod"
+import { confirmPasswordField, passwordField } from "@/modules/auth/validation"
 
 import { withFieldGroup } from "../form-context"
 
@@ -12,8 +12,6 @@ const defaultValues: PasswordFields = {
   confirmPassword: "",
 }
 
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/
-
 export const PasswordFieldsGroup = withFieldGroup({
   defaultValues,
   render({ group }) {
@@ -22,16 +20,7 @@ export const PasswordFieldsGroup = withFieldGroup({
         <group.AppField
           name="password"
           validators={{
-            onBlur: z
-              .string()
-              .min(8, {
-                message: "Password must be at least 8 characters long",
-              })
-              .max(50)
-              .regex(PASSWORD_REGEX, {
-                message:
-                  "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-              }),
+            onBlur: passwordField,
           }}
         >
           {(field) => (
@@ -47,12 +36,10 @@ export const PasswordFieldsGroup = withFieldGroup({
           name="confirmPassword"
           validators={{
             onChangeListenTo: ["password"],
-            onChange: z
-              .string()
-              .refine((value) => value === group.getFieldValue("password"), {
-                error: "Passwords don't match",
-                path: ["confirmPassword"],
-              }),
+            onChange: confirmPasswordField.refine(
+              (value) => value === group.getFieldValue("password"),
+              { message: "Passwords don't match" },
+            ),
           }}
         >
           {(field) => (

@@ -3,6 +3,8 @@ import { useTransition } from "react"
 import { toast } from "sonner"
 import { z } from "zod"
 
+import { passwordField, confirmPasswordField } from "@/modules/auth/validation"
+
 import { PasswordFieldsGroup } from "@/components/forms/fields/password-fields-group"
 import { useAppForm } from "@/components/forms/form-context"
 import { ButtonLink } from "@/components/ui/button-link"
@@ -26,18 +28,8 @@ const signUpFormSchema = z
       .min(2, { message: "Name must be at least 2 characters long" })
       .max(50, { message: "Name must be less than 50 characters" }),
     email: z.email({ message: "Invalid email address" }),
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .max(50)
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
-        message:
-          "Password must contain at least 1 uppercase letter, 1 lowercase letter, & 1 number",
-      }),
-    confirmPassword: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .max(50),
+    password: passwordField,
+    confirmPassword: confirmPasswordField,
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",

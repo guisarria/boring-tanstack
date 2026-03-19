@@ -1,7 +1,7 @@
 import type { UIMessage } from "@tanstack/ai-react"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import type { ComponentProps, HTMLAttributes, ReactElement } from "react"
-import { createContext, use, useEffect, useMemo, useState } from "react"
+import { createContext, memo, use, useEffect, useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group"
@@ -301,16 +301,20 @@ export const MessageBranchPage = ({
 
 export type MessageResponseProps = AssistantMarkdownProps
 
-export function MessageResponse({ className, ...props }: MessageResponseProps) {
-  return (
-    <AssistantMarkdown
-      mode="streaming"
-      animated={{ animation: "fadeIn", stagger: 0 }}
-      className={cn(
-        "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
-        className,
-      )}
-      {...props}
-    />
-  )
-}
+const ANIMATED_CONFIG = { animation: "fadeIn" as const, stagger: 0 }
+
+export const MessageResponse = memo(
+  ({ className, ...props }: MessageResponseProps) => {
+    return (
+      <AssistantMarkdown
+        mode="streaming"
+        animated={ANIMATED_CONFIG}
+        className={cn(
+          "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
+          className,
+        )}
+        {...props}
+      />
+    )
+  },
+)

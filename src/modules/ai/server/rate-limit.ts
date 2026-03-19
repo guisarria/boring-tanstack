@@ -64,7 +64,7 @@ export async function checkIpRateLimit(
   await db
     .delete(ipRateLimits)
     .where(lte(ipRateLimits.resetAt, now))
-    .catch(() => {})
+    .catch((err) => console.error("Rate limit cleanup failed:", err))
 
   const result = await db
     .insert(ipRateLimits)

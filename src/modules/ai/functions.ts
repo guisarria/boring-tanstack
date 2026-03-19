@@ -16,7 +16,7 @@ const chatHistoryInputSchema = z.object({
   conversationId: z.uuid().nullable().optional(),
 })
 
-export const listChats = createServerFn({ method: "GET" }).handler(async () => {
+async function getAuthenticatedUserId(): Promise<string> {
   const headers = getRequestHeaders()
   const sessionResult = await getSessionResult(headers)
 
@@ -24,7 +24,12 @@ export const listChats = createServerFn({ method: "GET" }).handler(async () => {
     throw new ChatbotError("unauthorized:chat").toResponse()
   }
 
-  const chats = await getChatsByUserId({ userId: sessionResult.value.user.id })
+  return sessionResult.value.user.id
+}
+
+export const listChats = createServerFn({ method: "GET" }).handler(async () => {
+  const userId = await getAuthenticatedUserId()
+  const chats = await getChatsByUserId({ userId })
 
   return {
     chats: chats.map((chat) => ({
@@ -48,16 +53,11 @@ export const getChatHistory = createServerFn({ method: "POST" })
 export const renameChat = createServerFn({ method: "POST" })
   .inputValidator(renameChatSchema)
   .handler(async ({ data }) => {
-    const headers = getRequestHeaders()
-    const sessionResult = await getSessionResult(headers)
-
-    if (sessionResult.isErr() || !sessionResult.value.user) {
-      throw new ChatbotError("unauthorized:chat").toResponse()
-    }
+    const userId = await getAuthenticatedUserId()
 
     const updated = await updateChatTitle({
       id: data.id,
-      userId: sessionResult.value.user.id,
+      userId,
       title: data.title,
     })
 
@@ -71,16 +71,11 @@ export const renameChat = createServerFn({ method: "POST" })
 export const deleteChat = createServerFn({ method: "POST" })
   .inputValidator(deleteChatSchema)
   .handler(async ({ data }) => {
-    const headers = getRequestHeaders()
-    const sessionResult = await getSessionResult(headers)
-
-    if (sessionResult.isErr() || !sessionResult.value.user) {
-      throw new ChatbotError("unauthorized:chat").toResponse()
-    }
+    const userId = await getAuthenticatedUserId()
 
     const deleted = await deleteChatById({
       id: data.id,
-      userId: sessionResult.value.user.id,
+      userId,
     })
 
     if (!deleted) {

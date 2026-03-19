@@ -72,6 +72,49 @@ const ERROR_MESSAGES: Partial<Record<ErrorCode, string>> = {
 
 const DEFAULT_ERROR_MESSAGE = "Something went wrong. Please try again later."
 
+const VALID_ERROR_TYPES: Record<ErrorType, true> = {
+  bad_request: true,
+  unauthorized: true,
+  forbidden: true,
+  not_found: true,
+  rate_limit: true,
+  offline: true,
+}
+
+const VALID_SURFACES: Record<Surface, true> = {
+  chat: true,
+  auth: true,
+  api: true,
+  stream: true,
+  database: true,
+  history: true,
+  vote: true,
+  document: true,
+  suggestions: true,
+  activate_gateway: true,
+}
+
+function isErrorType(value: string): value is ErrorType {
+  return value in VALID_ERROR_TYPES
+}
+
+function isSurface(value: string): value is Surface {
+  return value in VALID_SURFACES
+}
+
+function parseErrorCode(code: ErrorCode): { type: ErrorType; surface: Surface } {
+  const [rawType, rawSurface] = code.split(":")
+
+  if (!rawType || !isErrorType(rawType)) {
+    throw new Error(`Invalid error type in code "${code}"`)
+  }
+  if (!rawSurface || !isSurface(rawSurface)) {
+    throw new Error(`Invalid surface in code "${code}"`)
+  }
+
+  return { type: rawType, surface: rawSurface }
+}
+
 export class ChatbotError extends Error {
   type: ErrorType
   surface: Surface
@@ -80,11 +123,11 @@ export class ChatbotError extends Error {
   constructor(errorCode: ErrorCode, cause?: string) {
     super()
 
-    const [type, surface] = errorCode.split(":")
+    const { type, surface } = parseErrorCode(errorCode)
 
-    this.type = type as ErrorType
+    this.type = type
     this.cause = cause
-    this.surface = surface as Surface
+    this.surface = surface
     this.message = getMessageByErrorCode(errorCode)
     this.statusCode = STATUS_CODES[this.type]
   }

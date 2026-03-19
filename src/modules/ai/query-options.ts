@@ -1,5 +1,7 @@
 import { getChatHistory, listChats } from "./functions"
 
+const CHAT_STALE_TIME = 30_000
+
 export const chatQueryKeys = {
   all: ["chat"] as const,
   history: (conversationId: string | null) =>
@@ -15,7 +17,7 @@ export function chatHistoryQueryOptions(conversationId: string | null) {
         data: { conversationId },
         signal,
       }),
-    staleTime: 30_000,
+    staleTime: CHAT_STALE_TIME,
   }
 }
 
@@ -23,6 +25,6 @@ export function chatListQueryOptions() {
   return {
     queryKey: chatQueryKeys.list(),
     queryFn: ({ signal }: { signal: AbortSignal }) => listChats({ signal }),
-    staleTime: 30_000,
+    staleTime: CHAT_STALE_TIME,
   }
 }

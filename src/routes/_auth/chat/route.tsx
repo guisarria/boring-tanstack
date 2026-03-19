@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_auth/chat")({
 
 function RouteComponent() {
   return (
-    <AppSidebarLayout navGroups={[]}>
+    <AppSidebarLayout>
       <AppHeader basePath="/dashboard" rootLabel="Dashboard" />
       <Outlet />
     </AppSidebarLayout>

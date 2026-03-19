@@ -24,6 +24,14 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
       ...seo({ title: "Boring TanStack", url: "/" }).meta,
     ],
     links: [{ href: appCss, rel: "stylesheet" }],
+    scripts: [
+      {
+        src: "//unpkg.com/react-scan/dist/auto.global.js",
+        crossOrigin: "anonymous",
+        async: true,
+        defer: true,
+      },
+    ],
   }),
 
   shellComponent: RootDocument,

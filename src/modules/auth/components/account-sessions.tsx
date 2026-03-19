@@ -31,8 +31,11 @@ const DEVICE_ICONS = {
 } as const
 
 function getDeviceIcon(type: string) {
-  const Icon = DEVICE_ICONS[type as keyof typeof DEVICE_ICONS] ?? LaptopIcon
-  return <Icon className="h-4 w-4" />
+  if (type in DEVICE_ICONS) {
+    const Icon = DEVICE_ICONS[type as keyof typeof DEVICE_ICONS]
+    return <Icon className="h-4 w-4" />
+  }
+  return <LaptopIcon className="h-4 w-4" />
 }
 
 function SessionItem({

@@ -16,21 +16,12 @@ import {
 } from "@/components/ui/card"
 import { Field, FieldGroup } from "@/components/ui/field"
 import { authClient } from "@/modules/auth/auth-client"
+import { passwordField, confirmPasswordField } from "@/modules/auth/validation"
 
 const resetPasswordSchema = z
   .object({
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .max(50)
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
-        message:
-          "Password must contain at least 1 uppercase letter, 1 lowercase letter, & 1 number",
-      }),
-    confirmPassword: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .max(50),
+    password: passwordField,
+    confirmPassword: confirmPasswordField,
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -49,6 +40,29 @@ export function ResetPasswordForm() {
   const navigate = useNavigate()
   const { token, error } = useSearch({
     from: "/(marketing)/(auth)/reset-password/",
+  })
+
+  const form = useAppForm({
+    defaultValues,
+    validators: {
+      onSubmit: resetPasswordSchema,
+    },
+    onSubmit: ({ value: { password } }) => {
+      startTransition(async () => {
+        const { error } = await authClient.resetPassword({
+          newPassword: password,
+          token,
+        })
+
+        if (error) {
+          toast.error(error.message)
+          return
+        }
+
+        toast.success("Password reset successfully")
+        await navigate({ to: "/sign-in" })
+      })
+    },
   })
 
   if (error === "INVALID_TOKEN" || !token) {
@@ -75,29 +89,6 @@ export function ResetPasswordForm() {
       </Card>
     )
   }
-
-  const form = useAppForm({
-    defaultValues,
-    validators: {
-      onSubmit: resetPasswordSchema,
-    },
-    onSubmit: ({ value: { password } }) => {
-      startTransition(async () => {
-        const { error } = await authClient.resetPassword({
-          newPassword: password,
-          token,
-        })
-
-        if (error) {
-          toast.error(error.message)
-          return
-        }
-
-        toast.success("Password reset successfully")
-        await navigate({ to: "/sign-in" })
-      })
-    },
-  })
 
   return (
     <Card className="w-full max-w-md">

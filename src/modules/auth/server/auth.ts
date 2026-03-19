@@ -40,16 +40,12 @@ export const auth = betterAuth({
   emailVerification: {
     sendOnSignUp: true,
     sendVerificationEmail: async ({ user: { email, name }, url }) => {
-      resend.emails
-        .send({
-          from: `Boring Tanstack <${env.RESEND_EMAIL}>`,
-          to: [email],
-          subject: "Verify your email address",
-          react: VerificationEmail({ name, url }),
-        })
-        .catch((err) =>
-          console.error("Failed to send verification email:", err),
-        )
+      await resend.emails.send({
+        from: `Boring Tanstack <${env.RESEND_EMAIL}>`,
+        to: [email],
+        subject: "Verify your email address",
+        react: VerificationEmail({ name, url }),
+      })
     },
     autoSignInAfterVerification: true,
   },
@@ -62,16 +58,12 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user: { email, name }, url }) => {
-      resend.emails
-        .send({
-          from: `Boring Tanstack <${env.RESEND_EMAIL}>`,
-          to: [email],
-          subject: "Reset your password",
-          react: PasswordResetEmail({ name, url }),
-        })
-        .catch((err) =>
-          console.error("Failed to send password reset email:", err),
-        )
+      await resend.emails.send({
+        from: `Boring Tanstack <${env.RESEND_EMAIL}>`,
+        to: [email],
+        subject: "Reset your password",
+        react: PasswordResetEmail({ name, url }),
+      })
     },
   },
   plugins: [tanstackStartCookies(), admin()],

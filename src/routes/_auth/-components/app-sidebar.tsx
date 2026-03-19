@@ -13,7 +13,7 @@ import {
   Plus,
   Trash2,
 } from "lucide-react"
-import { useMemo, useState, useTransition, type SubmitEvent } from "react"
+import { useEffect, useMemo, useState, useTransition, type SubmitEvent } from "react"
 import { toast } from "sonner"
 
 import {
@@ -93,7 +93,7 @@ function RenameDialog({ target, onClose, onRenamed }: RenameDialogProps) {
 
   const isOpen = Boolean(target)
 
-  useMemo(() => {
+  useEffect(() => {
     if (target) setTitle(target.title)
   }, [target])
 
@@ -246,7 +246,7 @@ export function AppSidebar({
   navGroups,
   ...props
 }: React.ComponentProps<typeof Sidebar> & {
-  navGroups: NavGroup[]
+  navGroups?: NavGroup[]
 }) {
   const { user } = useRouteContext({ from: "/_auth" })
   const navigate = useNavigate()
@@ -409,7 +409,7 @@ export function AppSidebar({
         )}
 
         {!location.pathname.startsWith("/chat") &&
-          navGroups.map((group) => (
+          navGroups?.map((group) => (
             <SidebarNavGroup
               items={group.items}
               key={group.label}

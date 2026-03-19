@@ -23,7 +23,7 @@ function serializePersistedMessages(
 ) {
   return messages.map((message) => ({
     ...message,
-    attachments: message.attachments as Record<string, {}>[],
+    attachments: message.attachments as ChatHistoryPayload["messages"][number]["attachments"],
     createdAt: message.createdAt.toISOString(),
   }))
 }
@@ -35,7 +35,7 @@ export type ChatHistoryPayload = {
     chatId: string
     role: "system" | "user" | "assistant"
     parts: Array<ChatMessagePart>
-    attachments: Record<string, {}>[]
+    attachments: {}[]
     createdAt: string
   }>
 }
