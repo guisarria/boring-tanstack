@@ -2,7 +2,7 @@ import { and, count, eq, gte } from "drizzle-orm"
 
 import { db } from "@/db/index"
 
-import { ChatbotError } from "../errors"
+import { AppError } from "@/lib/errors"
 import { chats, messages } from "../schema"
 import type { ChatMessagePart } from "../validation"
 
@@ -23,7 +23,7 @@ export async function createChat({
       title,
     })
   } catch {
-    throw new ChatbotError("bad_request:database", "Failed to create chat")
+    throw new AppError("internal_error:database", "Failed to create chat")
   }
 }
 export async function getChatById({ id }: { id: string }) {
@@ -32,7 +32,7 @@ export async function getChatById({ id }: { id: string }) {
       where: (chats, { eq }) => eq(chats.id, id),
     })
   } catch {
-    throw new ChatbotError("bad_request:database", "Failed to get chat")
+    throw new AppError("internal_error:database", "Failed to get chat")
   }
 }
 
@@ -43,7 +43,7 @@ export async function getLatestChatByUserId({ userId }: { userId: string }) {
       orderBy: (chats, { desc }) => [desc(chats.createdAt)],
     })
   } catch {
-    throw new ChatbotError("bad_request:database", "Failed to get latest chat")
+    throw new AppError("internal_error:database", "Failed to get latest chat")
   }
 }
 
@@ -61,7 +61,7 @@ export async function getChatsByUserId({
       limit,
     })
   } catch {
-    throw new ChatbotError("bad_request:database", "Failed to get chats")
+    throw new AppError("internal_error:database", "Failed to get chats")
   }
 }
 
@@ -82,7 +82,7 @@ export async function updateChatTitle({
       .returning({ id: chats.id })
     return updated.at(0) ?? null
   } catch {
-    throw new ChatbotError("bad_request:database", "Failed to update chat")
+    throw new AppError("internal_error:database", "Failed to update chat")
   }
 }
 
@@ -114,7 +114,7 @@ export async function deleteChatById({
   } catch (error) {
     const cause =
       error instanceof Error ? error.message : "Failed to delete chat"
-    throw new ChatbotError("bad_request:database", cause)
+    throw new AppError("internal_error:database", cause)
   }
 }
 
@@ -125,7 +125,7 @@ export async function getMessagesByChatId({ id }: { id: string }) {
       orderBy: (messages, { asc }) => [asc(messages.createdAt)],
     })
   } catch {
-    throw new ChatbotError("bad_request:database", "Failed to get messages")
+    throw new AppError("internal_error:database", "Failed to get messages")
   }
 }
 
@@ -153,8 +153,8 @@ export async function getMessageCountByUserId({
 
     return Number(result?.count ?? 0)
   } catch {
-    throw new ChatbotError(
-      "bad_request:database",
+    throw new AppError(
+      "internal_error:database",
       "Failed to count recent messages",
     )
   }
@@ -186,6 +186,6 @@ export async function saveMessage(message: {
       createdAt: message.createdAt,
     })
   } catch {
-    throw new ChatbotError("bad_request:database", "Failed to save message")
+    throw new AppError("internal_error:database", "Failed to save message")
   }
 }

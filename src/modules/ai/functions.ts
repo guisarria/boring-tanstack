@@ -3,7 +3,7 @@ import { getRequestHeaders } from "@tanstack/react-start/server"
 import { z } from "zod"
 
 import { getSessionResult } from "../auth/server/auth-service"
-import { ChatbotError } from "./errors"
+import { AppError } from "@/lib/errors"
 import { loadChatHistory } from "./server/chat-history"
 import {
   deleteChatById,
@@ -21,7 +21,7 @@ async function getAuthenticatedUserId(): Promise<string> {
   const sessionResult = await getSessionResult(headers)
 
   if (sessionResult.isErr() || !sessionResult.value.user) {
-    throw new ChatbotError("unauthorized:chat").toResponse()
+    throw new AppError("unauthorized:chat").toResponse()
   }
 
   return sessionResult.value.user.id
@@ -62,7 +62,7 @@ export const renameChat = createServerFn({ method: "POST" })
     })
 
     if (!updated) {
-      throw new ChatbotError("not_found:chat").toResponse()
+      throw new AppError("not_found:chat").toResponse()
     }
 
     return { success: true }
@@ -79,7 +79,7 @@ export const deleteChat = createServerFn({ method: "POST" })
     })
 
     if (!deleted) {
-      throw new ChatbotError("not_found:chat").toResponse()
+      throw new AppError("not_found:chat").toResponse()
     }
 
     return { success: true }

@@ -45,9 +45,9 @@ export {
 
 export type { AllowedModelId, UserType } from "./constants"
 
-// Public API — Errors
-export { ChatbotError, getMessageByErrorCode } from "./errors"
-export type { ErrorType, Surface, ErrorCode, ErrorVisibility } from "./errors"
+// Public API — Errors (re-exported from shared lib)
+export { AppError, getErrorMessage } from "@/lib/errors"
+export type { ErrorType, Surface, ErrorCode, ErrorVisibility } from "@/lib/errors"
 
 // Public API — Schema (for Drizzle/DB consumers)
 export { chats, messages, ipRateLimits, chatRoleEnum } from "./schema"

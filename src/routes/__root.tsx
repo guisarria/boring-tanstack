@@ -1,3 +1,4 @@
+import { QueryClientProvider } from "@tanstack/react-query"
 import {
   createRootRouteWithContext,
   HeadContent,
@@ -5,10 +6,7 @@ import {
 } from "@tanstack/react-router"
 
 import { DefaultNotFound } from "@/components/default-not-found"
-import {
-  type AppRouterContext,
-  TanStackQueryProvider,
-} from "@/components/providers/root-provider"
+import { type AppRouterContext } from "@/components/providers/root-provider"
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { seo } from "@/config/seo"
@@ -52,7 +50,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="selection:text-background dark:selection:text-foreground selection:bg-cyan-700">
-        <TanStackQueryProvider queryClient={queryClient}>
+        <QueryClientProvider client={queryClient}>
           <ThemeProvider
             attribute={"class"}
             defaultTheme="dark"
@@ -62,7 +60,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             {children}
             <Toaster richColors />
           </ThemeProvider>
-        </TanStackQueryProvider>
+        </QueryClientProvider>
         <Scripts />
       </body>
     </html>

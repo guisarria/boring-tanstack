@@ -5,6 +5,8 @@ export type ErrorType =
   | "not_found"
   | "rate_limit"
   | "offline"
+  | "internal_error"
+  | "conflict"
 
 export type Surface =
   | "chat"
@@ -42,6 +44,8 @@ const STATUS_CODES = {
   not_found: 404,
   rate_limit: 429,
   offline: 503,
+  internal_error: 500,
+  conflict: 409,
 } as const satisfies Record<ErrorType, number>
 
 const ERROR_MESSAGES: Partial<Record<ErrorCode, string>> = {
@@ -67,7 +71,10 @@ const ERROR_MESSAGES: Partial<Record<ErrorCode, string>> = {
     "You need to sign in to view this document. Please sign in and try again.",
   "bad_request:document":
     "The request to create or update the document was invalid. Please check your input and try again.",
-  "bad_request:database": "An error occurred while executing a database query.",
+  "internal_error:database":
+    "A database error occurred. Please try again later.",
+  "internal_error:api":
+    "An unexpected server error occurred. Please try again later.",
 }
 
 const DEFAULT_ERROR_MESSAGE = "Something went wrong. Please try again later."
@@ -79,6 +86,8 @@ const VALID_ERROR_TYPES: Record<ErrorType, true> = {
   not_found: true,
   rate_limit: true,
   offline: true,
+  internal_error: true,
+  conflict: true,
 }
 
 const VALID_SURFACES: Record<Surface, true> = {
@@ -115,7 +124,7 @@ function parseErrorCode(code: ErrorCode): { type: ErrorType; surface: Surface } 
   return { type: rawType, surface: rawSurface }
 }
 
-export class ChatbotError extends Error {
+export class AppError extends Error {
   type: ErrorType
   surface: Surface
   statusCode: number
@@ -128,7 +137,7 @@ export class ChatbotError extends Error {
     this.type = type
     this.cause = cause
     this.surface = surface
-    this.message = getMessageByErrorCode(errorCode)
+    this.message = getErrorMessage(errorCode)
     this.statusCode = STATUS_CODES[this.type]
   }
 
@@ -151,6 +160,6 @@ export class ChatbotError extends Error {
   }
 }
 
-export function getMessageByErrorCode(errorCode: ErrorCode): string {
+export function getErrorMessage(errorCode: ErrorCode): string {
   return ERROR_MESSAGES[errorCode] ?? DEFAULT_ERROR_MESSAGE
 }

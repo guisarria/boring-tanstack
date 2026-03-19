@@ -1,13 +1,24 @@
 import { z } from "zod"
 
-import { ChatbotError } from "../errors"
+import { requireSessionResult } from "@/modules/auth/server/auth-service"
+
+import { AppError } from "@/lib/errors"
 import type { ChatMessagePart } from "../validation"
 import {
   getChatById,
   getLatestChatByUserId,
   getMessagesByChatId,
 } from "./queries"
-import { requireUser } from "./require-user"
+
+export async function requireUser(headers: Headers) {
+  const sessionResult = await requireSessionResult(headers)
+
+  if (sessionResult.isErr() || !sessionResult.value.user) {
+    throw new AppError("unauthorized:chat").toResponse()
+  }
+
+  return sessionResult.value.user
+}
 
 const uuidSchema = z.uuid()
 
@@ -54,7 +65,7 @@ export async function loadChatHistory(
     }
 
     if (chat.userId !== user.id) {
-      throw new ChatbotError("forbidden:chat").toResponse()
+      throw new AppError("forbidden:chat").toResponse()
     }
 
     const messages = await getMessagesByChatId({ id: conversationId })

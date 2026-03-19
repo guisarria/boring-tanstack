@@ -9,6 +9,7 @@ import { openRouterText } from "@tanstack/ai-openrouter"
 import { env } from "@/config/env/server"
 
 import { DEFAULT_MODEL_ID, isAllowedModelId } from "../constants"
+import { AppError } from "@/lib/errors"
 import { chatStreamRequestSchema } from "../validation"
 import { parseOptionalConversationId } from "./chat-history"
 import {
@@ -18,8 +19,30 @@ import {
 } from "./message-transforms"
 import { createChat, getChatById, saveMessage } from "./queries"
 import { checkBotId, checkIpRateLimit, checkRateLimit } from "./rate-limit"
-import { requireUser } from "./require-user"
-import { getStringValue, jsonError, wireAbortSignal } from "./utils"
+import { requireUser } from "./chat-history"
+
+function getStringValue(
+  record: Record<string, unknown>,
+  key: string,
+): string | null {
+  const value = record[key]
+  return typeof value === "string" ? value : null
+}
+
+function wireAbortSignal(request: Request, abortController: AbortController) {
+  if (request.signal.aborted) {
+    abortController.abort()
+    return
+  }
+
+  request.signal.addEventListener(
+    "abort",
+    () => {
+      abortController.abort()
+    },
+    { once: true },
+  )
+}
 
 export async function handleChatGet(request: Request): Promise<Response> {
   const url = new URL(request.url)
@@ -28,14 +51,16 @@ export async function handleChatGet(request: Request): Promise<Response> {
   )
 
   if (url.searchParams.has("conversationId") && !conversationId) {
-    return jsonError(400, "Invalid conversationId")
+    return new AppError("bad_request:chat").toResponse()
   }
 
   try {
     const { loadChatHistory } = await import("./chat-history")
     return Response.json(await loadChatHistory(request.headers, conversationId))
   } catch (error) {
-    return error instanceof Response ? error : jsonError(401, "Unauthorized")
+    return error instanceof Response
+      ? error
+      : new AppError("unauthorized:auth").toResponse()
   }
 }
 
@@ -48,23 +73,26 @@ export async function handleChatPost(request: Request): Promise<Response> {
   } catch (error) {
     return error instanceof Response
       ? error
-      : jsonError(401, "Unauthorized")
+      : new AppError("unauthorized:auth").toResponse()
   }
 
   if (!env.OPENROUTER_API_KEY) {
-    return jsonError(500, "OPENROUTER_API_KEY not configured")
+    return new AppError(
+      "internal_error:api",
+      "OPENROUTER_API_KEY not configured",
+    ).toResponse()
   }
 
   let rawBody: unknown
   try {
     rawBody = await request.json()
   } catch {
-    return jsonError(400, "Invalid JSON body")
+    return new AppError("bad_request:api", "Invalid JSON body").toResponse()
   }
 
   const parsed = chatStreamRequestSchema.safeParse(rawBody)
   if (!parsed.success) {
-    return jsonError(400, "Invalid request body")
+    return new AppError("bad_request:api", "Invalid request body").toResponse()
   }
   const body = parsed.data
   const messages = body.messages
@@ -84,13 +112,13 @@ export async function handleChatPost(request: Request): Promise<Response> {
   const selectedChatModel = selectedChatModelRaw ?? DEFAULT_MODEL_ID
 
   if (!isAllowedModelId(selectedChatModel)) {
-    return jsonError(400, "Invalid model")
+    return new AppError("bad_request:api", "Invalid model").toResponse()
   }
 
   const botResult = checkBotId(headers)
 
   if (botResult.isBot) {
-    return jsonError(401, "Unauthorized")
+    return new AppError("unauthorized:auth").toResponse()
   }
 
   const ip = headers.get("x-forwarded-for") || headers.get("x-real-ip")
@@ -105,13 +133,13 @@ export async function handleChatPost(request: Request): Promise<Response> {
       return error
     }
 
-    return jsonError(429, "Rate limited")
+    return new AppError("rate_limit:api").toResponse()
   }
 
   if (conversationUuid) {
     const existingChat = await getChatById({ id: conversationUuid })
     if (existingChat && existingChat.userId !== user.id) {
-      return jsonError(403, "Forbidden")
+      return new AppError("forbidden:chat").toResponse()
     }
     if (!existingChat) {
       await createChat({

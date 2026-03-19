@@ -3,7 +3,7 @@ import { lte, sql } from "drizzle-orm"
 import { db } from "@/db/index"
 
 import { ENTITLEMENTS_BY_USER_TYPE, getUserType } from "../constants"
-import { ChatbotError } from "../errors"
+import { AppError } from "@/lib/errors"
 import { ipRateLimits } from "../schema"
 import { getMessageCountByUserId } from "./queries"
 
@@ -33,7 +33,7 @@ export async function checkRateLimit({
   })
 
   if (messageCount >= ENTITLEMENTS_BY_USER_TYPE[userType].maxMessagesPerHour) {
-    throw new ChatbotError("rate_limit:chat").toResponse()
+    throw new AppError("rate_limit:chat").toResponse()
   }
 }
 
@@ -81,7 +81,7 @@ export async function checkIpRateLimit(
   const count = result.at(0)?.count ?? 0
 
   if (count > MAX_REQUESTS_PER_IP_WINDOW) {
-    throw new ChatbotError("rate_limit:chat").toResponse()
+    throw new AppError("rate_limit:chat").toResponse()
   }
 }
 
