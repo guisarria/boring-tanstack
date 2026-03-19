@@ -10,10 +10,8 @@ import {
   chatQueryKeys,
 } from "@/modules/ai/query-options"
 import {
-  chatHistoryResponseSchema,
   normalizePersistedMessageParts,
   type ChatMessage,
-  type PersistedChatMessage,
 } from "@/modules/ai/validation"
 
 import { ChatComposer } from "./chat-composer"
@@ -28,31 +26,18 @@ const PENDING_ASSISTANT: ChatMessage = {
   createdAt: new Date(),
 }
 
-function dbMessagesToUiMessages(
-  dbMessages: Array<PersistedChatMessage>,
-): Array<ChatMessage> {
-  return dbMessages.map((m) => ({
-    id: m.id,
-    role: m.role,
-    parts: normalizePersistedMessageParts(m.parts),
-    createdAt: m.createdAt,
-  }))
-}
-
-function uiMessagesToChatMessages(
-  messages: Array<{
-    id: string
-    role: ChatMessage["role"]
-    parts: unknown
-    createdAt?: Date
-  }>,
-): Array<ChatMessage> {
-  return messages.map((message) => ({
+function toChatMessage(message: {
+  id: string
+  role: ChatMessage["role"]
+  parts: unknown
+  createdAt?: Date
+}): ChatMessage {
+  return {
     id: message.id,
     role: message.role,
     parts: normalizePersistedMessageParts(message.parts),
     createdAt: message.createdAt,
-  }))
+  }
 }
 
 export function ChatPanel({
@@ -67,14 +52,12 @@ export function ChatPanel({
     chatHistoryQueryOptions(forcedConversationId ?? null),
   )
 
-  const history = chatHistoryResponseSchema.parse(
-    chatHistoryQuery.data ?? {
-      chatId: forcedConversationId ?? null,
-      messages: [],
-    },
-  )
+  const history = chatHistoryQuery.data ?? {
+    chatId: forcedConversationId ?? null,
+    messages: [],
+  }
 
-  const initialMessages = dbMessagesToUiMessages(history.messages)
+  const initialMessages = history.messages.map(toChatMessage)
 
   const chatId = forcedConversationId ?? history.chatId ?? undefined
 
@@ -119,7 +102,7 @@ export function ChatPanel({
   ])
 
   const [draft, setDraft] = useState("")
-  const normalizedMessages = uiMessagesToChatMessages(messages)
+  const normalizedMessages = messages.map(toChatMessage)
 
   const lastMessage = normalizedMessages.at(-1)
   const showThinkingPlaceholder = isLoading && lastMessage?.role === "user"

@@ -45,15 +45,6 @@ export {
 
 export type { AllowedModelId, UserType } from "./constants"
 
-// Errors
-export { AppError, getErrorMessage } from "@/lib/errors"
-export type {
-  ErrorType,
-  Surface,
-  ErrorCode,
-  ErrorVisibility,
-} from "@/lib/errors"
-
 // Schema
 export { chats, messages, ipRateLimits, chatRoleEnum } from "./schema"
 export type { Chat, DBMessage } from "./schema"

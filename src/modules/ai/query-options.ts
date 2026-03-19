@@ -1,4 +1,5 @@
 import { getChatHistory, listChats } from "./functions"
+import { chatHistoryResponseSchema } from "./validation"
 
 const CHAT_STALE_TIME = 30_000
 
@@ -12,11 +13,13 @@ export const chatQueryKeys = {
 export function chatHistoryQueryOptions(conversationId: string | null) {
   return {
     queryKey: chatQueryKeys.history(conversationId),
-    queryFn: ({ signal }: { signal: AbortSignal }) =>
-      getChatHistory({
-        data: { conversationId },
-        signal,
-      }),
+    queryFn: async ({ signal }: { signal: AbortSignal }) =>
+      chatHistoryResponseSchema.parse(
+        await getChatHistory({
+          data: { conversationId },
+          signal,
+        }),
+      ),
     staleTime: CHAT_STALE_TIME,
   }
 }

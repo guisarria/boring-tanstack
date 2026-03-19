@@ -1,6 +1,5 @@
-import type { UIMessage } from "@tanstack/ai-react"
-import { ArrowDownIcon, DownloadIcon } from "lucide-react"
-import type { ComponentProps, ReactNode, RefObject } from "react"
+import { ArrowDownIcon } from "lucide-react"
+import type { ComponentProps, RefObject } from "react"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -84,71 +83,6 @@ export function ConversationScrollButton({
       {...props}
     >
       <ArrowDownIcon className="size-4" />
-    </Button>
-  )
-}
-
-function getMessageText(message: UIMessage): string {
-  return message.parts
-    .filter(
-      (part): part is Extract<UIMessage["parts"][number], { type: "text" }> =>
-        part.type === "text",
-    )
-    .map((part) => part.content)
-    .join("")
-}
-
-function defaultFormatMessage(message: UIMessage): string {
-  const label = message.role.charAt(0).toUpperCase() + message.role.slice(1)
-  return `**${label}:** ${getMessageText(message)}`
-}
-
-export function messagesToMarkdown(
-  messages: UIMessage[],
-  formatMessage: (
-    message: UIMessage,
-    index: number,
-  ) => string = defaultFormatMessage,
-): string {
-  return messages.map((msg, i) => formatMessage(msg, i)).join("\n\n")
-}
-
-export function ConversationDownload({
-  messages,
-  filename = "conversation.md",
-  formatMessage = defaultFormatMessage,
-  className,
-  children,
-  ...props
-}: Omit<ComponentProps<typeof Button>, "onClick" | "children"> & {
-  messages: UIMessage[]
-  filename?: string
-  formatMessage?: (message: UIMessage, index: number) => string
-  children?: ReactNode
-}) {
-  function handleDownload() {
-    const markdown = messagesToMarkdown(messages, formatMessage)
-    const blob = new Blob([markdown], { type: "text/markdown" })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = filename
-    document.body.append(a)
-    a.click()
-    a.remove()
-    URL.revokeObjectURL(url)
-  }
-
-  return (
-    <Button
-      className={cn("absolute top-4 right-4 rounded-full", className)}
-      onClick={handleDownload}
-      size="icon"
-      type="button"
-      variant="outline"
-      {...props}
-    >
-      {children ?? <DownloadIcon className="size-4" />}
     </Button>
   )
 }

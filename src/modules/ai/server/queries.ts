@@ -1,8 +1,8 @@
 import { and, count, eq, gte } from "drizzle-orm"
 
 import { db } from "@/db/index"
-
 import { AppError } from "@/lib/errors"
+
 import { chats, messages } from "../schema"
 import type { ChatMessagePart } from "../validation"
 
@@ -158,14 +158,6 @@ export async function getMessageCountByUserId({
       "Failed to count recent messages",
     )
   }
-}
-
-export async function generateTitleFromUserMessage({
-  message: _message,
-}: {
-  message: { role: string; content: string }
-}) {
-  return "New chat"
 }
 
 export async function saveMessage(message: {

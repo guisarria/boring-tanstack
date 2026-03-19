@@ -7,11 +7,15 @@ import {
 import { openRouterText } from "@tanstack/ai-openrouter"
 
 import { env } from "@/config/env/server"
+import { AppError } from "@/lib/errors"
 
 import { DEFAULT_MODEL_ID, isAllowedModelId } from "../constants"
-import { AppError } from "@/lib/errors"
 import { chatStreamRequestSchema } from "../validation"
-import { parseOptionalConversationId } from "./chat-history"
+import {
+  loadChatHistory,
+  parseOptionalConversationId,
+  requireUser,
+} from "./chat-history"
 import {
   getLastUserMessageParts,
   toPersistedChatMessageParts,
@@ -19,7 +23,6 @@ import {
 } from "./message-transforms"
 import { createChat, getChatById, saveMessage } from "./queries"
 import { checkBotId, checkIpRateLimit, checkRateLimit } from "./rate-limit"
-import { requireUser } from "./chat-history"
 
 function getStringValue(
   record: Record<string, unknown>,
@@ -55,12 +58,11 @@ export async function handleChatGet(request: Request): Promise<Response> {
   }
 
   try {
-    const { loadChatHistory } = await import("./chat-history")
     return Response.json(await loadChatHistory(request.headers, conversationId))
   } catch (error) {
     return error instanceof Response
       ? error
-      : new AppError("unauthorized:auth").toResponse()
+      : new AppError("internal_error:api").toResponse()
   }
 }
 
@@ -237,7 +239,7 @@ export async function handleChatPost(request: Request): Promise<Response> {
           ? undefined
           : Math.max(1, Math.ceil((Date.now() - thinkingStartAt) / 1000))
 
-      void persistAssistantMessageBestEffort({ thinkingDurationSeconds })
+      await persistAssistantMessageBestEffort({ thinkingDurationSeconds })
     }
   }
 
