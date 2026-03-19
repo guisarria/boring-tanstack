@@ -21,12 +21,12 @@
 - **Drizzle ORM**
 - **PostgreSQL**
 - **Server Functions**
-- **T3Env**
 
 ### DX & Infrastructure
 
 - **Vite+**
-- **Oxc && Oxfmt**
+- **Oxc & Oxfmt**
+- **T3Env**
 
 ## Getting Started
 
