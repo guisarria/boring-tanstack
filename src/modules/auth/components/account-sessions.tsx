@@ -192,7 +192,7 @@ export function AccountSessions({
   sessionId: string | undefined
 }) {
   return (
-    <Card className="ring-border">
+    <Card>
       <CardHeader>
         <CardTitle>Active Sessions</CardTitle>
         <CardDescription>

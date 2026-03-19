@@ -36,16 +36,16 @@ function ItemSeparator({
 
 const itemVariants = cva(
   "group/item flex w-full flex-wrap items-center rounded-md border text-xs/relaxed transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-muted",
+
   {
     variants: {
       variant: {
         default: "border-transparent",
         outline: "border-border bg-card",
         muted: "border-transparent bg-muted/50",
-        success: "border-success-border bg-success-bg text-success-text",
-        info: "border-info-border bg-info-bg text-info-text",
-        warning: "border-warning-border bg-warning-bg text-warning-text",
-        error: "border-error-border bg-error-bg text-error-text",
+        info: "border-info/32 bg-info/4 *:[&>svg]:text-info",
+        success: "border-success/32 bg-success/4 *:[&>svg]:text-success",
+        warning: "border-warning/32 bg-warning/4 *:[&>svg]:text-warning",
       },
       size: {
         default: "gap-2.5 px-3 py-2.5",

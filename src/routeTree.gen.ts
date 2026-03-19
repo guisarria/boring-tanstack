@@ -13,6 +13,7 @@ import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as marketingRouteRouteImport } from './routes/(marketing)/route'
 import { Route as DebugIndexRouteImport } from './routes/debug/index'
 import { Route as marketingIndexRouteImport } from './routes/(marketing)/index'
+import { Route as DebugComponentTestRouteImport } from './routes/debug/component-test'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthSettingsRouteRouteImport } from './routes/_auth/settings/route'
 import { Route as AuthDashboardRouteRouteImport } from './routes/_auth/dashboard/route'
@@ -47,6 +48,11 @@ const marketingIndexRoute = marketingIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => marketingRouteRoute,
+} as any)
+const DebugComponentTestRoute = DebugComponentTestRouteImport.update({
+  id: '/debug/component-test',
+  path: '/debug/component-test',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthDashboardRouteRouteWithChildren
   '/settings': typeof AuthSettingsRouteRouteWithChildren
   '/api/chat': typeof ApiChatRoute
+  '/debug/component-test': typeof DebugComponentTestRoute
   '/debug/': typeof DebugIndexRoute
   '/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof marketingIndexRoute
   '/api/chat': typeof ApiChatRoute
+  '/debug/component-test': typeof DebugComponentTestRoute
   '/debug': typeof DebugIndexRoute
   '/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/_auth/dashboard': typeof AuthDashboardRouteRouteWithChildren
   '/_auth/settings': typeof AuthSettingsRouteRouteWithChildren
   '/api/chat': typeof ApiChatRoute
+  '/debug/component-test': typeof DebugComponentTestRoute
   '/(marketing)/': typeof marketingIndexRoute
   '/debug/': typeof DebugIndexRoute
   '/_auth/dashboard/inbox': typeof AuthDashboardInboxRoute
@@ -198,6 +207,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/settings'
     | '/api/chat'
+    | '/debug/component-test'
     | '/debug/'
     | '/dashboard/inbox'
     | '/dashboard/my-issues'
@@ -214,6 +224,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/api/chat'
+    | '/debug/component-test'
     | '/debug'
     | '/dashboard/inbox'
     | '/dashboard/my-issues'
@@ -235,6 +246,7 @@ export interface FileRouteTypes {
     | '/_auth/dashboard'
     | '/_auth/settings'
     | '/api/chat'
+    | '/debug/component-test'
     | '/(marketing)/'
     | '/debug/'
     | '/_auth/dashboard/inbox'
@@ -254,6 +266,7 @@ export interface RootRouteChildren {
   marketingRouteRoute: typeof marketingRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   ApiChatRoute: typeof ApiChatRoute
+  DebugComponentTestRoute: typeof DebugComponentTestRoute
   DebugIndexRoute: typeof DebugIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -287,6 +300,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof marketingIndexRouteImport
       parentRoute: typeof marketingRouteRoute
+    }
+    '/debug/component-test': {
+      id: '/debug/component-test'
+      path: '/debug/component-test'
+      fullPath: '/debug/component-test'
+      preLoaderRoute: typeof DebugComponentTestRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/chat': {
       id: '/api/chat'
@@ -494,6 +514,7 @@ const rootRouteChildren: RootRouteChildren = {
   marketingRouteRoute: marketingRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   ApiChatRoute: ApiChatRoute,
+  DebugComponentTestRoute: DebugComponentTestRoute,
   DebugIndexRoute: DebugIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
