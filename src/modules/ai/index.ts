@@ -1,4 +1,4 @@
-// Public API — Client
+// Client
 export {
   chatQueryKeys,
   chatHistoryQueryOptions,
@@ -6,7 +6,7 @@ export {
 } from "./query-options"
 export { ChatPanel } from "./components/chat/chat-panel"
 
-// Public API — Validation & Types
+// Validation & Types
 export {
   chatRoleSchema,
   uiMessageSchema,
@@ -31,10 +31,10 @@ export type {
   DeleteChatInput,
 } from "./validation"
 
-// Public API — Server Functions
+// Server Functions
 export { listChats, getChatHistory, renameChat, deleteChat } from "./functions"
 
-// Public API — Constants
+// Constants
 export {
   ALLOWED_MODEL_IDS,
   DEFAULT_MODEL_ID,
@@ -45,10 +45,15 @@ export {
 
 export type { AllowedModelId, UserType } from "./constants"
 
-// Public API — Errors (re-exported from shared lib)
+// Errors
 export { AppError, getErrorMessage } from "@/lib/errors"
-export type { ErrorType, Surface, ErrorCode, ErrorVisibility } from "@/lib/errors"
+export type {
+  ErrorType,
+  Surface,
+  ErrorCode,
+  ErrorVisibility,
+} from "@/lib/errors"
 
-// Public API — Schema (for Drizzle/DB consumers)
+// Schema
 export { chats, messages, ipRateLimits, chatRoleEnum } from "./schema"
 export type { Chat, DBMessage } from "./schema"

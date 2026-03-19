@@ -11,6 +11,7 @@ export function PasswordField(props: InputFieldProps) {
     <FieldBase {...props}>
       <PasswordInput
         aria-invalid={isInvalid}
+        autoComplete={props.autoComplete}
         disabled={props.disabled}
         id={field.name}
         name={field.name}

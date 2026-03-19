@@ -13,7 +13,13 @@ import {
   Plus,
   Trash2,
 } from "lucide-react"
-import { useEffect, useMemo, useState, useTransition, type SubmitEvent } from "react"
+import {
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+  type SubmitEvent,
+} from "react"
 import { toast } from "sonner"
 
 import {
@@ -56,8 +62,8 @@ import {
   SidebarMenu,
   SidebarRail,
 } from "@/components/ui/sidebar"
-import { deleteChat, renameChat } from "@/modules/ai/functions"
-import { chatListQueryOptions, chatQueryKeys } from "@/modules/ai/query-options"
+import { chatListQueryOptions, chatQueryKeys } from "@/modules/ai"
+import { deleteChat, renameChat } from "@/modules/ai"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
 
 import { type NavItem, SidebarNavGroup } from "./sidebar-nav-group"

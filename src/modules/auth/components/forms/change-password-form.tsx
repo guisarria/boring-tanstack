@@ -84,6 +84,13 @@ export function ChangePasswordForm() {
             }}
           >
             <FieldGroup>
+              <input
+                aria-hidden
+                autoComplete="username"
+                className="hidden"
+                tabIndex={-1}
+                type="text"
+              />
               <form.AppField
                 name="currentPassword"
                 validators={{

@@ -21,7 +21,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { chatQueryKeys } from "@/modules/ai/query-options"
+import { chatQueryKeys } from "@/modules/ai"
 import { authClient } from "@/modules/auth/auth-client"
 import type { ActiveSessions } from "@/modules/auth/schema"
 

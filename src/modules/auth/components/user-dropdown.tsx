@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
-import { chatQueryKeys } from "@/modules/ai/query-options"
+import { chatQueryKeys } from "@/modules/ai"
 import { UserAvatar } from "@/modules/auth/components/user-avatar"
 
 import { authClient } from "../auth-client"

@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router"
 
-import { chatListQueryOptions } from "@/modules/ai/query-options"
+import { chatListQueryOptions } from "@/modules/ai"
 import { AppHeader } from "@/routes/_auth/-components/app-sidebar-header"
 
 import { AppSidebarLayout } from "../-components/app-sidebar-layout"

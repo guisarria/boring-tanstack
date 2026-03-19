@@ -2,7 +2,7 @@ import { Field, FieldGroup } from "@/components/ui/field"
 import { cn } from "@/lib/utils"
 
 import { authClient } from "../auth-client"
-import { OAUTH_PROVIDERS, type OAuthProvider } from "../o-auth-providers"
+import { OAUTH_PROVIDERS, type OAuthProvider } from "../oauth-providers"
 import { AuthActionButton } from "./auth-action-button"
 
 function handleSocialLogin(provider: OAuthProvider) {
