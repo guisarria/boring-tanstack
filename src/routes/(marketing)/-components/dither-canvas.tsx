@@ -168,8 +168,8 @@ export function DitherCanvas({ className }: { className?: string }) {
     }
 
     const onVisibilityChange = () => {
-      if (document.hidden) stop()
-      else start()
+      if (document.hidden) return stop()
+      start()
     }
 
     start()

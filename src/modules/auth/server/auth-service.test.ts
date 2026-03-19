@@ -76,7 +76,7 @@ describe("getSessionResult", () => {
 
     expect(result.isErr()).toBe(true)
     expect(result._unsafeUnwrapErr()).toMatchObject({
-      code: "auth_provider_failure",
+      code: "internal_error:auth",
       message: "Auth provider request failed",
     })
   })
@@ -100,7 +100,7 @@ describe("requireSessionResult", () => {
 
     expect(result.isErr()).toBe(true)
     expect(result._unsafeUnwrapErr()).toMatchObject({
-      code: "unauthorized",
+      code: "unauthorized:auth",
       message: "Unauthorized",
     })
   })
@@ -111,6 +111,6 @@ describe("requireSessionResult", () => {
     const result = await requireSessionResult(new Headers())
 
     expect(result.isErr()).toBe(true)
-    expect(result._unsafeUnwrapErr().code).toBe("auth_provider_failure")
+    expect(result._unsafeUnwrapErr().code).toBe("internal_error:auth")
   })
 })

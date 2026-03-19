@@ -1,6 +1,7 @@
 import {
   chat,
   StreamProcessor,
+  streamToText,
   toServerSentEventsResponse,
   type StreamChunk,
 } from "@tanstack/ai"
@@ -21,7 +22,12 @@ import {
   toPersistedChatMessageParts,
   toTextOnlyModelMessages,
 } from "./message-transforms"
-import { createChat, getChatById, saveMessage } from "./queries"
+import {
+  createChat,
+  getChatById,
+  saveMessage,
+  updateChatTitle,
+} from "./queries"
 import { checkBotId, checkIpRateLimit, checkRateLimit } from "./rate-limit"
 
 function getStringValue(
@@ -45,6 +51,25 @@ function wireAbortSignal(request: Request, abortController: AbortController) {
     },
     { once: true },
   )
+}
+
+async function generateTitleFromUserMessage(
+  userMessage: string,
+): Promise<string> {
+  const stream = chat({
+    adapter: openRouterText(DEFAULT_MODEL_ID),
+    messages: [
+      {
+        role: "user",
+        content:
+          "Generate a short title (max 80 characters) for a conversation that starts with the following message. Respond with only the title text, no quotes or extra formatting.\n\n" +
+          userMessage,
+      },
+    ],
+  })
+
+  const title = (await streamToText(stream)).trim()
+  return title ? title.slice(0, 80) : "New chat"
 }
 
 export async function handleChatGet(request: Request): Promise<Response> {
@@ -138,12 +163,15 @@ export async function handleChatPost(request: Request): Promise<Response> {
     return new AppError("rate_limit:api").toResponse()
   }
 
+  let isNewChat = false
+
   if (conversationUuid) {
     const existingChat = await getChatById({ id: conversationUuid })
     if (existingChat && existingChat.userId !== user.id) {
       return new AppError("forbidden:chat").toResponse()
     }
     if (!existingChat) {
+      isNewChat = true
       await createChat({
         id: conversationUuid,
         userId: user.id,
@@ -161,6 +189,27 @@ export async function handleChatPost(request: Request): Promise<Response> {
         attachments: [],
         createdAt: new Date(),
       })
+
+      if (isNewChat) {
+        const userText = userParts
+          .filter(
+            (p): p is { type: "text"; content: string } => p.type === "text",
+          )
+          .map((p) => p.content)
+          .join("")
+
+        if (userText) {
+          void generateTitleFromUserMessage(userText)
+            .then((title) =>
+              updateChatTitle({
+                id: conversationUuid,
+                userId: user.id,
+                title,
+              }),
+            )
+            .catch(() => {})
+        }
+      }
     }
   }
 
