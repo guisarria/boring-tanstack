@@ -13,7 +13,7 @@
     "fix": "vp check --fix",
     "format": "vp fmt . --fix",
     "typecheck": "tsc --noEmit",
-    "auth:generate": "pnpm dlx @better-auth/cli@latest generate --config ./src/modules/auth/auth.ts --y ",
+    "auth:generate": "vp dlx @better-auth/cli@latest generate --config ./src/modules/auth/server/auth.ts --y ",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",

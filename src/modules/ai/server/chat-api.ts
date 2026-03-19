@@ -1,128 +1,25 @@
 import {
   chat,
-  convertMessagesToModelMessages,
   StreamProcessor,
   toServerSentEventsResponse,
-  type ModelMessage,
   type StreamChunk,
 } from "@tanstack/ai"
 import { openRouterText } from "@tanstack/ai-openrouter"
 
 import { env } from "@/config/env/server"
-import { requireSessionResult } from "@/modules/auth/auth-service.server"
 
+import { DEFAULT_MODEL_ID, isAllowedModelId } from "../constants"
+import { chatStreamRequestSchema } from "../validation"
+import { parseOptionalConversationId } from "./chat-history"
 import {
-  loadChatHistory,
-  parseOptionalConversationId,
-} from "./chat-history.server"
-import { DEFAULT_CHAT_MODEL, isAllowedModelId } from "./constants"
-import { ChatbotError } from "./errors"
-import { createChat, getChatById, saveMessage } from "./queries.server"
-import {
-  checkBotId,
-  checkIpRateLimit,
-  checkRateLimit,
-} from "./rate-limit.server"
-import {
-  chatStreamRequestSchema,
-  type ChatMessagePart,
-  type ChatStreamRequestMessage,
-} from "./validation"
-
-function jsonError(status: number, error: string) {
-  return Response.json({ error }, { status })
-}
-
-function getStringValue(
-  record: Record<string, unknown>,
-  key: string,
-): string | null {
-  const value = record[key]
-  return typeof value === "string" ? value : null
-}
-
-async function requireUser(headers: Headers) {
-  const sessionResult = await requireSessionResult(headers)
-
-  if (sessionResult.isErr() || !sessionResult.value.user) {
-    throw new ChatbotError("unauthorized:chat").toResponse()
-  }
-
-  return sessionResult.value.user
-}
-
-function getLastUserMessageParts(messages: Array<ChatStreamRequestMessage>) {
-  return (
-    [...messages].reverse().find((message) => message.role === "user")?.parts ??
-    null
-  )
-}
-
-type TextOnlyModelMessage = ModelMessage<string | null>
-
-function getTextOnlyContent(content: ModelMessage["content"]): string | null {
-  if (typeof content === "string" || content === null) {
-    return content
-  }
-
-  const textContent = content
-    .filter((part) => part.type === "text")
-    .map((part) => part.content)
-    .join("")
-
-  return textContent || null
-}
-
-function toTextOnlyModelMessages(
-  messages: Array<ChatStreamRequestMessage>,
-): Array<TextOnlyModelMessage> {
-  return convertMessagesToModelMessages(messages).map((message) => ({
-    ...message,
-    content: getTextOnlyContent(message.content),
-  }))
-}
-
-function toPersistedChatMessageParts(
-  parts: Array<{ type: string; content?: unknown }>,
-  thinkingDurationSeconds?: number,
-): Array<ChatMessagePart> {
-  const persistedParts: Array<ChatMessagePart> = []
-
-  for (const part of parts) {
-    if (part.type === "text" && typeof part.content === "string") {
-      persistedParts.push({
-        type: "text",
-        content: part.content,
-      })
-      continue
-    }
-
-    if (part.type === "thinking" && typeof part.content === "string") {
-      persistedParts.push({
-        type: "thinking",
-        content: part.content,
-        duration: thinkingDurationSeconds,
-      })
-    }
-  }
-
-  return persistedParts
-}
-
-function wireAbortSignal(request: Request, abortController: AbortController) {
-  if (request.signal.aborted) {
-    abortController.abort()
-    return
-  }
-
-  request.signal.addEventListener(
-    "abort",
-    () => {
-      abortController.abort()
-    },
-    { once: true },
-  )
-}
+  getLastUserMessageParts,
+  toPersistedChatMessageParts,
+  toTextOnlyModelMessages,
+} from "./message-transforms"
+import { createChat, getChatById, saveMessage } from "./queries"
+import { checkBotId, checkIpRateLimit, checkRateLimit } from "./rate-limit"
+import { requireUser } from "./require-user"
+import { getStringValue, jsonError, wireAbortSignal } from "./utils"
 
 export async function handleChatGet(request: Request): Promise<Response> {
   const url = new URL(request.url)
@@ -135,6 +32,7 @@ export async function handleChatGet(request: Request): Promise<Response> {
   }
 
   try {
+    const { loadChatHistory } = await import("./chat-history")
     return Response.json(await loadChatHistory(request.headers, conversationId))
   } catch (error) {
     return error instanceof Response ? error : jsonError(401, "Unauthorized")
@@ -179,13 +77,11 @@ export async function handleChatPost(request: Request): Promise<Response> {
     body.model ??
     null
 
-  const selectedChatModelCandidate = selectedChatModelRaw ?? DEFAULT_CHAT_MODEL
+  const selectedChatModel = selectedChatModelRaw ?? DEFAULT_MODEL_ID
 
-  if (!isAllowedModelId(selectedChatModelCandidate)) {
+  if (!isAllowedModelId(selectedChatModel)) {
     return new Response("Invalid model", { status: 400 })
   }
-
-  const selectedChatModel = selectedChatModelCandidate
 
   const botResult = checkBotId(headers)
 

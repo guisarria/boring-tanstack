@@ -9,7 +9,7 @@ vi.mock("./auth", () => ({
 }))
 
 import { auth } from "./auth"
-import { getSessionResult, requireSessionResult } from "./auth-service.server"
+import { getSessionResult, requireSessionResult } from "./auth-service"
 
 const now = new Date()
 

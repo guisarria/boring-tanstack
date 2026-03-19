@@ -1,7 +1,7 @@
 import { errAsync, okAsync, ResultAsync } from "neverthrow"
 
+import type { Session, User } from "../schema"
 import { auth } from "./auth"
-import type { Session, User } from "./schema"
 
 export type PublicUser = Pick<
   User,

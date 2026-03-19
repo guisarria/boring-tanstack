@@ -6,7 +6,7 @@ import {
   getSessionResult,
   listSessionsResult,
   requireSessionResult,
-} from "./auth-service.server"
+} from "./server/auth-service"
 
 function toHttpError(error: AuthServiceError): Response {
   if (error.code === "unauthorized") {

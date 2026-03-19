@@ -1,5 +1,5 @@
 import { SendIcon } from "lucide-react"
-import { useCallback, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -17,16 +17,16 @@ export function ChatComposer({
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  const adjustHeight = useCallback(() => {
+  function adjustHeight() {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto"
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 2}px`
     }
-  }, [])
+  }
 
   useEffect(() => {
     adjustHeight()
-  }, [value, adjustHeight])
+  }, [value])
 
   return (
     <div className="py-2">

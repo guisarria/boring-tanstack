@@ -18,7 +18,7 @@ vi.mock("@/db/index", () => ({
   },
 }))
 
-import { deleteChatById } from "./queries.server"
+import { deleteChatById } from "./queries"
 
 describe("deleteChatById", () => {
   beforeEach(() => {

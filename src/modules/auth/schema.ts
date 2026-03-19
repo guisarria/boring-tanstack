@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm"
 import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core"
 
-import type { auth } from "./auth"
+import type { auth } from "./server/auth"
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),

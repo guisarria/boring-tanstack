@@ -1,15 +1,7 @@
 import type { UIMessage } from "@tanstack/ai-react"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import type { ComponentProps, HTMLAttributes, ReactElement } from "react"
-import {
-  createContext,
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react"
+import { createContext, use, useEffect, useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group"
@@ -123,7 +115,7 @@ const MessageBranchContext = createContext<MessageBranchContextType | null>(
 )
 
 const useMessageBranch = () => {
-  const context = useContext(MessageBranchContext)
+  const context = use(MessageBranchContext)
 
   if (!context) {
     throw new Error(
@@ -148,45 +140,39 @@ export const MessageBranch = ({
   const [currentBranch, setCurrentBranch] = useState(defaultBranch)
   const [branches, setBranches] = useState<ReactElement[]>([])
 
-  const handleBranchChange = useCallback(
-    (newBranch: number) => {
-      setCurrentBranch(newBranch)
-      onBranchChange?.(newBranch)
-    },
-    [onBranchChange],
-  )
+  function handleBranchChange(newBranch: number) {
+    setCurrentBranch(newBranch)
+    onBranchChange?.(newBranch)
+  }
 
-  const goToPrevious = useCallback(() => {
+  function goToPrevious() {
     const newBranch =
       currentBranch > 0 ? currentBranch - 1 : branches.length - 1
     handleBranchChange(newBranch)
-  }, [currentBranch, branches.length, handleBranchChange])
+  }
 
-  const goToNext = useCallback(() => {
+  function goToNext() {
     const newBranch =
       currentBranch < branches.length - 1 ? currentBranch + 1 : 0
     handleBranchChange(newBranch)
-  }, [currentBranch, branches.length, handleBranchChange])
+  }
 
-  const contextValue = useMemo<MessageBranchContextType>(
-    () => ({
-      branches,
-      currentBranch,
-      goToNext,
-      goToPrevious,
-      setBranches,
-      totalBranches: branches.length,
-    }),
-    [branches, currentBranch, goToNext, goToPrevious],
-  )
+  const contextValue: MessageBranchContextType = {
+    branches,
+    currentBranch,
+    goToNext,
+    goToPrevious,
+    setBranches,
+    totalBranches: branches.length,
+  }
 
   return (
-    <MessageBranchContext.Provider value={contextValue}>
+    <MessageBranchContext value={contextValue}>
       <div
         className={cn("grid w-full gap-2 [&>div]:pb-0", className)}
         {...props}
       />
-    </MessageBranchContext.Provider>
+    </MessageBranchContext>
   )
 }
 
@@ -315,8 +301,8 @@ export const MessageBranchPage = ({
 
 export type MessageResponseProps = AssistantMarkdownProps
 
-export const MessageResponse = memo(
-  ({ className, ...props }: MessageResponseProps) => (
+export function MessageResponse({ className, ...props }: MessageResponseProps) {
+  return (
     <AssistantMarkdown
       mode="streaming"
       animated={{ animation: "fadeIn", stagger: 0 }}
@@ -326,28 +312,5 @@ export const MessageResponse = memo(
       )}
       {...props}
     />
-  ),
-  (prevProps, nextProps) =>
-    prevProps.children === nextProps.children &&
-    nextProps.isAnimating === prevProps.isAnimating,
-)
-
-MessageResponse.displayName = "MessageResponse"
-
-export type MessageToolbarProps = ComponentProps<"div">
-
-export const MessageToolbar = ({
-  className,
-  children,
-  ...props
-}: MessageToolbarProps) => (
-  <div
-    className={cn(
-      "mt-4 flex w-full items-center justify-between gap-4",
-      className,
-    )}
-    {...props}
-  >
-    {children}
-  </div>
-)
+  )
+}

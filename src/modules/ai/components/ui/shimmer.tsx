@@ -1,5 +1,4 @@
 import type { CSSProperties, ElementType } from "react"
-import { memo, useMemo } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -11,17 +10,14 @@ export interface TextShimmerProps {
   spread?: number
 }
 
-const ShimmerComponent = ({
+export function Shimmer({
   children,
   as: Component = "p",
   className,
   duration = 2,
   spread = 2,
-}: TextShimmerProps) => {
-  const dynamicSpread = useMemo(
-    () => (children?.length ?? 0) * spread,
-    [children, spread],
-  )
+}: TextShimmerProps) {
+  const dynamicSpread = (children?.length ?? 0) * spread
 
   return (
     <Component
@@ -46,5 +42,3 @@ const ShimmerComponent = ({
     </Component>
   )
 }
-
-export const Shimmer = memo(ShimmerComponent)

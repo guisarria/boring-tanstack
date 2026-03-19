@@ -1,40 +1,21 @@
 import { z } from "zod"
 
-import { requireSessionResult } from "@/modules/auth/auth-service.server"
-
-import { ChatbotError } from "./errors"
+import { ChatbotError } from "../errors"
+import type { ChatMessagePart } from "../validation"
 import {
   getChatById,
   getLatestChatByUserId,
   getMessagesByChatId,
-} from "./queries.server"
-import type { ChatMessagePart } from "./validation"
+} from "./queries"
+import { requireUser } from "./require-user"
 
 const uuidSchema = z.uuid()
-
-function toUnauthorizedResponse(error: unknown) {
-  if (error instanceof Response) {
-    return error
-  }
-
-  return new Response("Unauthorized", { status: 401 })
-}
 
 export function parseOptionalConversationId(value: unknown): string | null {
   if (typeof value !== "string") return null
 
   const result = uuidSchema.safeParse(value)
   return result.success ? result.data : null
-}
-
-async function requireUser(headers: Headers) {
-  const authResult = await requireSessionResult(headers)
-
-  if (authResult.isErr() || !authResult.value.user) {
-    throw new ChatbotError("unauthorized:chat").toResponse()
-  }
-
-  return authResult.value.user
 }
 
 function serializePersistedMessages(
@@ -96,5 +77,3 @@ export async function loadChatHistory(
     messages: serializePersistedMessages(messages),
   }
 }
-
-export { toUnauthorizedResponse }

@@ -7,9 +7,9 @@ import { env } from "@/config/env/server"
 import { db } from "@/db"
 import { schema } from "@/db/index"
 
-import PasswordResetEmail from "./emails/password-reset-email"
-import { resend } from "./emails/resend"
-import VerificationEmail from "./emails/verification-email"
+import PasswordResetEmail from "../emails/password-reset-email"
+import { resend } from "../emails/resend"
+import VerificationEmail from "../emails/verification-email"
 
 export const auth = betterAuth({
   appName: "Boring Tanstack",

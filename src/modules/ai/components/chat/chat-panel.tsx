@@ -1,7 +1,7 @@
 import { fetchServerSentEvents, useChat } from "@tanstack/ai-react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 
 import { Container } from "@/components/ui/design-system"
@@ -67,21 +67,14 @@ export function ChatPanel({
     chatHistoryQueryOptions(forcedConversationId ?? null),
   )
 
-  const history = useMemo(
-    () =>
-      chatHistoryResponseSchema.parse(
-        chatHistoryQuery.data ?? {
-          chatId: forcedConversationId ?? null,
-          messages: [],
-        },
-      ),
-    [chatHistoryQuery.data, forcedConversationId],
+  const history = chatHistoryResponseSchema.parse(
+    chatHistoryQuery.data ?? {
+      chatId: forcedConversationId ?? null,
+      messages: [],
+    },
   )
 
-  const initialMessages = useMemo(
-    () => dbMessagesToUiMessages(history.messages),
-    [history.messages],
-  )
+  const initialMessages = dbMessagesToUiMessages(history.messages)
 
   const chatId = forcedConversationId ?? history.chatId ?? undefined
 
@@ -126,10 +119,7 @@ export function ChatPanel({
   ])
 
   const [draft, setDraft] = useState("")
-  const normalizedMessages = useMemo(
-    () => uiMessagesToChatMessages(messages),
-    [messages],
-  )
+  const normalizedMessages = uiMessagesToChatMessages(messages)
 
   const lastMessage = normalizedMessages.at(-1)
   const showThinkingPlaceholder = isLoading && lastMessage?.role === "user"

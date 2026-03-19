@@ -2,14 +2,14 @@ import { createServerFn } from "@tanstack/react-start"
 import { getRequestHeaders } from "@tanstack/react-start/server"
 import { z } from "zod"
 
-import { getSessionResult } from "../auth/auth-service.server"
-import { loadChatHistory } from "./chat-history.server"
+import { getSessionResult } from "../auth/server/auth-service"
 import { ChatbotError } from "./errors"
+import { loadChatHistory } from "./server/chat-history"
 import {
   deleteChatById,
   getChatsByUserId,
   updateChatTitle,
-} from "./queries.server"
+} from "./server/queries"
 import { deleteChatSchema, renameChatSchema } from "./validation"
 
 const chatHistoryInputSchema = z.object({
