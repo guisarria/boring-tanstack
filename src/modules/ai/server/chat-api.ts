@@ -62,7 +62,7 @@ async function generateTitleFromUserMessage(
       {
         role: "user",
         content:
-          "Generate a short title (max 80 characters) for a conversation that starts with the following message. Respond with only the title text, no quotes or extra formatting.\n\n" +
+          "Generate a concise title (3-6 words, max 80 chars). Never return empty.\n\n" +
           userMessage,
       },
     ],
@@ -199,7 +199,7 @@ export async function handleChatPost(request: Request): Promise<Response> {
           .join("")
 
         if (userText) {
-          void generateTitleFromUserMessage(userText)
+          generateTitleFromUserMessage(userText)
             .then((title) =>
               updateChatTitle({
                 id: conversationUuid,

@@ -7,7 +7,7 @@ import {
   Plus,
   Trash2,
 } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 
 import {
   DropdownMenu,
@@ -25,6 +25,11 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
 } from "@/components/ui/sidebar"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { chatListQueryOptions, chatQueryKeys } from "@/modules/ai"
 
 import { DeleteDialog } from "./chat-delete-dialog"
@@ -45,9 +50,7 @@ export function SidebarChatList() {
   const queryClient = useQueryClient()
   const location = useLocation()
 
-  const activeConversationId = useMemo(() => {
-    return getConversationIdFromSearch(location.search)
-  }, [location.search])
+  const activeConversationId = getConversationIdFromSearch(location.search)
 
   const chatHistoryQuery = useQuery(chatListQueryOptions())
   const chatHistory = chatHistoryQuery.data?.chats ?? []
@@ -62,7 +65,10 @@ export function SidebarChatList() {
   }
 
   function refreshChats() {
-    void queryClient.invalidateQueries({ queryKey: chatQueryKeys.all })
+    queryClient.invalidateQueries({
+      queryKey: chatQueryKeys.all,
+      exact: true,
+    })
   }
 
   function handleDeleted(deletedId: string) {
@@ -105,15 +111,21 @@ export function SidebarChatList() {
                       location.pathname === "/chat" &&
                       activeConversationId === chat.id
                     }
-                    tooltip={chat.title}
                   >
                     <MessageSquare
                       className="text-muted-foreground"
                       strokeWidth={1.5}
                     />
-                    <span className="text-sm text-foreground/90">
-                      {chat.title}
-                    </span>
+                    <Tooltip>
+                      <TooltipTrigger
+                        render={
+                          <span className="text-sm text-foreground/90">
+                            {chat.title}
+                          </span>
+                        }
+                      />
+                      <TooltipContent>{chat.title}</TooltipContent>
+                    </Tooltip>
                   </SidebarMenuButton>
 
                   <DropdownMenu>
