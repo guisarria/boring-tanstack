@@ -186,7 +186,7 @@ export function ReasoningTrigger({
   return (
     <Collapsible.Trigger
       className={cn(
-        "text-muted-foreground hover:text-foreground flex w-full items-center gap-2 text-sm transition-colors",
+        "flex w-full items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground",
         className,
       )}
       {...props}
@@ -219,7 +219,7 @@ export function ReasoningContent({
     <Collapsible.Panel
       className={cn(
         "mt-4 overflow-hidden text-sm",
-        "data-[state=closed]:animate-out data-[state=open]:animate-in text-muted-foreground outline-none",
+        "text-muted-foreground outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
         className,
       )}
       {...props}

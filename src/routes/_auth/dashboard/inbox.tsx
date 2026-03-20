@@ -69,7 +69,7 @@ function RouteComponent() {
         <ItemGroup className="p-2">
           {email.map((mail) => (
             <Item
-              className={"hover:bg-muted transition-colors"}
+              className={"transition-colors hover:bg-muted"}
               key={mail.title}
             >
               <ItemMedia variant="default">
@@ -103,7 +103,7 @@ function RouteComponent() {
       <ResizableHandle />
 
       <ResizablePanel>
-        <Empty className="text-muted-foreground flex h-full flex-1 flex-col items-center justify-center">
+        <Empty className="flex h-full flex-1 flex-col items-center justify-center text-muted-foreground">
           <InboxIcon absoluteStrokeWidth className="size-40" strokeWidth={1} />
           <EmptyTitle>No notifications</EmptyTitle>
         </Empty>

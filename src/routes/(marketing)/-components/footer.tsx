@@ -5,7 +5,7 @@ import { Icons } from "@/components/ui/icons"
 
 export function Footer() {
   return (
-    <footer className="text-muted-foreground w-full pb-4 text-sm">
+    <footer className="w-full pb-4 text-sm text-muted-foreground">
       <Container className="flex justify-between">
         <p>© Boring TanStack</p>
         <nav className="flex gap-x-12">

@@ -58,7 +58,7 @@ export function ChatComposer({
         <Button
           type="submit"
           size="icon-lg"
-          className="bg-foreground text-background rounded-sm p-4.5"
+          className="rounded-sm bg-foreground p-4.5 text-background"
           disabled={disabled || !value.trim()}
         >
           <SendIcon />

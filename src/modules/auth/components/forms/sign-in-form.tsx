@@ -131,7 +131,7 @@ export function SignInForm() {
               <form.SubmitButton isPending={isPending}>
                 Continue with Email
               </form.SubmitButton>
-              <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card my-0.5">
+              <FieldSeparator className="my-0.5 *:data-[slot=field-separator-content]:bg-card">
                 Or continue with
               </FieldSeparator>
               <SocialAuthButtons />
@@ -140,7 +140,7 @@ export function SignInForm() {
         </form.AppForm>
       </CardContent>
       <CardFooter>
-        <span className="text-muted-foreground flex w-full items-center justify-center gap-x-1 text-center text-sm">
+        <span className="flex w-full items-center justify-center gap-x-1 text-center text-sm text-muted-foreground">
           Don&apos;t have an account?
           <ButtonLink variant="link" className="px-0 text-sm" to="/sign-up">
             Sign up

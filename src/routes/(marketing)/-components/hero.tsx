@@ -18,7 +18,7 @@ function Hero() {
             Bootstrap your app
             <br /> with the best defaults
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-lg text-muted-foreground">
             TanStack Start template
           </p>
           <div className="mt-4">

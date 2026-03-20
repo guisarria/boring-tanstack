@@ -66,7 +66,7 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="text-sm leading-none font-medium">{user.name}</p>
-              <p className="text-muted-foreground size-xs truncate leading-none">
+              <p className="size-xs truncate leading-none text-muted-foreground">
                 {user.email}
               </p>
             </div>

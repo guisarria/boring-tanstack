@@ -134,7 +134,7 @@ export function ChatPanel({
   }
 
   return (
-    <Container className="h-full max-w-5xl overflow-auto items-stretch justify-between flex flex-col">
+    <Container className="flex h-full max-w-5xl flex-col items-stretch justify-between overflow-auto">
       <ChatMessageList
         messages={displayMessages}
         streamingMessageId={streamingMessageId}

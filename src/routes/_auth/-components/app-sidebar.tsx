@@ -304,7 +304,7 @@ export function AppSidebar({
 
       <SidebarContent>
         {!location.pathname.startsWith("/dashboard") && (
-          <div className="text-xs text-muted-foreground px-2 pt-2">
+          <div className="px-2 pt-2 text-xs text-muted-foreground">
             <SidebarMenuItem>
               <SidebarMenuButton render={<Link to="/dashboard" />}>
                 <CornerUpLeftIcon
@@ -319,14 +319,14 @@ export function AppSidebar({
 
         {isChatRoute && (
           <>
-            <div className="text-xs text-muted-foreground px-2 pt-2">
+            <div className="px-2 pt-2 text-xs text-muted-foreground">
               <SidebarMenuButton
                 onClick={startNewChat}
                 tooltip="New chat"
                 variant="outline"
               >
                 <Plus className="text-muted-foreground" strokeWidth={1.5} />
-                <span className="text-foreground/90 text-sm">New chat</span>
+                <span className="text-sm text-foreground/90">New chat</span>
               </SidebarMenuButton>
             </div>
             <SidebarGroup className="pt-2">
@@ -359,7 +359,7 @@ export function AppSidebar({
                             className="text-muted-foreground"
                             strokeWidth={1.5}
                           />
-                          <span className="text-foreground/90 text-sm">
+                          <span className="text-sm text-foreground/90">
                             {chat.title}
                           </span>
                         </SidebarMenuButton>

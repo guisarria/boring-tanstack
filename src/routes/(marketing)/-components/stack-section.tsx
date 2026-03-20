@@ -129,7 +129,7 @@ function StackSection() {
           <h2 className="font-pixel text-4xl tracking-tight lg:text-5xl">
             The Stack
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-lg text-muted-foreground">
             Built with modern, production-ready tools so you can focus on
             shipping.
           </p>
@@ -149,7 +149,7 @@ function StackSection() {
 
                       "before:absolute before:-inset-px before:-z-2 before:animate-[move-background_16s_ease-in-out_infinite] before:rounded-lg before:bg-[url('./assets/void-background.jpg')] before:bg-size-[150%_150%] before:bg-center before:content-['']",
 
-                      "after:bg-card border-transparent after:absolute after:inset-1 after:-z-1 after:rounded-[7px] after:content-[''] dark:after:bg-card",
+                      "border-transparent after:absolute after:inset-1 after:-z-1 after:rounded-[7px] after:bg-card after:content-[''] dark:after:bg-card",
 
                       "items-center justify-center",
                     ],
@@ -167,7 +167,7 @@ function StackSection() {
                     </CardHeader>
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center lg:-top-4">
-                      <Icon className="dark:fill-foreground size-12 fill-card" />
+                      <Icon className="size-12 fill-card dark:fill-foreground" />
                     </div>
                   )}
 
@@ -190,7 +190,7 @@ function StackSection() {
                         Documentation
                       </a>
                     ) : isLast ? (
-                      <span className="text-muted-foreground/50 font-mono text-sm tracking-tighter">
+                      <span className="font-mono text-sm tracking-tighter text-muted-foreground/50">
                         Soon...
                       </span>
                     ) : null}

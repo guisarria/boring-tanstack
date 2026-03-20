@@ -202,7 +202,7 @@ function LexicalEditorInner({
             className={cn("h-full w-full p-2 outline-none", className)}
             onPaste={onPaste}
             placeholder={
-              <div className="text-muted-foreground pointer-events-none absolute top-3 left-2 opacity-50">
+              <div className="pointer-events-none absolute top-3 left-2 text-muted-foreground opacity-50">
                 {placeholder ?? ""}
               </div>
             }

@@ -10,7 +10,7 @@ function Nav({ className, ...props }: ComponentPropsWithoutRef<"nav">) {
   return (
     <nav
       data-slot="nav"
-      className={cn("max-w-5xl w-full py-2", className)}
+      className={cn("w-full max-w-5xl py-2", className)}
       {...props}
     />
   )
@@ -71,17 +71,17 @@ function Prose({
       data-slot="prose"
       className={cn(
         "text-base leading-7",
-        "[&_h1]:text-4xl sm:[&_h1]:text-5xl [&_h1]:font-medium [&_h1]:tracking-tight",
-        "[&_h2]:text-3xl sm:[&_h2]:text-4xl [&_h2]:font-medium [&_h2]:tracking-tight",
-        "[&_h3]:text-2xl sm:[&_h3]:text-3xl [&_h3]:font-medium",
+        "[&_h1]:text-4xl [&_h1]:font-medium [&_h1]:tracking-tight sm:[&_h1]:text-5xl",
+        "[&_h2]:text-3xl [&_h2]:font-medium [&_h2]:tracking-tight sm:[&_h2]:text-4xl",
+        "[&_h3]:text-2xl [&_h3]:font-medium sm:[&_h3]:text-3xl",
         "[&_p]:text-pretty",
         "[&_strong]:font-semibold",
         "[&_em]:italic",
         "[&_del]:line-through",
-        "[&_code:not(pre_code)]:rounded border bg-muted/50 px-1 py-px font-mono text-sm",
-        "[&_pre]:my-4 overflow-x-auto rounded-sm border bg-muted/50 p-4",
-        "[&_img]:my-4 h-auto max-w-full rounded-sm border",
-        "[&_blockquote]:my-4 border-l-4 border-border pl-4 text-muted-foreground",
+        "border bg-muted/50 px-1 py-px font-mono text-sm [&_code:not(pre_code)]:rounded",
+        "overflow-x-auto rounded-sm border bg-muted/50 p-4 [&_pre]:my-4",
+        "h-auto max-w-full rounded-sm border [&_img]:my-4",
+        "border-l-4 border-border pl-4 text-muted-foreground [&_blockquote]:my-4",
         article && "max-w-prose",
         spaced && "space-y-6",
         className,
@@ -110,7 +110,7 @@ function GlowText<T extends ElementType = "span">({
     <Tag
       data-slot="glow-text"
       className={cn(
-        "relative font-pixel text-4xl lg:text-5xl tracking-tight text-foreground",
+        "relative font-pixel text-4xl tracking-tight text-foreground lg:text-5xl",
         className,
       )}
       {...props}
@@ -120,7 +120,7 @@ function GlowText<T extends ElementType = "span">({
       <span
         aria-hidden
         className={cn(
-          "pointer-events-none absolute inset-0 select-none blur-xs",
+          "pointer-events-none absolute inset-0 blur-xs select-none",
           variant === "strong" && "blur-sm",
         )}
       >

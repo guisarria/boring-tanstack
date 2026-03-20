@@ -74,7 +74,7 @@ function NavMenuEntry({
         tooltip={item.title}
       >
         <Icon className="text-muted-foreground" strokeWidth={1.5} />
-        <span className="text-foreground/90 text-sm">{item.title}</span>
+        <span className="text-sm text-foreground/90">{item.title}</span>
       </SidebarMenuButton>
 
       {item.items?.length ? <NavItemSubMenu items={item.items} /> : null}

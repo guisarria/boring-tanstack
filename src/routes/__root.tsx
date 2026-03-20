@@ -41,7 +41,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="selection:text-background dark:selection:text-foreground selection:bg-cyan-700">
+      <body className="isolate selection:bg-cyan-700 selection:text-background dark:selection:text-foreground">
         <QueryClientProvider client={queryClient}>
           <ThemeProvider
             attribute={"class"}

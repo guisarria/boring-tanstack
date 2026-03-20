@@ -64,7 +64,7 @@ export function ForgotPasswordForm() {
           </CardDescription>
         </CardHeader>
         <CardFooter>
-          <div className="text-muted-foreground flex w-full items-center justify-center gap-x-1 text-center text-sm">
+          <div className="flex w-full items-center justify-center gap-x-1 text-center text-sm text-muted-foreground">
             <p>Didn&apos;t receive it?</p>
             <button
               className={cn(
@@ -123,7 +123,7 @@ export function ForgotPasswordForm() {
         </form.AppForm>
       </CardContent>
       <CardFooter>
-        <div className="text-muted-foreground flex w-full items-center justify-center gap-x-1 text-center text-sm">
+        <div className="flex w-full items-center justify-center gap-x-1 text-center text-sm text-muted-foreground">
           <p>Remember your password?</p>
           <ButtonLink variant="link" className="px-0 text-sm" to="/sign-in">
             Sign in

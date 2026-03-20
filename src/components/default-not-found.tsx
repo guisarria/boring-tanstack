@@ -16,7 +16,7 @@ export function DefaultNotFound() {
       <Container className="flex items-center justify-center">
         <Card className="min-w-md">
           <CardHeader>
-            <CardTitle className="text-destructive font-mono text-xl">
+            <CardTitle className="font-mono text-xl text-destructive">
               404 - Page Not Found
             </CardTitle>
             <CardDescription className="text-base">

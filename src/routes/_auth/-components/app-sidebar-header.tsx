@@ -39,8 +39,8 @@ export function AppHeader({
     })
 
   return (
-    <header className="border-border flex items-center gap-x-2 border-b p-2">
-      <SidebarTrigger className="text-foreground/60 pb-0.5" />
+    <header className="flex items-center gap-x-2 border-b border-border p-2">
+      <SidebarTrigger className="pb-0.5 text-foreground/60" />
 
       <Breadcrumb>
         <BreadcrumbList>

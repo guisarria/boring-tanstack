@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Container, Main, Section } from "@/components/ui/design-system"
 import {
   Item,
@@ -32,10 +33,11 @@ export const Route = createFileRoute("/debug/component-test")({
 
 function RouteComponent() {
   return (
-    <Main className="flex flex-col items-center justify-center h-screen w-full">
-      <Section className="flex flex-col items-center justify-center h-full w-full">
+    <Main className="flex h-screen w-full flex-col items-center justify-center">
+      <Section className="flex h-full w-full flex-col items-center justify-center">
         <ThemeToggle />
-        <Container className="flex mx-auto flex-col items-center justify-center h-full w-full max-w-3xl">
+        <Container className="mx-auto flex h-full w-full max-w-3xl flex-col items-center justify-center">
+          <Checkbox />
           <Item variant="info">
             <ItemMedia>
               <BadgeCheckIcon className="size-5" />

@@ -148,7 +148,7 @@ export function SignUpForm() {
       </CardContent>
 
       <CardFooter>
-        <div className="text-muted-foreground flex w-full items-center justify-center gap-x-1 text-center text-sm">
+        <div className="flex w-full items-center justify-center gap-x-1 text-center text-sm text-muted-foreground">
           <p>Already have an account?</p>
           <ButtonLink variant="link" className="px-0 text-sm" to="/sign-in">
             Sign in

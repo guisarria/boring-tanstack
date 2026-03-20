@@ -12,7 +12,7 @@ function RouteComponent() {
     <Empty className="flex h-full flex-1 flex-col items-center justify-center">
       <CircleDashed
         absoluteStrokeWidth
-        className="text-destructive size-20"
+        className="size-20 text-destructive"
         strokeWidth={1}
       />
 

@@ -71,7 +71,7 @@ function BlurLayer({ pos, size }: { pos: "top" | "bottom"; size: number }) {
     >
       {BLUR_LEVELS.map((blur) => (
         <div
-          className="bg-background/3 absolute inset-0"
+          className="absolute inset-0 bg-background/3"
           key={blur}
           style={{
             WebkitBackdropFilter: `blur(${blur}px)`,
