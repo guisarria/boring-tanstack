@@ -42,7 +42,7 @@ function RouteComponent() {
     <Section>
       <Container className="flex max-w-lg flex-col gap-y-6">
         <h2 className="text-2xl">Profile</h2>
-        {user.emailVerified && (
+        {!user.emailVerified && (
           <Alert variant="warning" className="pb-8">
             <MailWarningIcon className="size-4" />
             <AlertTitle>Verify Your Email Address</AlertTitle>
