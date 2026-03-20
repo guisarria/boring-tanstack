@@ -20,9 +20,9 @@ export const chats = pgTable(
   "chat",
   {
     id: uuid("id").primaryKey().notNull().defaultRandom(),
-    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
     title: text("title").notNull(),
-    userId: text("userId")
+    userId: text("user_id")
       .notNull()
       .references(() => users.id),
   },
@@ -37,7 +37,7 @@ export const messages = pgTable(
   "message",
   {
     id: uuid("id").primaryKey().notNull().defaultRandom(),
-    chatId: uuid("chatId")
+    chatId: uuid("chat_id")
       .notNull()
       .references(() => chats.id),
     role: chatRoleEnum("role").notNull(),
@@ -46,7 +46,7 @@ export const messages = pgTable(
       .$type<Array<unknown>>()
       .default(sql`'[]'::jsonb`)
       .notNull(),
-    createdAt: timestamp("createdAt").notNull().defaultNow(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (table) => [
     index("message_chatId_createdAt_idx").on(table.chatId, table.createdAt),

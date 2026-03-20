@@ -1,25 +1,36 @@
 {
-  "files.watcherExclude": {
-    "**/routeTree.gen.ts": true
-  },
-  "search.exclude": {
-    "**/routeTree.gen.ts": true
-  },
-  "files.readonlyInclude": {
-    "**/routeTree.gen.ts": true
-  },
   "[typescript]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode",
-    "js/ts.format.enabled": false
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode",
-    "js/ts.format.enabled": false
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   },
-  "editor.defaultFormatter": "oxc.oxc-vscode",
-  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.oxc": "explicit",
     "source.removeUnusedImports": "explicit"
+  },
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "files.readonlyInclude": {
+    "**/.tanstack/**/*": true,
+    "**/routeTree.gen.ts": true,
+    "**/worker-configuration.d.ts": true,
+    "pnpm-lock.yaml": true
+  },
+  "files.watcherExclude": {
+    "**/.tanstack/**/*": true,
+    "**/routeTree.gen.ts": true,
+    "**/worker-configuration.d.ts": true,
+    "pnpm-lock.yaml": true
+  },
+  "prettier.enable": false,
+  "biome.enabled": false,
+  "eslint.enable": false,
+  "oxc.enable": true,
+  "search.exclude": {
+    "**/.tanstack/**/*": true,
+    "**/routeTree.gen.ts": true,
+    "**/worker-configuration.d.ts": true,
+    "pnpm-lock.yaml": true
   }
 }

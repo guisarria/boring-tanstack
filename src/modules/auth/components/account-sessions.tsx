@@ -103,7 +103,7 @@ function SessionItem({
     <div>
       <div className="flex justify-between">
         <div className="flex items-start gap-x-3">
-          <div className="bg-secondary rounded-md p-2">
+          <div className="rounded-md bg-secondary p-2">
             {getDeviceIcon(device?.type ?? "laptop")}
           </div>
 
@@ -113,12 +113,12 @@ function SessionItem({
             </p>
 
             {isCurrent && (
-              <span className="text-success-text -mt-1 flex items-center justify-start gap-x-1">
+              <span className="-mt-1 flex items-center justify-start gap-x-1 text-success-foreground">
                 <span className="-mt-1 -ml-px text-2xl">•</span> Current session
               </span>
             )}
 
-            <p className="text-muted-foreground mt-1 text-xs tabular-nums">
+            <p className="mt-1 text-xs text-muted-foreground tabular-nums">
               {session.createdAt.toLocaleDateString(undefined, {
                 dateStyle: "medium",
               })}
@@ -203,7 +203,7 @@ export function AccountSessions({
       <CardContent className="space-y-4">
         {sessions.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-center">
-            <AlertCircle className="text-muted-foreground mb-2 h-10 w-10" />
+            <AlertCircle className="mb-2 h-10 w-10 text-muted-foreground" />
             <p className="text-muted-foreground">
               No active sessions to display
             </p>
@@ -220,7 +220,7 @@ export function AccountSessions({
       </CardContent>
 
       <CardFooter className="flex justify-between">
-        <p className="text-muted-foreground text-xs tabular-nums">
+        <p className="text-xs text-muted-foreground tabular-nums">
           Last checked:{" "}
           {new Date().toLocaleDateString(undefined, { dateStyle: "medium" })}
         </p>

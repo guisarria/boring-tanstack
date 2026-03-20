@@ -4,6 +4,12 @@ import { useState } from "react"
 import { toast } from "sonner"
 
 import { ThemeSelect } from "@/components/theme-toggle"
+import {
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Container, Section } from "@/components/ui/design-system"
 import {
@@ -11,7 +17,6 @@ import {
   ItemActions,
   ItemContent,
   ItemDescription,
-  ItemMedia,
   ItemTitle,
 } from "@/components/ui/item"
 import { LoadingSwap } from "@/components/ui/loading-swap"
@@ -37,54 +42,46 @@ function RouteComponent() {
     <Section>
       <Container className="flex max-w-lg flex-col gap-y-6">
         <h2 className="text-2xl">Profile</h2>
-        {!user.emailVerified && (
-          <Item variant="warning">
-            <ItemMedia variant="icon">
-              <MailWarningIcon />
-            </ItemMedia>
-
-            <ItemContent>
-              <ItemTitle>Verify Your Email Address</ItemTitle>
-
-              <ItemDescription>
-                Please verify your email address. Check your inbox for the
-                verification email. If you haven't received the email, click the
-                button below to resend.
-              </ItemDescription>
-
-              <ItemActions className="mt-1 ml-auto">
-                <Button
-                  disabled={emailVerificationPending}
-                  variant="outline"
-                  className="bg-warning-border/80 border-warning-text/40 hover:text-warning-text hover:bg-warning-bg/80"
-                  onClick={async () => {
-                    await authClient.sendVerificationEmail(
-                      {
-                        email: user.email,
+        {user.emailVerified && (
+          <Alert variant="warning" className="pb-8">
+            <MailWarningIcon className="size-4" />
+            <AlertTitle>Verify Your Email Address</AlertTitle>
+            <AlertDescription>
+              Please verify your email address. Check your inbox for the
+              verification email. If you haven't received the email, click the
+              button below to resend.
+            </AlertDescription>
+            <AlertAction className="top-auto bottom-2">
+              <Button
+                variant="secondary"
+                disabled={emailVerificationPending}
+                onClick={async () => {
+                  await authClient.sendVerificationEmail(
+                    {
+                      email: user.email,
+                    },
+                    {
+                      onRequest() {
+                        setEmailVerificationPending(true)
                       },
-                      {
-                        onRequest() {
-                          setEmailVerificationPending(true)
-                        },
-                        onError(context) {
-                          toast.error(context.error.message)
-                          setEmailVerificationPending(false)
-                        },
-                        onSuccess() {
-                          toast.success("Verification email sent successfully")
-                          setEmailVerificationPending(false)
-                        },
+                      onError(context) {
+                        toast.error(context.error.message)
+                        setEmailVerificationPending(false)
                       },
-                    )
-                  }}
-                >
-                  <LoadingSwap isLoading={emailVerificationPending}>
-                    Resend Verification Email
-                  </LoadingSwap>
-                </Button>
-              </ItemActions>
-            </ItemContent>
-          </Item>
+                      onSuccess() {
+                        toast.success("Verification email sent successfully")
+                        setEmailVerificationPending(false)
+                      },
+                    },
+                  )
+                }}
+              >
+                <LoadingSwap isLoading={emailVerificationPending}>
+                  Resend Verification Email
+                </LoadingSwap>
+              </Button>
+            </AlertAction>
+          </Alert>
         )}
 
         <ChangePasswordForm />

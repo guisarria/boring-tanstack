@@ -17,6 +17,11 @@ const config = defineConfig({
     sortImports: {},
     sortPackageJson: true,
     tailwindcss: true,
+    sortTailwindcss: {
+      stylesheet: "src/styles.css",
+      attributes: ["class", "className"],
+      functions: ["clsx", "cn", "cva", "tw"],
+    },
     ignorePatterns: [
       "pnpm-lock.yaml",
       "package-lock.json",
