@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { chatListQueryOptions, chatQueryKeys, deleteChat } from "@/modules/ai"
 
-import type { ChatTarget } from "./types"
+import type { ChatTarget } from "./chat-rename-dialog"
 
 interface DeleteDialogProps {
   target: ChatTarget | null

@@ -28,8 +28,7 @@ import {
 import { chatListQueryOptions, chatQueryKeys } from "@/modules/ai"
 
 import { DeleteDialog } from "./chat-delete-dialog"
-import { RenameDialog } from "./chat-rename-dialog"
-import type { ChatTarget } from "./types"
+import { RenameDialog, type ChatTarget } from "./chat-rename-dialog"
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null

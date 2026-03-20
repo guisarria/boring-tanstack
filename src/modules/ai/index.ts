@@ -5,6 +5,7 @@ export {
   chatListQueryOptions,
 } from "./query-options"
 export { ChatPanel } from "./components/chat/chat-panel"
+export { SidebarChatList } from "./components/chat/sidebar-chat-list"
 
 // Validation & Types
 export {

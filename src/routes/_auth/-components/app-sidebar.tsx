@@ -9,9 +9,9 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { SidebarChatList } from "@/modules/ai/components/chat/sidebar-chat-list"
 import { UserDropdown } from "@/modules/auth/components/user-dropdown"
 
-import { SidebarChatList } from "./sidebar-chat-list"
 import { SidebarNavGroup } from "./sidebar-nav-group"
 import type { NavGroup } from "./types"
 

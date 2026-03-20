@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { chatListQueryOptions, chatQueryKeys, renameChat } from "@/modules/ai"
 
-import type { ChatTarget } from "./types"
+export type ChatTarget = { id: string; title: string }
 
 interface RenameDialogProps {
   target: ChatTarget | null
