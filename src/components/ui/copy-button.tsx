@@ -1,6 +1,5 @@
 import { Check, Copy } from "lucide-react"
-import { useCallback, useEffect, useRef, useState } from "react"
-import { toast } from "sonner"
+import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -9,51 +8,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard"
 import { cn } from "@/lib/utils"
-
-const COPY_RESET_DELAY = 2000
-
-function useCopyToClipboard() {
-  const [isCopied, setIsCopied] = useState(false)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  const copy = useCallback(async (text: string) => {
-    if (!navigator?.clipboard) {
-      toast.error("Clipboard is unavailable in this browser.")
-      return false
-    }
-
-    try {
-      await navigator.clipboard.writeText(text)
-
-      setIsCopied(true)
-      toast.success("Copied to clipboard!")
-
-      if (timerRef.current) {
-        clearTimeout(timerRef.current)
-      }
-
-      timerRef.current = setTimeout(() => {
-        setIsCopied(false)
-      }, COPY_RESET_DELAY)
-
-      return true
-    } catch {
-      toast.error("Unable to copy—try selecting the text manually.")
-      return false
-    }
-  }, [])
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current)
-      }
-    }
-  }, [])
-
-  return { isCopied, copy } as const
-}
 
 type CopyButtonProps = {
   textToCopy: string
@@ -61,7 +17,7 @@ type CopyButtonProps = {
 }
 
 function CopyButton({ textToCopy, className }: CopyButtonProps) {
-  const { isCopied, copy } = useCopyToClipboard()
+  const { copyToClipboard, isCopied } = useCopyToClipboard()
   const [tooltipOpen, setTooltipOpen] = useState(false)
 
   return (
@@ -72,7 +28,7 @@ function CopyButton({ textToCopy, className }: CopyButtonProps) {
             <Button
               aria-label={isCopied ? "Copied!" : "Copy to clipboard"}
               className={cn("text-cyan-300", className)}
-              onClick={() => copy(textToCopy)}
+              onClick={() => copyToClipboard(textToCopy)}
               size="icon"
               variant="ghost"
             />

@@ -1,6 +1,5 @@
 import { useRouteContext } from "@tanstack/react-router"
 
-import { useStickToBottom } from "@/hooks/use-stick-to-bottom"
 import { AiBotAvatar } from "@/modules/ai/components/ui/ai-avatar"
 import {
   Conversation,
@@ -8,6 +7,7 @@ import {
   ConversationEmptyState,
   ConversationScrollButton,
 } from "@/modules/ai/components/ui/conversation"
+import { useStickToBottom } from "@/modules/ai/hooks/use-stick-to-bottom"
 import type { ChatMessage } from "@/modules/ai/validation"
 
 import { ChatMessageItem } from "./chat-message-item"
