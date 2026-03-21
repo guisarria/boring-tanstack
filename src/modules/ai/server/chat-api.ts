@@ -53,9 +53,7 @@ function wireAbortSignal(request: Request, abortController: AbortController) {
   )
 }
 
-async function generateTitleFromUserMessage(
-  userMessage: string,
-): Promise<string> {
+async function generateChatTitle(assistantResponse: string): Promise<string> {
   const stream = chat({
     adapter: openRouterText(DEFAULT_MODEL_ID),
     messages: [
@@ -63,13 +61,18 @@ async function generateTitleFromUserMessage(
         role: "user",
         content:
           "Generate a concise title (3-6 words, max 80 chars). Never return empty.\n\n" +
-          userMessage,
+          assistantResponse,
       },
     ],
   })
 
   const title = (await streamToText(stream)).trim()
-  return title ? title.slice(0, 80) : "New chat"
+  return title
+    ? title
+        .replace(/^[#*"\s]+/, "")
+        .replace(/["]+$/, "")
+        .trim()
+    : "New chat"
 }
 
 export async function handleChatGet(request: Request): Promise<Response> {
@@ -164,6 +167,10 @@ export async function handleChatPost(request: Request): Promise<Response> {
   }
 
   let isNewChat = false
+  let titleGenerationContext: {
+    conversationUuid: string
+    userId: string
+  } | null = null
 
   if (conversationUuid) {
     const existingChat = await getChatById({ id: conversationUuid })
@@ -191,24 +198,7 @@ export async function handleChatPost(request: Request): Promise<Response> {
       })
 
       if (isNewChat) {
-        const userText = userParts
-          .filter(
-            (p): p is { type: "text"; content: string } => p.type === "text",
-          )
-          .map((p) => p.content)
-          .join("")
-
-        if (userText) {
-          generateTitleFromUserMessage(userText)
-            .then((title) =>
-              updateChatTitle({
-                id: conversationUuid,
-                userId: user.id,
-                title,
-              }),
-            )
-            .catch(() => {})
-        }
+        titleGenerationContext = { conversationUuid, userId: user.id }
       }
     }
   }
@@ -289,6 +279,30 @@ export async function handleChatPost(request: Request): Promise<Response> {
           : Math.max(1, Math.ceil((Date.now() - thinkingStartAt) / 1000))
 
       await persistAssistantMessageBestEffort({ thinkingDurationSeconds })
+
+      if (titleGenerationContext) {
+        const assistantMessages = processor
+          .getMessages()
+          .filter((m) => m.role === "assistant")
+        const assistantText = assistantMessages
+          .at(-1)
+          ?.parts.filter(
+            (p): p is { type: "text"; content: string } => p.type === "text",
+          )
+          .map((p) => p.content)
+          .join("")
+
+        if (assistantText) {
+          try {
+            const title = await generateChatTitle(assistantText)
+            await updateChatTitle({
+              id: titleGenerationContext.conversationUuid,
+              userId: titleGenerationContext.userId,
+              title,
+            })
+          } catch {}
+        }
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import { and, count, eq, gte } from "drizzle-orm"
+import { and, count, eq, gte, inArray } from "drizzle-orm"
 
 import { db } from "@/db/index"
 import { AppError } from "@/lib/errors"
@@ -114,6 +114,33 @@ export async function deleteChatById({
   } catch (error) {
     const cause =
       error instanceof Error ? error.message : "Failed to delete chat"
+    throw new AppError("internal_error:database", cause)
+  }
+}
+
+export async function deleteAllChatsByUserId({ userId }: { userId: string }) {
+  try {
+    const userChats = await db.query.chats.findMany({
+      where: (chats, { eq }) => eq(chats.userId, userId),
+      columns: { id: true },
+    })
+
+    if (userChats.length === 0) return []
+
+    const chatIds = userChats.map((c) => c.id)
+
+    const [, deleted] = await db.batch([
+      db.delete(messages).where(inArray(messages.chatId, chatIds)),
+      db
+        .delete(chats)
+        .where(eq(chats.userId, userId))
+        .returning({ id: chats.id }),
+    ])
+
+    return deleted.map((d) => d.id)
+  } catch (error) {
+    const cause =
+      error instanceof Error ? error.message : "Failed to delete all chats"
     throw new AppError("internal_error:database", cause)
   }
 }

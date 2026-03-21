@@ -7,11 +7,16 @@ import { AppError } from "@/lib/errors"
 import { getSessionResult } from "../auth/server/auth-service"
 import { loadChatHistory } from "./server/chat-history"
 import {
+  deleteAllChatsByUserId,
   deleteChatById,
   getChatsByUserId,
   updateChatTitle,
 } from "./server/queries"
-import { deleteChatSchema, renameChatSchema } from "./validation"
+import {
+  deleteAllChatsSchema,
+  deleteChatSchema,
+  renameChatSchema,
+} from "./validation"
 
 const chatHistoryInputSchema = z.object({
   conversationId: z.uuid().nullable().optional(),
@@ -84,4 +89,14 @@ export const deleteChat = createServerFn({ method: "POST" })
     }
 
     return { success: true }
+  })
+
+export const deleteAllChats = createServerFn({ method: "POST" })
+  .inputValidator(deleteAllChatsSchema)
+  .handler(async () => {
+    const userId = await getAuthenticatedUserId()
+
+    const deletedIds = await deleteAllChatsByUserId({ userId })
+
+    return { success: true, deletedIds }
   })

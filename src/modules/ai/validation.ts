@@ -102,3 +102,7 @@ export const deleteChatSchema = z.object({
 })
 
 export type DeleteChatInput = z.infer<typeof deleteChatSchema>
+
+export const deleteAllChatsSchema = z.object({})
+
+export type DeleteAllChatsInput = z.infer<typeof deleteAllChatsSchema>

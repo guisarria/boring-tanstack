@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 import { useState } from "react"
 
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +33,7 @@ import {
 } from "@/components/ui/tooltip"
 import { chatListQueryOptions, chatQueryKeys } from "@/modules/ai"
 
+import { DeleteAllDialog } from "./chat-delete-all-dialog"
 import { DeleteDialog } from "./chat-delete-dialog"
 import { RenameDialog, type ChatTarget } from "./chat-rename-dialog"
 
@@ -58,6 +60,7 @@ export function SidebarChatList() {
 
   const [renameTarget, setRenameTarget] = useState<ChatTarget | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<ChatTarget | null>(null)
+  const [showDeleteAll, setShowDeleteAll] = useState(false)
 
   function startNewChat() {
     const conversationId = crypto.randomUUID()
@@ -65,7 +68,7 @@ export function SidebarChatList() {
   }
 
   function refreshChats() {
-    queryClient.invalidateQueries({
+    void queryClient.invalidateQueries({
       queryKey: chatQueryKeys.all,
       exact: true,
     })
@@ -90,7 +93,7 @@ export function SidebarChatList() {
         </SidebarMenuButton>
       </div>
 
-      <SidebarGroup className="pt-2">
+      <SidebarGroup className="h-full pt-2">
         <SidebarGroupLabel>Chats</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
@@ -172,6 +175,18 @@ export function SidebarChatList() {
             )}
           </SidebarMenu>
         </SidebarGroupContent>
+        {chatHistory.length > 0 && (
+          <Button
+            type="button"
+            onClick={() => setShowDeleteAll(true)}
+            aria-label="Delete all chats"
+            className="mt-auto mb-2 flex gap-x-2 place-self-end"
+            variant="destructive-outline"
+          >
+            <span>Delete All</span>
+            <Trash2 className="h-3.5 w-3.5" strokeWidth={1.5} />
+          </Button>
+        )}
       </SidebarGroup>
 
       <RenameDialog
@@ -184,6 +199,12 @@ export function SidebarChatList() {
         target={deleteTarget}
         onClose={() => setDeleteTarget(null)}
         onDeleted={handleDeleted}
+      />
+
+      <DeleteAllDialog
+        open={showDeleteAll}
+        onClose={() => setShowDeleteAll(false)}
+        onDeletedAll={startNewChat}
       />
     </>
   )

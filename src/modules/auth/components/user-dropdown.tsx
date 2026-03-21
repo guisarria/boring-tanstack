@@ -6,6 +6,7 @@ import {
   useRouter,
 } from "@tanstack/react-router"
 import {
+  BotIcon,
   HomeIcon,
   LayoutDashboard,
   LogOutIcon,
@@ -84,12 +85,12 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
               }
             />
           )}
-          {!pathname.startsWith("/settings") && (
+          {!pathname.startsWith("/chat") && (
             <DropdownMenuItem
               render={
-                <Link preload="render" to="/settings">
-                  <Settings2Icon />
-                  Settings
+                <Link preload="render" to="/chat">
+                  <BotIcon />
+                  Chat
                 </Link>
               }
             />
@@ -107,6 +108,16 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          {!pathname.startsWith("/settings") && (
+            <DropdownMenuItem
+              render={
+                <Link preload="render" to="/settings">
+                  <Settings2Icon />
+                  Account
+                </Link>
+              }
+            />
+          )}
           <DropdownMenuItem onClick={handleSignOut}>
             <LogOutIcon />
             Sign out

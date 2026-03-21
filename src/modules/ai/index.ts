@@ -19,6 +19,7 @@ export {
   getThinkingDuration,
   renameChatSchema,
   deleteChatSchema,
+  deleteAllChatsSchema,
   CHAT_ROLES,
 } from "./validation"
 
@@ -30,10 +31,17 @@ export type {
   ChatMessage,
   RenameChatInput,
   DeleteChatInput,
+  DeleteAllChatsInput,
 } from "./validation"
 
 // Server Functions
-export { listChats, getChatHistory, renameChat, deleteChat } from "./functions"
+export {
+  listChats,
+  getChatHistory,
+  renameChat,
+  deleteChat,
+  deleteAllChats,
+} from "./functions"
 
 // Constants
 export {

@@ -70,6 +70,11 @@ export function ChatPanel({
       void queryClient.invalidateQueries({
         queryKey: chatQueryKeys.all,
       })
+      setTimeout(() => {
+        void queryClient.invalidateQueries({
+          queryKey: chatQueryKeys.all,
+        })
+      }, 3000)
     },
   })
 
