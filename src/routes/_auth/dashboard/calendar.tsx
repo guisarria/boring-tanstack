@@ -125,7 +125,7 @@ function RouteComponent() {
     if (editor?.mode === "edit" && !selectedEvent) {
       setEditor(null)
     }
-  }, [editor, events, selectedEvent])
+  }, [editor, selectedEvent, events.length])
 
   const createMutation = useMutation({
     mutationFn: async (input: CreateScheduleMutationInput) =>
