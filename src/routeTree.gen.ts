@@ -24,6 +24,7 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthSettingsSecurityRouteImport } from './routes/_auth/settings/security'
 import { Route as AuthDashboardMyIssuesRouteImport } from './routes/_auth/dashboard/my-issues'
 import { Route as AuthDashboardInboxRouteImport } from './routes/_auth/dashboard/inbox'
+import { Route as AuthDashboardCalendarRouteImport } from './routes/_auth/dashboard/calendar'
 import { Route as marketingauthSignUpIndexRouteImport } from './routes/(marketing)/(auth)/sign-up/index'
 import { Route as marketingauthSignInIndexRouteImport } from './routes/(marketing)/(auth)/sign-in/index'
 import { Route as marketingauthResetPasswordIndexRouteImport } from './routes/(marketing)/(auth)/reset-password/index'
@@ -101,6 +102,11 @@ const AuthDashboardInboxRoute = AuthDashboardInboxRouteImport.update({
   path: '/inbox',
   getParentRoute: () => AuthDashboardRouteRoute,
 } as any)
+const AuthDashboardCalendarRoute = AuthDashboardCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => AuthDashboardRouteRoute,
+} as any)
 const marketingauthSignUpIndexRoute =
   marketingauthSignUpIndexRouteImport.update({
     id: '/sign-up/',
@@ -132,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthDashboardRouteRouteWithChildren
   '/settings': typeof AuthSettingsRouteRouteWithChildren
   '/api/chat': typeof ApiChatRoute
+  '/dashboard/calendar': typeof AuthDashboardCalendarRoute
   '/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/settings/security': typeof AuthSettingsSecurityRoute
@@ -147,6 +154,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof marketingIndexRoute
   '/api/chat': typeof ApiChatRoute
+  '/dashboard/calendar': typeof AuthDashboardCalendarRoute
   '/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/settings/security': typeof AuthSettingsSecurityRoute
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/_auth/settings': typeof AuthSettingsRouteRouteWithChildren
   '/api/chat': typeof ApiChatRoute
   '/(marketing)/': typeof marketingIndexRoute
+  '/_auth/dashboard/calendar': typeof AuthDashboardCalendarRoute
   '/_auth/dashboard/inbox': typeof AuthDashboardInboxRoute
   '/_auth/dashboard/my-issues': typeof AuthDashboardMyIssuesRoute
   '/_auth/settings/security': typeof AuthSettingsSecurityRoute
@@ -189,6 +198,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/settings'
     | '/api/chat'
+    | '/dashboard/calendar'
     | '/dashboard/inbox'
     | '/dashboard/my-issues'
     | '/settings/security'
@@ -204,6 +214,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/api/chat'
+    | '/dashboard/calendar'
     | '/dashboard/inbox'
     | '/dashboard/my-issues'
     | '/settings/security'
@@ -225,6 +236,7 @@ export interface FileRouteTypes {
     | '/_auth/settings'
     | '/api/chat'
     | '/(marketing)/'
+    | '/_auth/dashboard/calendar'
     | '/_auth/dashboard/inbox'
     | '/_auth/dashboard/my-issues'
     | '/_auth/settings/security'
@@ -352,6 +364,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardInboxRouteImport
       parentRoute: typeof AuthDashboardRouteRoute
     }
+    '/_auth/dashboard/calendar': {
+      id: '/_auth/dashboard/calendar'
+      path: '/calendar'
+      fullPath: '/dashboard/calendar'
+      preLoaderRoute: typeof AuthDashboardCalendarRouteImport
+      parentRoute: typeof AuthDashboardRouteRoute
+    }
     '/(marketing)/(auth)/sign-up/': {
       id: '/(marketing)/(auth)/sign-up/'
       path: '/sign-up'
@@ -427,12 +446,14 @@ const AuthChatRouteRouteWithChildren = AuthChatRouteRoute._addFileChildren(
 )
 
 interface AuthDashboardRouteRouteChildren {
+  AuthDashboardCalendarRoute: typeof AuthDashboardCalendarRoute
   AuthDashboardInboxRoute: typeof AuthDashboardInboxRoute
   AuthDashboardMyIssuesRoute: typeof AuthDashboardMyIssuesRoute
   AuthDashboardIndexRoute: typeof AuthDashboardIndexRoute
 }
 
 const AuthDashboardRouteRouteChildren: AuthDashboardRouteRouteChildren = {
+  AuthDashboardCalendarRoute: AuthDashboardCalendarRoute,
   AuthDashboardInboxRoute: AuthDashboardInboxRoute,
   AuthDashboardMyIssuesRoute: AuthDashboardMyIssuesRoute,
   AuthDashboardIndexRoute: AuthDashboardIndexRoute,

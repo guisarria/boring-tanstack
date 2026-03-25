@@ -10,6 +10,7 @@ export type ErrorType =
 
 export type Surface =
   | "chat"
+  | "schedule"
   | "auth"
   | "api"
   | "stream"
@@ -27,6 +28,7 @@ export type ErrorVisibility = "response" | "log" | "none"
 export const visibilityBySurface = {
   database: "log",
   chat: "response",
+  schedule: "response",
   auth: "response",
   stream: "response",
   api: "response",
@@ -57,10 +59,16 @@ const ERROR_MESSAGES: Partial<Record<ErrorCode, string>> = {
     "You have exceeded your maximum number of messages for the day. Please try again later.",
   "not_found:chat":
     "The requested chat was not found. Please check the chat ID and try again.",
+  "not_found:schedule":
+    "The requested event was not found. Please refresh the calendar and try again.",
+  "bad_request:schedule":
+    "The event details were invalid. Please review them and try again.",
   "forbidden:chat":
     "This chat belongs to another user. Please check the chat ID and try again.",
   "unauthorized:chat":
     "You need to sign in to view this chat. Please sign in and try again.",
+  "unauthorized:schedule":
+    "You need to sign in to use the calendar. Please sign in and try again.",
   "offline:chat":
     "We're having trouble sending your message. Please check your internet connection and try again.",
   "not_found:document":
@@ -92,6 +100,7 @@ const VALID_ERROR_TYPES: Record<ErrorType, true> = {
 
 const VALID_SURFACES: Record<Surface, true> = {
   chat: true,
+  schedule: true,
   auth: true,
   api: true,
   stream: true,

@@ -12,6 +12,7 @@ import {
   usersRelations,
   verifications,
 } from "@/modules/auth/schema"
+import { scheduleEvents } from "@/modules/schedule/schema"
 
 export const schema = {
   users,
@@ -24,6 +25,7 @@ export const schema = {
   chats,
   messages,
   ipRateLimits,
+  scheduleEvents,
 }
 
 const sql = neon(env.DATABASE_URL)
