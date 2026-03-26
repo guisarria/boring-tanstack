@@ -42,7 +42,7 @@ export function useStickToBottom() {
 
     el.addEventListener("scroll", onScroll, { passive: true })
     return () => el.removeEventListener("scroll", onScroll)
-  }, [setLocked])
+  }, [])
 
   useEffect(() => {
     const content = scrollRef.current
