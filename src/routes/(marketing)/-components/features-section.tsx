@@ -1,5 +1,5 @@
 import { addDays, addHours, startOfDay, startOfWeek } from "date-fns"
-import { ArrowDownIcon, SendIcon } from "lucide-react"
+import { CalendarArrowDownIcon, SendIcon } from "lucide-react"
 import * as React from "react"
 
 import { Button } from "@/components/ui/button"
@@ -245,19 +245,25 @@ function FeaturesSection() {
             Features
           </h2>
           <p className="text-lg text-muted-foreground">
-            A composable calendar and AI chat out of the box.
+            AI chat and a composable calendar, ready out of the box.
           </p>
         </div>
 
-        <Tabs defaultValue="calendar">
+        <Tabs defaultValue="chat">
           <TabsList>
-            <TabsTrigger value="calendar">Calendar</TabsTrigger>
             <TabsTrigger value="chat">AI Chat</TabsTrigger>
+            <TabsTrigger className="hidden sm:flex" value="calendar">
+              Calendar
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="calendar" className="relative">
-            <span className="absolute -top-8 right-12 flex gap-x-1 text-base text-muted-foreground">
-              Check the views <ArrowDownIcon className="mt-4 text-primary" />
+            <span className="absolute -top-3 right-10 flex gap-x-1 bg-background px-2 text-base text-muted-foreground">
+              Change calendar view{" "}
+              <CalendarArrowDownIcon
+                className="-mt-px text-primary"
+                strokeWidth={1.5}
+              />
             </span>
             <EventCalendar
               className="h-220 max-h-220"
