@@ -1,4 +1,3 @@
-import type { UIMessage } from "@tanstack/ai-react"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import type { ComponentProps, HTMLAttributes, ReactElement } from "react"
 import { createContext, memo, use, useEffect, useMemo, useState } from "react"
@@ -19,7 +18,7 @@ import {
 } from "./assistant-markdown"
 
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {
-  from: UIMessage["role"]
+  from: "user" | "assistant" | "system" | "data" | "tool"
 }
 
 export const Message = ({ className, from, ...props }: MessageProps) => (

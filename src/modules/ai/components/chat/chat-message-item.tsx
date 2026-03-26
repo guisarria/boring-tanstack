@@ -1,3 +1,5 @@
+import type { UIMessage } from "ai"
+
 import { AiBotAvatar } from "@/modules/ai/components/ui/ai-avatar"
 import {
   Message,
@@ -9,36 +11,32 @@ import {
   ReasoningContent,
   ReasoningTrigger,
 } from "@/modules/ai/components/ui/reasoning"
-import { getThinkingDuration, type ChatMessage } from "@/modules/ai/validation"
 import { UserAvatar } from "@/modules/auth/components/user-avatar"
 
 function MessagePartView({
   part,
   role,
   isStreaming,
+  reasoningDuration,
 }: {
-  part: ChatMessage["parts"][number]
-  role: ChatMessage["role"]
+  part: UIMessage["parts"][number]
+  role: UIMessage["role"]
   isStreaming: boolean
+  reasoningDuration?: number
 }) {
   switch (part.type) {
-    case "thinking":
+    case "reasoning":
       return (
-        <Reasoning
-          isStreaming={isStreaming}
-          duration={getThinkingDuration(part)}
-        >
+        <Reasoning isStreaming={isStreaming} duration={reasoningDuration}>
           <ReasoningTrigger />
-          <ReasoningContent>{part.content}</ReasoningContent>
+          <ReasoningContent>{part.text}</ReasoningContent>
         </Reasoning>
       )
     case "text":
       return role === "assistant" ? (
-        <MessageResponse isAnimating={isStreaming}>
-          {part.content}
-        </MessageResponse>
+        <MessageResponse isAnimating={isStreaming}>{part.text}</MessageResponse>
       ) : (
-        <p className="whitespace-pre-wrap">{part.content}</p>
+        <p className="whitespace-pre-wrap">{part.text}</p>
       )
     default:
       return null
@@ -49,19 +47,31 @@ export function ChatMessageItem({
   message,
   isStreaming,
   showAvatar,
+  reasoningDuration,
 }: {
-  message: ChatMessage
+  message: UIMessage
   isStreaming: boolean
   showAvatar: boolean
+  reasoningDuration?: number
 }) {
   const isUser = message.role === "user"
 
-  const parts = message.parts.map((part, idx) => (
+  const renderableParts = message.parts.filter(
+    (
+      part,
+    ): part is typeof part & { type: "text" | "reasoning"; text: string } =>
+      (part.type === "text" || part.type === "reasoning") && "text" in part,
+  )
+
+  const parts = renderableParts.map((part) => (
     <MessagePartView
-      key={`${message.id}:${part.type}:${idx}`}
+      key={`${message.id}-${part.type}-${part.text.slice(0, 20)}`}
       part={part}
       role={message.role}
       isStreaming={isStreaming}
+      reasoningDuration={
+        part.type === "reasoning" ? reasoningDuration : undefined
+      }
     />
   ))
 
@@ -80,7 +90,7 @@ export function ChatMessageItem({
             ) : (
               <div className="w-9" />
             )}
-            <MessageContent>{parts}</MessageContent>
+            <MessageContent className="max-w-xl">{parts}</MessageContent>
           </>
         )}
       </div>

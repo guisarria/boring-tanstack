@@ -1,4 +1,5 @@
 import { useRouteContext } from "@tanstack/react-router"
+import type { UIMessage } from "ai"
 
 import { AiBotAvatar } from "@/modules/ai/components/ui/ai-avatar"
 import {
@@ -8,16 +9,17 @@ import {
   ConversationScrollButton,
 } from "@/modules/ai/components/ui/conversation"
 import { useStickToBottom } from "@/modules/ai/hooks/use-stick-to-bottom"
-import type { ChatMessage } from "@/modules/ai/validation"
 
 import { ChatMessageItem } from "./chat-message-item"
 
 export function ChatMessageList({
   messages,
   streamingMessageId,
+  getReasoningDuration,
 }: {
-  messages: Array<ChatMessage>
+  messages: UIMessage[]
   streamingMessageId: string | null
+  getReasoningDuration: (metadata: unknown) => number | undefined
 }) {
   const { user } = useRouteContext({ from: "__root__" })
   const { scrollRef, bottomRef, isAtBottom, scrollToBottom } =
@@ -48,6 +50,7 @@ export function ChatMessageList({
               message={message}
               isStreaming={isStreaming}
               showAvatar={showAvatar}
+              reasoningDuration={getReasoningDuration(message.metadata)}
             />
           )
         })}

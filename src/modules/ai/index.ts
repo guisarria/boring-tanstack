@@ -5,7 +5,6 @@ export {
   chatListQueryOptions,
 } from "./query-options"
 export { ChatPanel } from "./components/chat/chat-panel"
-export { SidebarChatList } from "./components/chat/sidebar-chat-list"
 
 // Validation & Types
 export {
@@ -15,8 +14,6 @@ export {
   persistedChatMessagePartSchema,
   persistedChatMessageSchema,
   chatHistoryResponseSchema,
-  normalizePersistedMessageParts,
-  getThinkingDuration,
   renameChatSchema,
   deleteChatSchema,
   deleteAllChatsSchema,
@@ -28,7 +25,6 @@ export type {
   ChatStreamRequestMessage,
   PersistedChatMessage,
   ChatMessagePart,
-  ChatMessage,
   RenameChatInput,
   DeleteChatInput,
   DeleteAllChatsInput,

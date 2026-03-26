@@ -172,7 +172,7 @@ const defaultGetThinkingMessage = (isStreaming: boolean, duration?: number) => {
     }
   }
 
-  return <p>Reasoning</p>
+  return <p>Thought for a few seconds</p>
 }
 
 export function ReasoningTrigger({

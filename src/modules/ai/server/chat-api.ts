@@ -1,27 +1,28 @@
+import { createOpenRouter } from "@openrouter/ai-sdk-provider"
 import {
-  chat,
-  StreamProcessor,
-  streamToText,
-  toServerSentEventsResponse,
-  type StreamChunk,
-} from "@tanstack/ai"
-import { openRouterText } from "@tanstack/ai-openrouter"
+  convertToModelMessages,
+  generateText,
+  streamText,
+  type LanguageModel,
+  type TextStreamPart,
+  type UIMessage,
+} from "ai"
 
 import { env } from "@/config/env/server"
 import { AppError } from "@/lib/errors"
 
-import { DEFAULT_MODEL_ID, isAllowedModelId } from "../constants"
+import {
+  ALLOWED_MODEL_IDS,
+  DEFAULT_MODEL_ID,
+  type AllowedModelId,
+} from "../constants"
 import { chatStreamRequestSchema } from "../validation"
 import {
   loadChatHistory,
   parseOptionalConversationId,
   requireUser,
 } from "./chat-history"
-import {
-  getLastUserMessageParts,
-  toPersistedChatMessageParts,
-  toTextOnlyModelMessages,
-} from "./message-transforms"
+import { toPersistedChatMessageParts } from "./message-transforms"
 import {
   createChat,
   getChatById,
@@ -30,32 +31,28 @@ import {
 } from "./queries"
 import { checkBotId, checkIpRateLimit, checkRateLimit } from "./rate-limit"
 
-function getStringValue(
-  record: Record<string, unknown>,
-  key: string,
-): string | null {
-  const value = record[key]
-  return typeof value === "string" ? value : null
+const openrouter = createOpenRouter({
+  apiKey: env.OPENROUTER_API_KEY,
+})
+
+const modelCache = new Map<AllowedModelId, LanguageModel>()
+
+function getModel(modelId: AllowedModelId): LanguageModel {
+  let model = modelCache.get(modelId)
+  if (!model) {
+    model = openrouter.chat(modelId)
+    modelCache.set(modelId, model)
+  }
+  return model
 }
 
-function wireAbortSignal(request: Request, abortController: AbortController) {
-  if (request.signal.aborted) {
-    abortController.abort()
-    return
-  }
-
-  request.signal.addEventListener(
-    "abort",
-    () => {
-      abortController.abort()
-    },
-    { once: true },
-  )
+function isAllowedModelId(value: string): value is AllowedModelId {
+  return (ALLOWED_MODEL_IDS as Set<string>).has(value)
 }
 
 async function generateChatTitle(assistantResponse: string): Promise<string> {
-  const stream = chat({
-    adapter: openRouterText(DEFAULT_MODEL_ID),
+  const { text } = await generateText({
+    model: getModel(DEFAULT_MODEL_ID),
     messages: [
       {
         role: "user",
@@ -66,7 +63,7 @@ async function generateChatTitle(assistantResponse: string): Promise<string> {
     ],
   })
 
-  const title = (await streamToText(stream)).trim()
+  const title = text.trim()
   return title
     ? title
         .replace(/^[#*"\s]+/, "")
@@ -125,28 +122,27 @@ export async function handleChatPost(request: Request): Promise<Response> {
     return new AppError("bad_request:api", "Invalid request body").toResponse()
   }
   const body = parsed.data
-  const messages = body.messages
-  const data = body.data ?? {}
 
-  const conversationId =
-    getStringValue(data, "conversationId") ?? body.id ?? null
+  const conversationId = body.data?.conversationId ?? body.id ?? null
 
-  const conversationUuid = parseOptionalConversationId(conversationId)
+  const conversationUuid =
+    typeof conversationId === "string"
+      ? parseOptionalConversationId(conversationId)
+      : null
 
   const selectedChatModelRaw =
-    getStringValue(data, "selectedChatModel") ??
-    getStringValue(data, "model") ??
-    body.model ??
-    null
+    body.data?.selectedChatModel ?? body.data?.model ?? body.model ?? null
 
-  const selectedChatModel = selectedChatModelRaw ?? DEFAULT_MODEL_ID
+  const selectedChatModel =
+    typeof selectedChatModelRaw === "string"
+      ? selectedChatModelRaw
+      : DEFAULT_MODEL_ID
 
   if (!isAllowedModelId(selectedChatModel)) {
     return new AppError("bad_request:api", "Invalid model").toResponse()
   }
 
   const botResult = checkBotId(headers)
-
   if (botResult.isBot) {
     return new AppError("unauthorized:auth").toResponse()
   }
@@ -159,12 +155,11 @@ export async function handleChatPost(request: Request): Promise<Response> {
       userRole: user.role,
     })
   } catch (error) {
-    if (error instanceof Response) {
-      return error
-    }
-
+    if (error instanceof Response) return error
     return new AppError("rate_limit:api").toResponse()
   }
+
+  const messages = body.messages as UIMessage[]
 
   let isNewChat = false
   let titleGenerationContext: {
@@ -186,127 +181,106 @@ export async function handleChatPost(request: Request): Promise<Response> {
       })
     }
 
-    const userParts = getLastUserMessageParts(messages)
-    if (userParts) {
-      await saveMessage({
-        id: crypto.randomUUID(),
-        chatId: conversationUuid,
-        role: "user",
-        parts: userParts,
-        attachments: [],
-        createdAt: new Date(),
-      })
+    const lastUserMessage = [...messages]
+      .reverse()
+      .find((m) => m.role === "user")
 
-      if (isNewChat) {
-        titleGenerationContext = { conversationUuid, userId: user.id }
-      }
-    }
-  }
+    if (lastUserMessage) {
+      const persistedParts = toPersistedChatMessageParts(
+        lastUserMessage.parts.filter(
+          (p) => p.type === "text" || p.type === "reasoning",
+        ),
+      )
 
-  const abortController = new AbortController()
-  wireAbortSignal(request, abortController)
+      if (persistedParts.length > 0) {
+        await saveMessage({
+          id: crypto.randomUUID(),
+          chatId: conversationUuid,
+          role: "user",
+          parts: persistedParts,
+          attachments: [],
+          createdAt: new Date(),
+        })
 
-  const modelMessages = toTextOnlyModelMessages(messages)
-
-  const processor = new StreamProcessor()
-  const initialAssistantCount = processor
-    .getMessages()
-    .filter((m) => m.role === "assistant").length
-  let thinkingStartAt: number | null = null
-
-  async function persistAssistantMessageBestEffort({
-    thinkingDurationSeconds,
-  }: {
-    thinkingDurationSeconds?: number
-  }) {
-    if (!conversationUuid) return
-    if (abortController.signal.aborted) return
-
-    const assistantMessages = processor
-      .getMessages()
-      .filter((m) => m.role === "assistant")
-
-    if (assistantMessages.length <= initialAssistantCount) return
-
-    const lastAssistant = assistantMessages.at(-1)
-    if (!lastAssistant || lastAssistant.parts.length === 0) return
-
-    const persistedParts = toPersistedChatMessageParts(
-      lastAssistant.parts,
-      typeof thinkingDurationSeconds === "number" &&
-        Number.isFinite(thinkingDurationSeconds)
-        ? thinkingDurationSeconds
-        : undefined,
-    )
-
-    try {
-      await saveMessage({
-        id: crypto.randomUUID(),
-        chatId: conversationUuid,
-        role: "assistant",
-        parts: persistedParts,
-        attachments: [],
-        createdAt: new Date(),
-      })
-    } catch (e) {
-      const message = e instanceof Error ? e.message : "Unknown error"
-      console.error("Failed to persist assistant message:", message)
-    }
-  }
-
-  const stream = chat({
-    adapter: openRouterText(selectedChatModel),
-    messages: modelMessages,
-    conversationId: conversationId ?? undefined,
-    abortController,
-    metadata: data,
-  })
-
-  async function* streamWithPersistence(): AsyncIterable<StreamChunk> {
-    try {
-      for await (const chunk of stream) {
-        if (abortController.signal.aborted) break
-        thinkingStartAt ??= Date.now()
-        processor.processChunk(chunk)
-        yield chunk
-      }
-    } finally {
-      processor.finalizeStream()
-
-      const thinkingDurationSeconds =
-        thinkingStartAt == null
-          ? undefined
-          : Math.max(1, Math.ceil((Date.now() - thinkingStartAt) / 1000))
-
-      await persistAssistantMessageBestEffort({ thinkingDurationSeconds })
-
-      if (titleGenerationContext) {
-        const assistantMessages = processor
-          .getMessages()
-          .filter((m) => m.role === "assistant")
-        const assistantText = assistantMessages
-          .at(-1)
-          ?.parts.filter(
-            (p): p is { type: "text"; content: string } => p.type === "text",
-          )
-          .map((p) => p.content)
-          .join("")
-
-        if (assistantText) {
-          try {
-            const title = await generateChatTitle(assistantText)
-            await updateChatTitle({
-              id: titleGenerationContext.conversationUuid,
-              userId: titleGenerationContext.userId,
-              title,
-            })
-          } catch {}
+        if (isNewChat) {
+          titleGenerationContext = { conversationUuid, userId: user.id }
         }
       }
     }
   }
 
-  return toServerSentEventsResponse(streamWithPersistence(), {
-    abortController,
+  const modelMessages = await convertToModelMessages(messages)
+
+  let reasoningStartTime: number | null = null
+  let reasoningDuration: number | undefined
+
+  const result = streamText({
+    model: getModel(selectedChatModel),
+    messages: modelMessages,
+    onChunk: ({ chunk }) => {
+      const type = (chunk as TextStreamPart<{}>).type
+      if (type === "reasoning-start") {
+        reasoningStartTime = Date.now()
+      } else if (type === "reasoning-end" && reasoningStartTime != null) {
+        reasoningDuration = Math.ceil((Date.now() - reasoningStartTime) / 1000)
+        reasoningStartTime = null
+      }
+    },
+    onFinish: async ({ text, reasoning }) => {
+      if (!conversationUuid) return
+
+      const partsToPersist: Array<{
+        type: string
+        text: string
+        duration?: number
+      }> = []
+
+      if (reasoning && reasoning.length > 0) {
+        for (const part of reasoning) {
+          if (part.type === "reasoning" && part.text) {
+            partsToPersist.push({
+              type: "reasoning",
+              text: part.text,
+              ...(reasoningDuration != null && { duration: reasoningDuration }),
+            })
+          }
+        }
+      }
+
+      partsToPersist.push({ type: "text", text })
+
+      const persistedParts = toPersistedChatMessageParts(
+        partsToPersist,
+        undefined,
+      )
+
+      try {
+        await saveMessage({
+          id: crypto.randomUUID(),
+          chatId: conversationUuid,
+          role: "assistant",
+          parts: persistedParts,
+          attachments: [],
+          createdAt: new Date(),
+        })
+
+        if (titleGenerationContext) {
+          try {
+            const title = await generateChatTitle(text)
+            await updateChatTitle({
+              id: titleGenerationContext.conversationUuid,
+              userId: titleGenerationContext.userId,
+              title,
+            })
+          } catch (e) {
+            console.error("Failed to generate title:", e)
+          }
+        }
+      } catch (e) {
+        console.error("Failed to persist assistant message:", e)
+      }
+    },
   })
+
+  return result.toUIMessageStreamResponse()
 }

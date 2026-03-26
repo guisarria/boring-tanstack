@@ -45,7 +45,7 @@ export type ChatHistoryPayload = {
   messages: Array<{
     id: string
     chatId: string
-    role: "system" | "user" | "assistant"
+    role: "system" | "user" | "assistant" | "tool"
     parts: Array<ChatMessagePart>
     attachments: {}[]
     createdAt: string

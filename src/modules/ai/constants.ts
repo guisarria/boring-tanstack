@@ -1,15 +1,14 @@
 const models = [
-  "nvidia/nemotron-3-nano-30b-a3b:free",
+  "google/gemini-2.0-flash-lite",
   "openai/gpt-4o-mini",
-  "anthropic/claude-3.5-sonnet",
+  "openai/gpt-oss-120b:free",
 ] as const
 
 export type AllowedModelId = (typeof models)[number]
 
 export const ALLOWED_MODEL_IDS = new Set<AllowedModelId>(models)
 
-export const DEFAULT_MODEL_ID: AllowedModelId =
-  "nvidia/nemotron-3-nano-30b-a3b:free"
+export const DEFAULT_MODEL_ID: AllowedModelId = "openai/gpt-oss-120b:free"
 
 export const ENTITLEMENTS_BY_USER_TYPE = {
   free: { maxMessagesPerHour: 10 },
