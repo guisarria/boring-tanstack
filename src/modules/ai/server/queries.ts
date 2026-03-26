@@ -204,7 +204,8 @@ export async function saveMessage(message: {
       attachments: message.attachments,
       createdAt: message.createdAt,
     })
-  } catch {
+  } catch (e) {
+    console.error("saveMessage error:", e)
     throw new AppError("internal_error:database", "Failed to save message")
   }
 }

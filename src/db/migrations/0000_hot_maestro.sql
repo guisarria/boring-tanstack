@@ -1,4 +1,5 @@
 CREATE TYPE "public"."chat_role" AS ENUM('system', 'user', 'assistant');--> statement-breakpoint
+CREATE TYPE "public"."schedule_event_color" AS ENUM('sky', 'amber', 'violet', 'rose', 'emerald', 'orange');--> statement-breakpoint
 CREATE TABLE "chat" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -76,13 +77,31 @@ CREATE TABLE "verifications" (
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "schedule_event" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" text NOT NULL,
+	"title" text NOT NULL,
+	"description" text,
+	"location" text,
+	"color" "schedule_event_color" DEFAULT 'sky' NOT NULL,
+	"start_at" timestamp NOT NULL,
+	"end_at" timestamp NOT NULL,
+	"all_day" boolean DEFAULT false NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "schedule_event_end_after_start" CHECK ("schedule_event"."end_at" > "schedule_event"."start_at")
+);
+--> statement-breakpoint
 ALTER TABLE "chat" ADD CONSTRAINT "chat_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "message" ADD CONSTRAINT "message_chat_id_chat_id_fk" FOREIGN KEY ("chat_id") REFERENCES "public"."chat"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "schedule_event" ADD CONSTRAINT "schedule_event_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "chat_userId_createdAt_idx" ON "chat" USING btree ("user_id","created_at");--> statement-breakpoint
 CREATE INDEX "message_chatId_createdAt_idx" ON "message" USING btree ("chat_id","created_at");--> statement-breakpoint
 CREATE INDEX "message_chatId_role_createdAt_idx" ON "message" USING btree ("chat_id","role","created_at");--> statement-breakpoint
 CREATE INDEX "accounts_userId_idx" ON "accounts" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "sessions_userId_idx" ON "sessions" USING btree ("user_id");--> statement-breakpoint
-CREATE INDEX "verifications_identifier_idx" ON "verifications" USING btree ("identifier");
+CREATE INDEX "verifications_identifier_idx" ON "verifications" USING btree ("identifier");--> statement-breakpoint
+CREATE INDEX "schedule_event_userId_startAt_idx" ON "schedule_event" USING btree ("user_id","start_at");--> statement-breakpoint
+CREATE INDEX "schedule_event_userId_endAt_idx" ON "schedule_event" USING btree ("user_id","end_at");

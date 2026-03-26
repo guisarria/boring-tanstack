@@ -1,10 +1,7 @@
-import { createOpenRouter } from "@openrouter/ai-sdk-provider"
 import {
-  convertToModelMessages,
+  createAgentUIStreamResponse,
   generateText,
   Output,
-  streamText,
-  type LanguageModel,
   type UIMessage,
 } from "ai"
 import { z } from "zod"
@@ -12,41 +9,17 @@ import { z } from "zod"
 import { env } from "@/config/env/server"
 import { AppError } from "@/lib/errors"
 
-import {
-  DEFAULT_MODEL_ID,
-  isAllowedModelId,
-  type AllowedModelId,
-} from "../constants"
+import { DEFAULT_MODEL_ID, isAllowedModelId } from "../constants"
 import { chatStreamRequestSchema } from "../validation"
+import { getChatAgent, getChatModel } from "./chat-agent"
 import {
   loadChatHistory,
   parseOptionalConversationId,
   requireUser,
 } from "./chat-history"
-import { CHAT_SYSTEM_PROMPT } from "./chat-prompts"
-import { toPersistedChatMessageParts } from "./message-transforms"
-import {
-  createChat,
-  getChatById,
-  saveMessage,
-  updateChatTitle,
-} from "./queries"
+import { persistAssistantMessage, prepareChatTurn } from "./chat-session"
+import { updateChatTitle } from "./queries"
 import { checkBotId, checkIpRateLimit, checkRateLimit } from "./rate-limit"
-
-const openrouter = createOpenRouter({
-  apiKey: env.OPENROUTER_API_KEY,
-})
-
-const modelCache = new Map<AllowedModelId, LanguageModel>()
-
-function getModel(modelId: AllowedModelId): LanguageModel {
-  let model = modelCache.get(modelId)
-  if (!model) {
-    model = openrouter.chat(modelId)
-    modelCache.set(modelId, model)
-  }
-  return model
-}
 
 const chatTitleSchema = z.object({
   title: z
@@ -70,7 +43,7 @@ function sanitizeTitle(raw: string): string {
 async function generateChatTitle(userMessage: string): Promise<string> {
   try {
     const { output } = await generateText({
-      model: getModel(DEFAULT_MODEL_ID),
+      model: getChatModel(DEFAULT_MODEL_ID),
       system:
         "Generate a short user-visible chat title. Return a concise plain-text title only.",
       prompt: userMessage,
@@ -135,7 +108,6 @@ export async function handleChatPost(request: Request): Promise<Response> {
   const body = parsed.data
 
   const conversationId = body.data?.conversationId ?? body.id ?? null
-
   const conversationUuid =
     typeof conversationId === "string"
       ? parseOptionalConversationId(conversationId)
@@ -143,7 +115,6 @@ export async function handleChatPost(request: Request): Promise<Response> {
 
   const selectedChatModelRaw =
     body.data?.selectedChatModel ?? body.data?.model ?? body.model ?? null
-
   const selectedChatModel =
     typeof selectedChatModelRaw === "string"
       ? selectedChatModelRaw
@@ -161,10 +132,7 @@ export async function handleChatPost(request: Request): Promise<Response> {
   const ip = headers.get("x-forwarded-for") || headers.get("x-real-ip")
   try {
     await checkIpRateLimit(ip ?? undefined)
-    await checkRateLimit({
-      userId: user.id,
-      userRole: user.role,
-    })
+    await checkRateLimit({ userId: user.id, userRole: user.role })
   } catch (error) {
     if (error instanceof Response) return error
     return new AppError("rate_limit:api").toResponse()
@@ -172,113 +140,70 @@ export async function handleChatPost(request: Request): Promise<Response> {
 
   const messages = body.messages as UIMessage[]
 
-  let isNewChat = false
-  let titleGenerationContext: {
-    conversationUuid: string
-    userId: string
-    userText: string
-  } | null = null
+  let titleContext: Awaited<
+    ReturnType<typeof prepareChatTurn>
+  >["titleContext"] = null
+  let titlePromise: Promise<string> | null = null
 
   if (conversationUuid) {
-    const existingChat = await getChatById({ id: conversationUuid })
-    if (existingChat && existingChat.userId !== user.id) {
-      return new AppError("forbidden:chat").toResponse()
-    }
-    if (!existingChat) {
-      isNewChat = true
-      await createChat({
-        id: conversationUuid,
+    try {
+      const turn = await prepareChatTurn({
+        conversationId: conversationUuid,
         userId: user.id,
-        title: "New chat",
+        messages,
       })
-    }
+      titleContext = turn.titleContext
 
-    const lastUserMessage = [...messages]
-      .reverse()
-      .find((m) => m.role === "user")
-
-    if (lastUserMessage) {
-      const persistedParts = toPersistedChatMessageParts(
-        lastUserMessage.parts.filter(
-          (p) => p.type === "text" || p.type === "reasoning",
-        ),
-      )
-
-      if (persistedParts.length > 0) {
-        await saveMessage({
-          id: crypto.randomUUID(),
-          chatId: conversationUuid,
-          role: "user",
-          parts: persistedParts,
-          attachments: [],
-          createdAt: new Date(),
-        })
-
-        if (isNewChat) {
-          const userText = persistedParts
-            .filter((p) => p.type === "text")
-            .map((p) => p.text)
-            .join(" ")
-          titleGenerationContext = {
-            conversationUuid,
-            userId: user.id,
-            userText,
-          }
-        }
+      if (titleContext) {
+        titlePromise = generateChatTitle(titleContext.userText)
       }
+    } catch (error) {
+      if (error instanceof Error && error.message === "forbidden") {
+        return new AppError("forbidden:chat").toResponse()
+      }
+      throw error
     }
   }
 
-  const modelMessages = await convertToModelMessages(messages)
+  const agent = getChatAgent(selectedChatModel)
 
-  const result = streamText({
-    model: getModel(selectedChatModel),
-    system: CHAT_SYSTEM_PROMPT,
-    messages: modelMessages,
+  return createAgentUIStreamResponse({
+    agent,
+    uiMessages: messages,
     abortSignal: request.signal,
-  })
-
-  result.consumeStream()
-
-  return result.toUIMessageStreamResponse({
-    originalMessages: messages,
     sendReasoning: true,
-    onFinish: async ({ messages: finalMessages }) => {
-      if (!conversationUuid) return
-
-      const assistantMessage = finalMessages.at(-1)
-      if (!assistantMessage || assistantMessage.role !== "assistant") return
-
-      const persistedParts = toPersistedChatMessageParts(
-        assistantMessage.parts.filter(
-          (p) => p.type === "text" || p.type === "reasoning",
-        ),
+    onFinish: async ({ responseMessage }) => {
+      console.log(
+        "[onFinish] called with responseMessage:",
+        responseMessage.id,
+        responseMessage.role,
       )
-
-      if (persistedParts.length === 0) return
+      if (!conversationUuid) {
+        console.log("[onFinish] no conversationUuid, returning early")
+        return
+      }
 
       try {
-        await saveMessage({
-          id: crypto.randomUUID(),
-          chatId: conversationUuid,
-          role: "assistant",
-          parts: persistedParts,
-          attachments: [],
-          createdAt: new Date(),
+        console.log(
+          "[onFinish] persisting assistant message:",
+          responseMessage.id,
+        )
+        await persistAssistantMessage({
+          conversationId: conversationUuid,
+          message: responseMessage,
         })
+        console.log("[onFinish] assistant message persisted successfully")
 
-        if (titleGenerationContext) {
+        if (titleContext && titlePromise) {
           try {
-            const title = await generateChatTitle(
-              titleGenerationContext.userText,
-            )
+            const title = await titlePromise
             await updateChatTitle({
-              id: titleGenerationContext.conversationUuid,
-              userId: titleGenerationContext.userId,
+              id: titleContext.conversationId,
+              userId: titleContext.userId,
               title,
             })
           } catch (e) {
-            console.error("Failed to generate title:", e)
+            console.error("Failed to update title:", e)
           }
         }
       } catch (e) {

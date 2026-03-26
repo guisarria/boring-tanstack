@@ -20,7 +20,7 @@ const chatTransport = new DefaultChatTransport({
 const PENDING_ASSISTANT_MESSAGE: UIMessage = {
   id: "__pending__",
   role: "assistant",
-  parts: [{ type: "reasoning", text: "Thinking…", state: "streaming" }],
+  parts: [{ type: "reasoning", text: "", state: "streaming" }],
 }
 
 type HistoryMessage = {
@@ -92,9 +92,15 @@ export function ChatProvider({
   const { messages, sendMessage, status, stop } = useChat({
     id: conversationId,
     messages: initialMessages,
+    generateId: () => crypto.randomUUID(),
     transport: chatTransport,
     onFinish: () => {
-      void queryClient.invalidateQueries({ queryKey: chatQueryKeys.all })
+      void queryClient.invalidateQueries({
+        queryKey: chatQueryKeys.history(conversationId),
+      })
+      void queryClient.invalidateQueries({
+        queryKey: chatQueryKeys.list(),
+      })
     },
   })
 

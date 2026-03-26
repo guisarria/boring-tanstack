@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1773961917104,
-      "tag": "0000_naive_spectrum",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1774476688095,
-      "tag": "0001_famous_hex",
+      "when": 1774557876038,
+      "tag": "0000_hot_maestro",
       "breakpoints": true
     }
   ]
