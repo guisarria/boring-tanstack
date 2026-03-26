@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const CHAT_ROLES = ["system", "user", "assistant", "tool"] as const
+export const CHAT_ROLES = ["system", "user", "assistant"] as const
 
 export const chatRoleSchema = z.enum(CHAT_ROLES)
 
@@ -12,7 +12,6 @@ const uiTextPartSchema = z.object({
 const uiReasoningPartSchema = z.object({
   type: z.literal("reasoning"),
   text: z.string(),
-  duration: z.number().optional(),
 })
 
 const uiStepStartPartSchema = z.object({
@@ -37,12 +36,20 @@ export const uiMessageSchema = z.object({
   createdAt: z.coerce.date().optional(),
 })
 
+const chatStreamRequestDataSchema = z
+  .object({
+    conversationId: z.string().optional(),
+    selectedChatModel: z.string().optional(),
+    model: z.string().optional(),
+  })
+  .optional()
+
 export const chatStreamRequestSchema = z
   .object({
     id: z.string().optional(),
     model: z.string().optional(),
     messages: z.array(uiMessageSchema),
-    data: z.record(z.string(), z.unknown()).optional(),
+    data: chatStreamRequestDataSchema,
   })
   .passthrough()
 
@@ -60,7 +67,6 @@ export const persistedChatMessagePartSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("reasoning"),
     text: z.string(),
-    duration: z.number().optional(),
   }),
 ])
 

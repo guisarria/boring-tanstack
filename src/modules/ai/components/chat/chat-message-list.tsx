@@ -1,5 +1,4 @@
 import { useRouteContext } from "@tanstack/react-router"
-import type { UIMessage } from "ai"
 
 import { AiBotAvatar } from "@/modules/ai/components/ui/ai-avatar"
 import {
@@ -11,35 +10,29 @@ import {
 import { useStickToBottom } from "@/modules/ai/hooks/use-stick-to-bottom"
 
 import { ChatMessageItem } from "./chat-message-item"
+import { useChatController } from "./chat-provider"
 
-export function ChatMessageList({
-  messages,
-  streamingMessageId,
-  getReasoningDuration,
-}: {
-  messages: UIMessage[]
-  streamingMessageId: string | null
-  getReasoningDuration: (metadata: unknown) => number | undefined
-}) {
+export function ChatMessageList() {
+  const { displayMessages, streamingMessageId } = useChatController()
   const { user } = useRouteContext({ from: "__root__" })
   const { scrollRef, bottomRef, isAtBottom, scrollToBottom } =
     useStickToBottom()
 
-  const lastAssistantId = [...messages]
+  const lastAssistantId = [...displayMessages]
     .reverse()
     .find((m) => m.role === "assistant")?.id
 
   return (
     <Conversation scrollRef={scrollRef}>
       <ConversationContent bottomRef={bottomRef} className="mx-auto space-y-4">
-        {messages.length === 0 && (
+        {displayMessages.length === 0 && (
           <ConversationEmptyState>
             <AiBotAvatar className="size-40" />
             <p className="text-2xl">How can I help, {user?.name}?</p>
           </ConversationEmptyState>
         )}
 
-        {messages.map((message) => {
+        {displayMessages.map((message) => {
           const isStreaming = message.id === streamingMessageId
           const showAvatar =
             message.role === "assistant" && message.id === lastAssistantId
@@ -50,7 +43,6 @@ export function ChatMessageList({
               message={message}
               isStreaming={isStreaming}
               showAvatar={showAvatar}
-              reasoningDuration={getReasoningDuration(message.metadata)}
             />
           )
         })}

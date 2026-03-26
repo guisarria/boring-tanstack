@@ -1,20 +1,14 @@
-import { SendIcon } from "lucide-react"
-import { useEffect, useRef } from "react"
+import { SendIcon, SquareIcon } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 
-export function ChatComposer({
-  value,
-  onChange,
-  onSubmit,
-  disabled,
-}: {
-  value: string
-  onChange: (value: string) => void
-  onSubmit: () => void
-  disabled: boolean
-}) {
+import { useChatController } from "./chat-provider"
+
+export function ChatComposer() {
+  const { isLoading, sendText, stop } = useChatController()
+  const [draft, setDraft] = useState("")
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   function adjustHeight() {
@@ -26,22 +20,29 @@ export function ChatComposer({
 
   useEffect(() => {
     adjustHeight()
-  }, [value])
+  }, [draft])
+
+  function submit() {
+    const text = draft.trim()
+    if (!text || isLoading) return
+    setDraft("")
+    void sendText(text)
+  }
 
   return (
     <div className="py-2">
       <form
         onSubmit={(e) => {
           e.preventDefault()
-          onSubmit()
+          submit()
         }}
         className="mx-auto flex max-w-2xl items-center gap-x-2"
       >
         <Textarea
           ref={textareaRef}
-          value={value}
+          value={draft}
           onChange={(e) => {
-            onChange(e.target.value)
+            setDraft(e.target.value)
             adjustHeight()
           }}
           placeholder="Type a message… (Enter to send, Shift+Enter for new line)"
@@ -49,20 +50,31 @@ export function ChatComposer({
             if (e.nativeEvent.isComposing) return
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault()
-              onSubmit()
+              submit()
             }
           }}
-          disabled={disabled}
+          disabled={isLoading}
           className="max-h-32 min-h-9 resize-none overflow-hidden rounded-sm"
         />
-        <Button
-          type="submit"
-          size="icon-lg"
-          className="rounded-sm bg-foreground p-4.5 text-background"
-          disabled={disabled || !value.trim()}
-        >
-          <SendIcon />
-        </Button>
+        {isLoading ? (
+          <Button
+            type="button"
+            size="icon-lg"
+            className="rounded-sm bg-destructive p-4.5 text-destructive-foreground"
+            onClick={stop}
+          >
+            <SquareIcon className="size-4" />
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            size="icon-lg"
+            className="rounded-sm bg-foreground p-4.5 text-background"
+            disabled={!draft.trim()}
+          >
+            <SendIcon />
+          </Button>
+        )}
       </form>
     </div>
   )

@@ -5,6 +5,10 @@ export {
   chatListQueryOptions,
 } from "./query-options"
 export { ChatPanel } from "./components/chat/chat-panel"
+export {
+  ChatProvider,
+  useChatController,
+} from "./components/chat/chat-provider"
 
 // Validation & Types
 export {

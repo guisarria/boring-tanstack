@@ -1,8 +1,13 @@
 import type { UIMessage } from "ai"
+import { CheckIcon, CopyIcon } from "lucide-react"
+import { toast } from "sonner"
 
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard"
 import { AiBotAvatar } from "@/modules/ai/components/ui/ai-avatar"
 import {
   Message,
+  MessageAction,
+  MessageActions,
   MessageContent,
   MessageResponse,
 } from "@/modules/ai/components/ui/message"
@@ -17,17 +22,15 @@ function MessagePartView({
   part,
   role,
   isStreaming,
-  reasoningDuration,
 }: {
   part: UIMessage["parts"][number]
   role: UIMessage["role"]
   isStreaming: boolean
-  reasoningDuration?: number
 }) {
   switch (part.type) {
     case "reasoning":
       return (
-        <Reasoning isStreaming={isStreaming} duration={reasoningDuration}>
+        <Reasoning isStreaming={isStreaming}>
           <ReasoningTrigger />
           <ReasoningContent>{part.text}</ReasoningContent>
         </Reasoning>
@@ -43,37 +46,69 @@ function MessagePartView({
   }
 }
 
+function AssistantActions({
+  message,
+  isStreaming,
+}: {
+  message: UIMessage
+  isStreaming: boolean
+}) {
+  const { copyToClipboard, isCopied } = useCopyToClipboard()
+
+  const text = message.parts
+    .filter((part) => part.type === "text")
+    .map((part) => part.text)
+    .join("\n\n")
+    .trim()
+
+  if (isStreaming || !text) return null
+
+  return (
+    <MessageActions className="ml-12 opacity-0 transition-opacity group-hover:opacity-100">
+      <MessageAction
+        tooltip={isCopied ? "Copied!" : "Copy"}
+        onClick={() => {
+          copyToClipboard(text)
+          toast.success("Copied to clipboard")
+        }}
+      >
+        {isCopied ? (
+          <CheckIcon className="size-3.5" />
+        ) : (
+          <CopyIcon className="size-3.5" />
+        )}
+      </MessageAction>
+    </MessageActions>
+  )
+}
+
 export function ChatMessageItem({
   message,
   isStreaming,
   showAvatar,
-  reasoningDuration,
 }: {
   message: UIMessage
   isStreaming: boolean
   showAvatar: boolean
-  reasoningDuration?: number
 }) {
   const isUser = message.role === "user"
 
-  const renderableParts = message.parts.filter(
-    (
-      part,
-    ): part is typeof part & { type: "text" | "reasoning"; text: string } =>
-      (part.type === "text" || part.type === "reasoning") && "text" in part,
-  )
-
-  const parts = renderableParts.map((part) => (
-    <MessagePartView
-      key={`${message.id}-${part.type}-${part.text.slice(0, 20)}`}
-      part={part}
-      role={message.role}
-      isStreaming={isStreaming}
-      reasoningDuration={
-        part.type === "reasoning" ? reasoningDuration : undefined
-      }
-    />
-  ))
+  const parts = message.parts.map((part, index) => {
+    switch (part.type) {
+      case "text":
+      case "reasoning":
+        return (
+          <MessagePartView
+            key={`${message.id}-${index}`}
+            part={part}
+            role={message.role}
+            isStreaming={isStreaming}
+          />
+        )
+      default:
+        return null
+    }
+  })
 
   return (
     <Message from={message.role}>
@@ -94,6 +129,9 @@ export function ChatMessageItem({
           </>
         )}
       </div>
+      {!isUser && (
+        <AssistantActions message={message} isStreaming={isStreaming} />
+      )}
     </Message>
   )
 }

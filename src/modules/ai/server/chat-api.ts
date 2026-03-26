@@ -1,19 +1,21 @@
 import { createOpenRouter } from "@openrouter/ai-sdk-provider"
 import {
+  consumeStream,
   convertToModelMessages,
   generateText,
+  Output,
   streamText,
   type LanguageModel,
-  type TextStreamPart,
   type UIMessage,
 } from "ai"
+import { z } from "zod"
 
 import { env } from "@/config/env/server"
 import { AppError } from "@/lib/errors"
 
 import {
-  ALLOWED_MODEL_IDS,
   DEFAULT_MODEL_ID,
+  isAllowedModelId,
   type AllowedModelId,
 } from "../constants"
 import { chatStreamRequestSchema } from "../validation"
@@ -22,6 +24,7 @@ import {
   parseOptionalConversationId,
   requireUser,
 } from "./chat-history"
+import { CHAT_SYSTEM_PROMPT } from "./chat-prompts"
 import { toPersistedChatMessageParts } from "./message-transforms"
 import {
   createChat,
@@ -46,30 +49,39 @@ function getModel(modelId: AllowedModelId): LanguageModel {
   return model
 }
 
-function isAllowedModelId(value: string): value is AllowedModelId {
-  return (ALLOWED_MODEL_IDS as Set<string>).has(value)
+const chatTitleSchema = z.object({
+  title: z
+    .string()
+    .min(1)
+    .max(80)
+    .describe(
+      "A concise 3-6 word plain-text conversation title. No quotes or markdown.",
+    ),
+})
+
+function sanitizeTitle(raw: string): string {
+  const cleaned = raw
+    .trim()
+    .replace(/^["'#*\s]+/, "")
+    .replace(/["]+$/, "")
+    .trim()
+  return cleaned || "New chat"
 }
 
-async function generateChatTitle(assistantResponse: string): Promise<string> {
-  const { text } = await generateText({
-    model: getModel(DEFAULT_MODEL_ID),
-    messages: [
-      {
-        role: "user",
-        content:
-          "Generate a concise title (3-6 words, max 80 chars). Never return empty.\n\n" +
-          assistantResponse,
-      },
-    ],
-  })
+async function generateChatTitle(userMessage: string): Promise<string> {
+  try {
+    const { output } = await generateText({
+      model: getModel(DEFAULT_MODEL_ID),
+      system:
+        "Generate a short user-visible chat title. Return a concise plain-text title only.",
+      prompt: userMessage,
+      output: Output.object({ schema: chatTitleSchema }),
+    })
 
-  const title = text.trim()
-  return title
-    ? title
-        .replace(/^[#*"\s]+/, "")
-        .replace(/["]+$/, "")
-        .trim()
-    : "New chat"
+    return sanitizeTitle(output.title)
+  } catch {
+    return "New chat"
+  }
 }
 
 export async function handleChatGet(request: Request): Promise<Response> {
@@ -165,6 +177,7 @@ export async function handleChatPost(request: Request): Promise<Response> {
   let titleGenerationContext: {
     conversationUuid: string
     userId: string
+    userText: string
   } | null = null
 
   if (conversationUuid) {
@@ -203,7 +216,15 @@ export async function handleChatPost(request: Request): Promise<Response> {
         })
 
         if (isNewChat) {
-          titleGenerationContext = { conversationUuid, userId: user.id }
+          const userText = persistedParts
+            .filter((p) => p.type === "text")
+            .map((p) => p.text)
+            .join(" ")
+          titleGenerationContext = {
+            conversationUuid,
+            userId: user.id,
+            userText,
+          }
         }
       }
     }
@@ -211,48 +232,27 @@ export async function handleChatPost(request: Request): Promise<Response> {
 
   const modelMessages = await convertToModelMessages(messages)
 
-  let reasoningStartTime: number | null = null
-  let reasoningDuration: number | undefined
-
   const result = streamText({
     model: getModel(selectedChatModel),
+    system: CHAT_SYSTEM_PROMPT,
     messages: modelMessages,
-    onChunk: ({ chunk }) => {
-      const type = (chunk as TextStreamPart<{}>).type
-      if (type === "reasoning-start") {
-        reasoningStartTime = Date.now()
-      } else if (type === "reasoning-end" && reasoningStartTime != null) {
-        reasoningDuration = Math.ceil((Date.now() - reasoningStartTime) / 1000)
-        reasoningStartTime = null
-      }
-    },
+    abortSignal: request.signal,
     onFinish: async ({ text, reasoning }) => {
       if (!conversationUuid) return
 
-      const partsToPersist: Array<{
-        type: string
-        text: string
-        duration?: number
-      }> = []
+      const partsToPersist: Array<{ type: string; text: string }> = []
 
       if (reasoning && reasoning.length > 0) {
         for (const part of reasoning) {
           if (part.type === "reasoning" && part.text) {
-            partsToPersist.push({
-              type: "reasoning",
-              text: part.text,
-              ...(reasoningDuration != null && { duration: reasoningDuration }),
-            })
+            partsToPersist.push({ type: "reasoning", text: part.text })
           }
         }
       }
 
       partsToPersist.push({ type: "text", text })
 
-      const persistedParts = toPersistedChatMessageParts(
-        partsToPersist,
-        undefined,
-      )
+      const persistedParts = toPersistedChatMessageParts(partsToPersist)
 
       try {
         await saveMessage({
@@ -266,7 +266,9 @@ export async function handleChatPost(request: Request): Promise<Response> {
 
         if (titleGenerationContext) {
           try {
-            const title = await generateChatTitle(text)
+            const title = await generateChatTitle(
+              titleGenerationContext.userText,
+            )
             await updateChatTitle({
               id: titleGenerationContext.conversationUuid,
               userId: titleGenerationContext.userId,
@@ -282,5 +284,8 @@ export async function handleChatPost(request: Request): Promise<Response> {
     },
   })
 
-  return result.toUIMessageStreamResponse()
+  return result.toUIMessageStreamResponse({
+    sendReasoning: true,
+    consumeSseStream: consumeStream,
+  })
 }
