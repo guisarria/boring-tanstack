@@ -14,5 +14,6 @@ export function scheduleEventsQueryOptions() {
     queryFn: async ({ signal }: { signal: AbortSignal }) =>
       scheduleEventsResponseSchema.parse(await listScheduleEvents({ signal })),
     staleTime: SCHEDULE_STALE_TIME,
+    refetchOnWindowFocus: true,
   }
 }

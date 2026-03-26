@@ -2004,7 +2004,7 @@ function WeekView({
 
               {currentTimeVisible && isToday(day) && (
                 <div
-                  className="pointer-events-none absolute left-0 z-20 w-screen"
+                  className="pointer-events-none absolute left-0 z-20 w-full"
                   style={{ top: `${currentTimePosition}%` }}
                 >
                   <div className="relative flex items-center">
