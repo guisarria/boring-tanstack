@@ -31,7 +31,6 @@
     "@lexical/react": "^0.42.0",
     "@lexical/rich-text": "^0.42.0",
     "@neondatabase/serverless": "^1.0.2",
-    "@radix-ui/react-use-controllable-state": "^1.2.2",
     "@react-email/components": "^1.0.10",
     "@react-email/render": "2.0.4",
     "@streamdown/cjk": "^1.0.3",

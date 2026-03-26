@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router"
 
 import { Main } from "@/components/ui/design-system"
 import { seo } from "@/config/seo"
+import { FeaturesSection } from "@/routes/(marketing)/-components/features-section"
 import { Hero } from "@/routes/(marketing)/-components/hero"
 import { StackSection } from "@/routes/(marketing)/-components/stack-section"
 
@@ -28,6 +29,7 @@ function Index() {
       <Main className="flex flex-col items-center gap-y-20">
         <Hero />
         <StackSection />
+        <FeaturesSection />
         <CloneRepository />
       </Main>
       <Footer />
