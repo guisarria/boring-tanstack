@@ -13,6 +13,7 @@ import {
 import {
   createScheduleEventSchema,
   deleteScheduleEventSchema,
+  SCHEDULE_EVENT_COLORS,
   scheduleEventSchema,
   updateScheduleEventSchema,
 } from "./validation"
@@ -60,7 +61,12 @@ export const listScheduleEvents = createServerFn({ method: "GET" }).handler(
     const events = await listScheduleEventsByUserId({ userId })
 
     return {
-      events: events.map((event) => toScheduleEventDto(event)),
+      events: events.map((event, index) =>
+        scheduleEventSchema.parse({
+          ...toScheduleEventDto(event),
+          color: SCHEDULE_EVENT_COLORS[index % SCHEDULE_EVENT_COLORS.length],
+        }),
+      ),
     }
   },
 )
