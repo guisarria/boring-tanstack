@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useSyncExternalStore } from "react"
+import { useEffect, useRef, useSyncExternalStore } from "react"
 
 const BOTTOM_THRESHOLD_PX = 80
 
@@ -8,28 +8,28 @@ export function useStickToBottom() {
   const isLockedRef = useRef(true)
   const subscribersRef = useRef(new Set<() => void>())
 
-  const subscribe = useCallback((cb: () => void) => {
+  function subscribe(cb: () => void) {
     subscribersRef.current.add(cb)
     return () => {
       subscribersRef.current.delete(cb)
     }
-  }, [])
+  }
 
-  const getSnapshot = useCallback(() => isLockedRef.current, [])
+  const getSnapshot = () => isLockedRef.current
 
   const isAtBottom = useSyncExternalStore(subscribe, getSnapshot, () => true)
 
-  const setLocked = useCallback((next: boolean) => {
+  function setLocked(next: boolean) {
     if (isLockedRef.current !== next) {
       isLockedRef.current = next
       for (const cb of subscribersRef.current) cb()
     }
-  }, [])
+  }
 
-  const scrollToBottom = useCallback(() => {
+  function scrollToBottom() {
     bottomRef.current?.scrollIntoView({ block: "end", behavior: "instant" })
     setLocked(true)
-  }, [setLocked])
+  }
 
   useEffect(() => {
     const el = scrollRef.current

@@ -1,31 +1,32 @@
 import { SendIcon, SquareIcon } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 
 import { useChatController } from "./chat-provider"
 
+function resizeTextarea(el: HTMLTextAreaElement | null) {
+  if (!el) return
+  el.style.height = "0px"
+  el.style.height = `${el.scrollHeight + 2}px`
+}
+
 export function ChatComposer() {
   const { isLoading, sendText, stop } = useChatController()
   const [draft, setDraft] = useState("")
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
-  function adjustHeight() {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 2}px`
-    }
+  function setTextareaRef(node: HTMLTextAreaElement | null) {
+    textareaRef.current = node
+    resizeTextarea(node)
   }
-
-  useEffect(() => {
-    adjustHeight()
-  }, [draft])
 
   function submit() {
     const text = draft.trim()
     if (!text || isLoading) return
     setDraft("")
+    requestAnimationFrame(() => resizeTextarea(textareaRef.current))
     void sendText(text)
   }
 
@@ -39,12 +40,10 @@ export function ChatComposer() {
         className="mx-auto flex max-w-2xl items-center gap-x-2"
       >
         <Textarea
-          ref={textareaRef}
+          ref={setTextareaRef}
           value={draft}
-          onChange={(e) => {
-            setDraft(e.target.value)
-            adjustHeight()
-          }}
+          onChange={(e) => setDraft(e.target.value)}
+          onInput={(e) => resizeTextarea(e.currentTarget)}
           placeholder="Type a message… (Enter to send, Shift+Enter for new line)"
           onKeyDown={(e) => {
             if (e.nativeEvent.isComposing) return

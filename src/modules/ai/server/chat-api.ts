@@ -1,6 +1,5 @@
 import { createOpenRouter } from "@openrouter/ai-sdk-provider"
 import {
-  consumeStream,
   convertToModelMessages,
   generateText,
   Output,
@@ -237,22 +236,26 @@ export async function handleChatPost(request: Request): Promise<Response> {
     system: CHAT_SYSTEM_PROMPT,
     messages: modelMessages,
     abortSignal: request.signal,
-    onFinish: async ({ text, reasoning }) => {
+  })
+
+  result.consumeStream()
+
+  return result.toUIMessageStreamResponse({
+    originalMessages: messages,
+    sendReasoning: true,
+    onFinish: async ({ messages: finalMessages }) => {
       if (!conversationUuid) return
 
-      const partsToPersist: Array<{ type: string; text: string }> = []
+      const assistantMessage = finalMessages.at(-1)
+      if (!assistantMessage || assistantMessage.role !== "assistant") return
 
-      if (reasoning && reasoning.length > 0) {
-        for (const part of reasoning) {
-          if (part.type === "reasoning" && part.text) {
-            partsToPersist.push({ type: "reasoning", text: part.text })
-          }
-        }
-      }
+      const persistedParts = toPersistedChatMessageParts(
+        assistantMessage.parts.filter(
+          (p) => p.type === "text" || p.type === "reasoning",
+        ),
+      )
 
-      partsToPersist.push({ type: "text", text })
-
-      const persistedParts = toPersistedChatMessageParts(partsToPersist)
+      if (persistedParts.length === 0) return
 
       try {
         await saveMessage({
@@ -282,10 +285,5 @@ export async function handleChatPost(request: Request): Promise<Response> {
         console.error("Failed to persist assistant message:", e)
       }
     },
-  })
-
-  return result.toUIMessageStreamResponse({
-    sendReasoning: true,
-    consumeSseStream: consumeStream,
   })
 }

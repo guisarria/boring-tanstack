@@ -2,14 +2,7 @@ import { useChat } from "@ai-sdk/react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { DefaultChatTransport, type UIMessage } from "ai"
-import {
-  createContext,
-  use,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from "react"
+import { createContext, use, useEffect, useRef } from "react"
 import { toast } from "sonner"
 
 import {
@@ -23,6 +16,12 @@ const chatTransport = new DefaultChatTransport({
     body: { messages, data: { conversationId: id } },
   }),
 })
+
+const PENDING_ASSISTANT_MESSAGE: UIMessage = {
+  id: "__pending__",
+  role: "assistant",
+  parts: [{ type: "reasoning", text: "Thinking…", state: "streaming" }],
+}
 
 type HistoryMessage = {
   id: string
@@ -88,10 +87,7 @@ export function ChatProvider({
       return generatedIdRef.current
     })()
 
-  const initialMessages = useMemo(
-    () => historyToUIMessages(history.messages),
-    [history.messages],
-  )
+  const initialMessages = historyToUIMessages(history.messages)
 
   const { messages, sendMessage, status, stop } = useChat({
     id: conversationId,
@@ -128,44 +124,28 @@ export function ChatProvider({
       ? lastMessage.id
       : null
 
-  const pendingAssistant = useRef<UIMessage>({
-    id: "__pending__",
-    role: "assistant",
-    parts: [{ type: "reasoning", text: "Thinking…", state: "streaming" }],
-  })
+  const displayMessages = showThinkingPlaceholder
+    ? [...messages, PENDING_ASSISTANT_MESSAGE]
+    : messages
 
-  const displayMessages = useMemo<UIMessage[]>(
-    () =>
-      showThinkingPlaceholder
-        ? [...messages, pendingAssistant.current]
-        : messages,
-    [showThinkingPlaceholder, messages],
-  )
+  async function sendText(text: string) {
+    try {
+      await sendMessage({ text })
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong"
+      toast.error(message, { position: "top-right" })
+    }
+  }
 
-  const sendText = useCallback(
-    async (text: string) => {
-      try {
-        await sendMessage({ text })
-      } catch (err) {
-        const message =
-          err instanceof Error ? err.message : "Something went wrong"
-        toast.error(message, { position: "top-right" })
-      }
-    },
-    [sendMessage],
-  )
-
-  const value = useMemo<ChatController>(
-    () => ({
-      messages,
-      displayMessages,
-      streamingMessageId,
-      isLoading,
-      sendText,
-      stop,
-    }),
-    [messages, displayMessages, streamingMessageId, isLoading, sendText, stop],
-  )
+  const value: ChatController = {
+    messages,
+    displayMessages,
+    streamingMessageId,
+    isLoading,
+    sendText,
+    stop,
+  }
 
   return <ChatContext value={value}>{children}</ChatContext>
 }
