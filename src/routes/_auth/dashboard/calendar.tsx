@@ -259,6 +259,9 @@ function RouteComponent() {
           values: toEditorValues(event),
         })
       }
+      toast.success(
+        `"${event.title}" moved to ${format(event.startAt, "MMM d, yyyy")} at ${format(event.startAt, "h:mm a")}`,
+      )
     },
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: scheduleQueryKeys.all })
