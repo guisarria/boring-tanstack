@@ -5,17 +5,12 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query"
-import { createFileRoute } from "@tanstack/react-router"
-import { addDays, addHours, format, startOfDay } from "date-fns"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { addDays, addHours, format, parse, startOfDay } from "date-fns"
 import { LoaderCircle, Trash2 } from "lucide-react"
-import {
-  startTransition,
-  useEffect,
-  useMemo,
-  useOptimistic,
-  useState,
-} from "react"
+import { useEffect, useMemo, useOptimistic, useState } from "react"
 import { toast } from "sonner"
+import { z } from "zod"
 
 import { useAppForm } from "@/components/forms/form-context"
 import { Button } from "@/components/ui/button"
@@ -53,7 +48,13 @@ import {
   calendarEventFormSchema,
 } from "@/modules/schedule/validation"
 
+const calendarSearchSchema = z.object({
+  date: z.string().optional(),
+  view: z.enum(["month", "week", "day", "schedule", "year"]).optional(),
+})
+
 export const Route = createFileRoute("/_auth/dashboard/calendar")({
+  validateSearch: (search) => calendarSearchSchema.parse(search),
   beforeLoad: async ({ context }) => {
     await context.queryClient.fetchQuery(scheduleEventsQueryOptions())
   },
@@ -86,6 +87,20 @@ type UpdateScheduleMutationInput = CreateScheduleMutationInput & {
 }
 
 function RouteComponent() {
+  const { date: dateParam, view: viewParam } = Route.useSearch()
+  const navigate = useNavigate({ from: Route.fullPath })
+
+  const date = useMemo(() => {
+    if (!dateParam) return new Date()
+    try {
+      return parse(dateParam, "yyyy-MM-dd", new Date())
+    } catch {
+      return new Date()
+    }
+  }, [dateParam])
+
+  const view = viewParam ?? "month"
+
   const queryClient = useQueryClient()
   const queryOptions = useMemo(() => scheduleEventsQueryOptions(), [])
   const calendarQuery = useQuery(queryOptions)
@@ -161,11 +176,7 @@ function RouteComponent() {
     },
     onSuccess: ({ event }) => {
       upsertScheduleEventInCache(queryClient, queryOptions.queryKey, event)
-      setEditor({
-        mode: "edit",
-        eventId: event.id,
-        values: toEditorValues(event),
-      })
+      setEditor(null)
       toast.success("Event saved")
     },
     onSettled: () => {
@@ -176,7 +187,41 @@ function RouteComponent() {
   const moveMutation = useMutation({
     mutationFn: async (input: UpdateScheduleMutationInput) =>
       updateScheduleEvent({ data: input }),
-    onMutate: (data) => {
+    onMutate: async (data) => {
+      await queryClient.cancelQueries({ queryKey: scheduleQueryKeys.all })
+
+      const previousEvents = queryClient.getQueryData<ScheduleEventsResponse>(
+        queryOptions.queryKey,
+      )
+
+      if (previousEvents) {
+        queryClient.setQueryData<ScheduleEventsResponse>(
+          queryOptions.queryKey,
+          (current) => {
+            if (!current) return current
+            return {
+              events: sortEvents(
+                current.events.map((event) =>
+                  event.id === data.id
+                    ? {
+                        ...event,
+                        allDay: data.allDay,
+                        color: data.color,
+                        description: data.description,
+                        endAt: data.endAt,
+                        location: data.location,
+                        startAt: data.startAt,
+                        title: data.title,
+                        updatedAt: new Date(),
+                      }
+                    : event,
+                ),
+              ),
+            }
+          },
+        )
+      }
+
       if (editor?.mode === "edit" && editor.eventId === data.id) {
         setEditor({
           mode: "edit",
@@ -194,13 +239,19 @@ function RouteComponent() {
           }),
         })
       }
+
+      return { previousEvents }
     },
-    onError: (error) => {
+    onError: (error, _data, context) => {
+      if (context?.previousEvents) {
+        queryClient.setQueryData(queryOptions.queryKey, context.previousEvents)
+      }
       toast.error(
         error instanceof Error ? error.message : "Failed to move event",
       )
     },
     onSuccess: ({ event }) => {
+      upsertScheduleEventInCache(queryClient, queryOptions.queryKey, event)
       if (editor?.mode === "edit" && editor.eventId === event.id) {
         setEditor({
           mode: "edit",
@@ -291,18 +342,16 @@ function RouteComponent() {
       updatedAt: new Date(),
     }
 
-    startTransition(() => {
-      addOptimisticEvent(optimisticEvent)
-      moveMutation.mutate({
-        id: item.id,
-        title: item.title,
-        description: item.description,
-        location: item.location,
-        color: item.color,
-        startAt: nextEvent.start,
-        endAt: nextEvent.end,
-        allDay: nextEvent.allDay ?? false,
-      })
+    addOptimisticEvent(optimisticEvent)
+    moveMutation.mutate({
+      id: item.id,
+      title: item.title,
+      description: item.description,
+      location: item.location,
+      color: item.color,
+      startAt: nextEvent.start,
+      endAt: nextEvent.end,
+      allDay: nextEvent.allDay ?? false,
     })
   }
 
@@ -321,7 +370,7 @@ function RouteComponent() {
     <div className="flex min-h-0 flex-1 flex-col gap-4 p-4 xl:flex-row">
       <EventCalendar
         className="min-h-0 flex-1 overflow-hidden bg-background"
-        defaultView="schedule"
+        date={date}
         getItemAllDay={(item) => item.allDay}
         getItemColor={(item) => item.color as EventColor}
         getItemDescription={(item) => item.description}
@@ -332,8 +381,27 @@ function RouteComponent() {
         getItemTitle={(item) => item.title}
         items={optimisticEvents}
         onCreateRequest={beginCreate}
+        onDateChange={(newDate) => {
+          void navigate({
+            search: (prev) => ({
+              ...prev,
+              date: format(newDate, "yyyy-MM-dd"),
+            }),
+            replace: true,
+          })
+        }}
         onItemDrop={handleEventDrop}
         onItemSelect={selectEvent}
+        onViewChange={(newView) => {
+          void navigate({
+            search: (prev) => ({
+              ...prev,
+              view: newView,
+            }),
+            replace: true,
+          })
+        }}
+        view={view}
       >
         <EventCalendarHeader className="gap-3 border-b border-border/70 px-4 py-3">
           <div className="flex min-w-0 flex-1 items-center gap-3">
