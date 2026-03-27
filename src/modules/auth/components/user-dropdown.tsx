@@ -14,6 +14,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,11 +57,19 @@ export function UserDropdown({ label, className }: UserDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className={cn("flex items-center gap-x-2", className)}
-      >
-        <UserAvatar size={25.5} />
-        {label && <span className="text-sm">{user.name}</span>}
-      </DropdownMenuTrigger>
+        render={
+          <Button
+            variant="ghost"
+            className={cn(
+              "flex justify-start gap-x-2 hover:bg-sidebar-accent dark:hover:bg-sidebar-accent",
+              className,
+            )}
+          >
+            <UserAvatar size={25.5} />
+            {label && <span className="text-sm">{user.name}</span>}
+          </Button>
+        }
+      />
 
       <DropdownMenuContent align="center" className="mt-1">
         <DropdownMenuGroup>

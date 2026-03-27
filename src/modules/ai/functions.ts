@@ -4,7 +4,7 @@ import { z } from "zod"
 
 import { AppError } from "@/lib/errors"
 
-import { getSessionResult } from "../auth/server/auth-service"
+import { getAuthenticatedUserId } from "../auth/server/auth-service"
 import { loadChatHistory } from "./server/chat-history"
 import {
   deleteAllChatsByUserId,
@@ -22,19 +22,19 @@ const chatHistoryInputSchema = z.object({
   conversationId: z.uuid().nullable().optional(),
 })
 
-async function getAuthenticatedUserId(): Promise<string> {
+async function authenticatedUserId(): Promise<string> {
   const headers = getRequestHeaders()
-  const sessionResult = await getSessionResult(headers)
+  const result = await getAuthenticatedUserId(headers, "unauthorized:chat")
 
-  if (sessionResult.isErr() || !sessionResult.value.user) {
-    throw new AppError("unauthorized:chat").toResponse()
+  if (result.isErr()) {
+    throw new AppError(result.error.code).toResponse()
   }
 
-  return sessionResult.value.user.id
+  return result.value
 }
 
 export const listChats = createServerFn({ method: "GET" }).handler(async () => {
-  const userId = await getAuthenticatedUserId()
+  const userId = await authenticatedUserId()
   const chats = await getChatsByUserId({ userId })
 
   return {
@@ -59,7 +59,7 @@ export const getChatHistory = createServerFn({ method: "POST" })
 export const renameChat = createServerFn({ method: "POST" })
   .inputValidator(renameChatSchema)
   .handler(async ({ data }) => {
-    const userId = await getAuthenticatedUserId()
+    const userId = await authenticatedUserId()
 
     const updated = await updateChatTitle({
       id: data.id,
@@ -77,7 +77,7 @@ export const renameChat = createServerFn({ method: "POST" })
 export const deleteChat = createServerFn({ method: "POST" })
   .inputValidator(deleteChatSchema)
   .handler(async ({ data }) => {
-    const userId = await getAuthenticatedUserId()
+    const userId = await authenticatedUserId()
 
     const deleted = await deleteChatById({
       id: data.id,
@@ -94,7 +94,7 @@ export const deleteChat = createServerFn({ method: "POST" })
 export const deleteAllChats = createServerFn({ method: "POST" })
   .inputValidator(deleteAllChatsSchema)
   .handler(async () => {
-    const userId = await getAuthenticatedUserId()
+    const userId = await authenticatedUserId()
 
     const deletedIds = await deleteAllChatsByUserId({ userId })
 

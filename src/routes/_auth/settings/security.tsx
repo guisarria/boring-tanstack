@@ -2,13 +2,13 @@ import { createFileRoute } from "@tanstack/react-router"
 
 import { Container, Section } from "@/components/ui/design-system"
 import { AccountSessions } from "@/modules/auth/components/account-sessions"
-import { sessionsAction } from "@/modules/auth/functions"
+import { getActiveSessions } from "@/modules/auth/functions"
 
 export const Route = createFileRoute("/_auth/settings/security")({
   beforeLoad: async ({ context }) => {
     return await context.queryClient.fetchQuery({
       queryKey: ["sessions"],
-      queryFn: ({ signal }) => sessionsAction({ signal }),
+      queryFn: ({ signal }) => getActiveSessions({ signal }),
     })
   },
 

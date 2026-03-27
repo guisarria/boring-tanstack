@@ -1,5 +1,7 @@
 import { errAsync, okAsync, ResultAsync } from "neverthrow"
 
+import { type ErrorCode } from "@/lib/errors"
+
 import type { Session, User } from "../schema"
 import { auth } from "./auth"
 
@@ -18,7 +20,7 @@ export type SessionListPayload = {
 }
 
 export type AuthServiceError = {
-  code: "unauthorized:auth" | "internal_error:auth"
+  code: ErrorCode
   cause?: unknown
   message: string
 }
@@ -31,28 +33,32 @@ function toProviderFailure(cause: unknown): AuthServiceError {
   }
 }
 
-export function getSessionResult(headers: Headers) {
+function toPublicUser(user: NonNullable<Session["user"]>): PublicUser {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    image: user.image,
+    role: user.role,
+    emailVerified: user.emailVerified,
+  }
+}
+
+function fetchSession(headers: Headers) {
   return ResultAsync.fromPromise(
     auth.api.getSession({ headers }),
     toProviderFailure,
-  ).map<SessionPayload>((response) => ({
-    user: response?.user
-      ? {
-          id: response.user.id,
-          name: response.user.name,
-          email: response.user.email,
-          image: response.user.image,
-          role: response.user.role,
-          emailVerified: response.user.emailVerified,
-        }
-      : null,
+  )
+}
+
+export function getSession(headers: Headers) {
+  return fetchSession(headers).map<SessionPayload>((response) => ({
+    user: response?.user ? toPublicUser(response.user) : null,
   }))
 }
-export function requireSessionResult(headers: Headers) {
-  return ResultAsync.fromPromise(
-    auth.api.getSession({ headers }),
-    toProviderFailure,
-  ).andThen((response) => {
+
+export function requireSession(headers: Headers) {
+  return fetchSession(headers).andThen((response) => {
     if (!response) {
       return errAsync<Session, AuthServiceError>({
         code: "unauthorized:auth",
@@ -64,11 +70,30 @@ export function requireSessionResult(headers: Headers) {
   })
 }
 
-export function listSessionsResult(
+export function getAuthenticatedUserId(
+  headers: Headers,
+  errorCode: ErrorCode = "unauthorized:auth",
+) {
+  return fetchSession(headers).andThen((response) => {
+    if (!response?.user) {
+      return errAsync<string, AuthServiceError>({
+        code: errorCode,
+        message: "Unauthorized",
+      })
+    }
+
+    return okAsync(response.user.id)
+  })
+}
+
+export function listSessions(
   headers: Headers,
   rawSessionToken: string | undefined,
 ) {
-  const sessionId = rawSessionToken?.split(".")[0]
+  const sessionId =
+    typeof rawSessionToken === "string" && rawSessionToken.includes(".")
+      ? rawSessionToken.split(".")[0]
+      : undefined
 
   return ResultAsync.fromPromise(
     auth.api.listSessions({ headers }),

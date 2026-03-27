@@ -3,37 +3,46 @@ import { getCookie, getRequestHeaders } from "@tanstack/react-start/server"
 
 import { AppError } from "@/lib/errors"
 
-import { getSessionResult, listSessionsResult } from "./server/auth-service"
+import * as authService from "./server/auth-service"
 
-async function resolveSession() {
+function getAuthContext() {
   const headers = getRequestHeaders()
-  const result = await getSessionResult(headers)
+  const secureToken = getCookie("__Secure-better-auth.session_token")
+  const fallbackToken = getCookie("better-auth.session_token")
 
-  if (result.isErr()) {
-    throw new AppError(result.error.code).toResponse()
-  }
+  const sessionToken = secureToken ?? fallbackToken
 
-  return result.value
-}
-
-async function resolveSessions() {
-  const headers = getRequestHeaders()
-  const sessionToken =
-    getCookie("__Secure-better-auth.session_token") ??
-    getCookie("better-auth.session_token")
-  const result = await listSessionsResult(headers, sessionToken)
-
-  if (result.isErr()) {
-    throw new AppError(result.error.code).toResponse()
-  }
-
-  return result.value
+  return { headers, sessionToken }
 }
 
 export const getSession = createServerFn({ method: "GET" }).handler(
-  resolveSession,
+  async () => {
+    const { headers } = getAuthContext()
+    const result = await authService.getSession(headers)
+
+    if (result.isErr()) {
+      const { code, message } = result.error
+      throw new AppError(code, message).toResponse()
+    }
+
+    return result.value
+  },
 )
 
-export const sessionsAction = createServerFn({ method: "GET" }).handler(
-  resolveSessions,
+export const getActiveSessions = createServerFn({ method: "GET" }).handler(
+  async () => {
+    const { headers, sessionToken } = getAuthContext()
+
+    if (!sessionToken) {
+      throw new AppError("unauthorized:auth").toResponse()
+    }
+
+    const result = await authService.listSessions(headers, sessionToken)
+    if (result.isErr()) {
+      const { code, message } = result.error
+      throw new AppError(code, message).toResponse()
+    }
+
+    return result.value
+  },
 )

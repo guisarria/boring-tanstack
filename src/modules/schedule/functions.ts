@@ -3,7 +3,7 @@ import { getRequestHeaders } from "@tanstack/react-start/server"
 
 import { AppError } from "@/lib/errors"
 
-import { getSessionResult } from "../auth/server/auth-service"
+import { getAuthenticatedUserId } from "../auth/server/auth-service"
 import {
   createScheduleEvent as createScheduleEventRecord,
   deleteScheduleEventById,
@@ -18,15 +18,15 @@ import {
   updateScheduleEventSchema,
 } from "./validation"
 
-async function getAuthenticatedUserId(): Promise<string> {
+async function authenticatedUserId(): Promise<string> {
   const headers = getRequestHeaders()
-  const sessionResult = await getSessionResult(headers)
+  const result = await getAuthenticatedUserId(headers, "unauthorized:schedule")
 
-  if (sessionResult.isErr() || !sessionResult.value.user) {
-    throw new AppError("unauthorized:schedule").toResponse()
+  if (result.isErr()) {
+    throw new AppError(result.error.code).toResponse()
   }
 
-  return sessionResult.value.user.id
+  return result.value
 }
 
 function toScheduleEventDto(event: {
@@ -57,7 +57,7 @@ function toScheduleEventDto(event: {
 
 export const listScheduleEvents = createServerFn({ method: "GET" }).handler(
   async () => {
-    const userId = await getAuthenticatedUserId()
+    const userId = await authenticatedUserId()
     const events = await listScheduleEventsByUserId({ userId })
 
     return {
@@ -74,7 +74,7 @@ export const listScheduleEvents = createServerFn({ method: "GET" }).handler(
 export const createScheduleEvent = createServerFn({ method: "POST" })
   .inputValidator(createScheduleEventSchema)
   .handler(async ({ data }) => {
-    const userId = await getAuthenticatedUserId()
+    const userId = await authenticatedUserId()
     const created = await createScheduleEventRecord({ input: data, userId })
 
     if (!created) {
@@ -89,7 +89,7 @@ export const createScheduleEvent = createServerFn({ method: "POST" })
 export const updateScheduleEvent = createServerFn({ method: "POST" })
   .inputValidator(updateScheduleEventSchema)
   .handler(async ({ data }) => {
-    const userId = await getAuthenticatedUserId()
+    const userId = await authenticatedUserId()
     const updated = await updateScheduleEventRecord({ input: data, userId })
 
     if (!updated) {
@@ -104,7 +104,7 @@ export const updateScheduleEvent = createServerFn({ method: "POST" })
 export const deleteScheduleEvent = createServerFn({ method: "POST" })
   .inputValidator(deleteScheduleEventSchema)
   .handler(async ({ data }) => {
-    const userId = await getAuthenticatedUserId()
+    const userId = await authenticatedUserId()
     const deleted = await deleteScheduleEventById({ id: data.id, userId })
 
     if (!deleted) {

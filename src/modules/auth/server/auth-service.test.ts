@@ -9,7 +9,11 @@ vi.mock("./auth", () => ({
 }))
 
 import { auth } from "./auth"
-import { getSessionResult, requireSessionResult } from "./auth-service"
+import {
+  getAuthenticatedUserId,
+  getSession,
+  requireSession,
+} from "./auth-service"
 
 const now = new Date()
 
@@ -32,18 +36,19 @@ function createMockSession() {
       emailVerified: true,
       banned: null,
       image: null,
+      role: "user",
       createdAt: now,
       updatedAt: now,
     },
   }
 }
 
-describe("getSessionResult", () => {
+describe("getSession", () => {
   it("returns session payload on success", async () => {
     const mockSession = createMockSession()
     vi.mocked(auth.api.getSession).mockResolvedValue(mockSession)
 
-    const result = await getSessionResult(new Headers())
+    const result = await getSession(new Headers())
 
     expect(result.isOk()).toBe(true)
     expect(result._unsafeUnwrap()).toEqual({
@@ -52,7 +57,7 @@ describe("getSessionResult", () => {
         name: mockSession.user.name,
         email: mockSession.user.email,
         image: mockSession.user.image,
-        role: undefined,
+        role: mockSession.user.role,
         emailVerified: mockSession.user.emailVerified,
       },
     })
@@ -61,7 +66,7 @@ describe("getSessionResult", () => {
   it("returns null session and user when provider returns null", async () => {
     vi.mocked(auth.api.getSession).mockResolvedValue(null)
 
-    const result = await getSessionResult(new Headers())
+    const result = await getSession(new Headers())
 
     expect(result.isOk()).toBe(true)
     expect(result._unsafeUnwrap()).toEqual({
@@ -69,10 +74,10 @@ describe("getSessionResult", () => {
     })
   })
 
-  it("returns auth_provider_failure when provider throws", async () => {
+  it("returns internal_error:auth when provider throws", async () => {
     vi.mocked(auth.api.getSession).mockRejectedValue(new Error("network"))
 
-    const result = await getSessionResult(new Headers())
+    const result = await getSession(new Headers())
 
     expect(result.isErr()).toBe(true)
     expect(result._unsafeUnwrapErr()).toMatchObject({
@@ -82,12 +87,12 @@ describe("getSessionResult", () => {
   })
 })
 
-describe("requireSessionResult", () => {
+describe("requireSession", () => {
   it("returns session when authenticated", async () => {
     const mockSession = createMockSession()
     vi.mocked(auth.api.getSession).mockResolvedValue(mockSession)
 
-    const result = await requireSessionResult(new Headers())
+    const result = await requireSession(new Headers())
 
     expect(result.isOk()).toBe(true)
     expect(result._unsafeUnwrap()).toEqual(mockSession)
@@ -96,7 +101,7 @@ describe("requireSessionResult", () => {
   it("returns unauthorized when session is null", async () => {
     vi.mocked(auth.api.getSession).mockResolvedValue(null)
 
-    const result = await requireSessionResult(new Headers())
+    const result = await requireSession(new Headers())
 
     expect(result.isErr()).toBe(true)
     expect(result._unsafeUnwrapErr()).toMatchObject({
@@ -105,10 +110,55 @@ describe("requireSessionResult", () => {
     })
   })
 
-  it("returns auth_provider_failure when provider throws", async () => {
+  it("returns internal_error:auth when provider throws", async () => {
     vi.mocked(auth.api.getSession).mockRejectedValue(new Error("fail"))
 
-    const result = await requireSessionResult(new Headers())
+    const result = await requireSession(new Headers())
+
+    expect(result.isErr()).toBe(true)
+    expect(result._unsafeUnwrapErr().code).toBe("internal_error:auth")
+  })
+})
+
+describe("getAuthenticatedUserId", () => {
+  it("returns user id when authenticated", async () => {
+    const mockSession = createMockSession()
+    vi.mocked(auth.api.getSession).mockResolvedValue(mockSession)
+
+    const result = await getAuthenticatedUserId(new Headers())
+
+    expect(result.isOk()).toBe(true)
+    expect(result._unsafeUnwrap()).toBe("u1")
+  })
+
+  it("returns unauthorized when session has no user", async () => {
+    vi.mocked(auth.api.getSession).mockResolvedValue(null)
+
+    const result = await getAuthenticatedUserId(new Headers())
+
+    expect(result.isErr()).toBe(true)
+    expect(result._unsafeUnwrapErr()).toMatchObject({
+      code: "unauthorized:auth",
+      message: "Unauthorized",
+    })
+  })
+
+  it("uses custom error code when provided", async () => {
+    vi.mocked(auth.api.getSession).mockResolvedValue(null)
+
+    const result = await getAuthenticatedUserId(
+      new Headers(),
+      "unauthorized:chat",
+    )
+
+    expect(result.isErr()).toBe(true)
+    expect(result._unsafeUnwrapErr().code).toBe("unauthorized:chat")
+  })
+
+  it("returns internal_error:auth when provider throws", async () => {
+    vi.mocked(auth.api.getSession).mockRejectedValue(new Error("network"))
+
+    const result = await getAuthenticatedUserId(new Headers())
 
     expect(result.isErr()).toBe(true)
     expect(result._unsafeUnwrapErr().code).toBe("internal_error:auth")

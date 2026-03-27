@@ -13,6 +13,7 @@ const config = defineConfig({
     printWidth: 80,
     semi: false,
     useTabs: false,
+    trailingComma: "all",
     tabWidth: 2,
     sortImports: {},
     sortPackageJson: true,

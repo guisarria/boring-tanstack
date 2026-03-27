@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 import { AppError } from "@/lib/errors"
-import { requireSessionResult } from "@/modules/auth/server/auth-service"
+import { requireSession } from "@/modules/auth/server/auth-service"
 
 import type { ChatMessagePart } from "../validation"
 import {
@@ -11,7 +11,7 @@ import {
 } from "./queries"
 
 export async function requireUser(headers: Headers) {
-  const sessionResult = await requireSessionResult(headers)
+  const sessionResult = await requireSession(headers)
 
   if (sessionResult.isErr() || !sessionResult.value.user) {
     throw new AppError("unauthorized:chat").toResponse()

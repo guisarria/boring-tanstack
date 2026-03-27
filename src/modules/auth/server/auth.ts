@@ -66,5 +66,6 @@ export const auth = betterAuth({
       })
     },
   },
+  // tanstackStartCookies() must always be the last plugin in the array
   plugins: [admin(), tanstackStartCookies()],
 })
