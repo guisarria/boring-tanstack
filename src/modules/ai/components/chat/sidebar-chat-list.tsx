@@ -31,11 +31,14 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { chatListQueryOptions, chatQueryKeys } from "@/modules/ai"
 
-import { DeleteAllDialog } from "./chat-delete-all-dialog"
-import { DeleteDialog } from "./chat-delete-dialog"
-import { RenameDialog, type ChatTarget } from "./chat-rename-dialog"
+import { chatListQueryOptions, chatQueryKeys } from "../../query-options"
+import {
+  DeleteAllDialog,
+  DeleteDialog,
+  RenameDialog,
+  type ChatTarget,
+} from "./chat-dialogs"
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null

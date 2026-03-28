@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { z } from "zod"
 
-import { chatHistoryQueryOptions } from "@/modules/ai"
-import { ChatPanel } from "@/modules/ai"
+import { ChatPanel } from "@/modules/ai/components/chat/chat-panel"
+import { chatHistoryQueryOptions } from "@/modules/ai/query-options"
 
 export const Route = createFileRoute("/_auth/chat/")({
   validateSearch: z.object({

@@ -3,8 +3,16 @@ import { ToolLoopAgent, type LanguageModel } from "ai"
 
 import { env } from "@/config/env/server"
 
-import { type AllowedModelId } from "../constants"
-import { CHAT_SYSTEM_PROMPT } from "./chat-prompts"
+import { type AllowedModelId } from "../validation"
+
+const CHAT_SYSTEM_PROMPT = `You are a helpful AI assistant.
+
+Guidelines:
+- Give accurate, direct answers.
+- Be concise by default; expand when the task needs it.
+- Use Markdown lists, tables, and code blocks when they improve clarity.
+- If the request is ambiguous, ask one brief clarifying question.
+- If you are uncertain, say so clearly instead of guessing.`
 
 const openrouter = createOpenRouter({
   apiKey: env.OPENROUTER_API_KEY,

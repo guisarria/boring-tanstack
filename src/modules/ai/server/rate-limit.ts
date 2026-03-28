@@ -3,8 +3,8 @@ import { lte, sql } from "drizzle-orm"
 import { db } from "@/db/index"
 import { AppError } from "@/lib/errors"
 
-import { ENTITLEMENTS_BY_USER_TYPE, getUserType } from "../constants"
 import { ipRateLimits } from "../schema"
+import { ENTITLEMENTS_BY_USER_TYPE, getUserType } from "../validation"
 import { getMessageCountByUserId } from "./queries"
 
 const BOT_USER_AGENT_PATTERN =

@@ -10,8 +10,11 @@ import { env } from "@/config/env/server"
 import { AppError, toErrorResponse } from "@/lib/errors"
 import { requireAuthenticatedUser } from "@/modules/auth/server/auth-service"
 
-import { DEFAULT_MODEL_ID, isAllowedModelId } from "../constants"
-import { chatStreamRequestSchema } from "../validation"
+import {
+  chatStreamRequestSchema,
+  DEFAULT_MODEL_ID,
+  isAllowedModelId,
+} from "../validation"
 import { getChatAgent, getChatModel } from "./chat-agent"
 import {
   getChatHistory,

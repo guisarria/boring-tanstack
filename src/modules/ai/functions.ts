@@ -10,11 +10,7 @@ import {
   getChatsByUserId,
   updateChatTitle,
 } from "./server/queries"
-import {
-  deleteAllChatsSchema,
-  deleteChatSchema,
-  renameChatSchema,
-} from "./validation"
+import { deleteChatSchema, renameChatSchema } from "./validation"
 
 const chatHistoryInputSchema = z.object({
   conversationId: z.uuid().nullable().optional(),
@@ -84,12 +80,12 @@ export const deleteChat = createServerFn({ method: "POST" })
     return { success: true }
   })
 
-export const deleteAllChats = createServerFn({ method: "POST" })
-  .inputValidator(deleteAllChatsSchema)
-  .handler(async () => {
+export const deleteAllChats = createServerFn({ method: "POST" }).handler(
+  async () => {
     const userId = await authenticatedUserId()
 
     const deletedIds = await deleteAllChatsByUserId({ userId })
 
     return { success: true, deletedIds }
-  })
+  },
+)
