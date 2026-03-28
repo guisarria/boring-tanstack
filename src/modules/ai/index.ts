@@ -37,7 +37,7 @@ export type {
 // Server Functions
 export {
   listChats,
-  getChatHistory,
+  getChatHistoryFn,
   renameChat,
   deleteChat,
   deleteAllChats,

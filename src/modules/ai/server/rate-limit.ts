@@ -33,7 +33,7 @@ export async function checkRateLimit({
   })
 
   if (messageCount >= ENTITLEMENTS_BY_USER_TYPE[userType].maxMessagesPerHour) {
-    throw new AppError("rate_limit:chat").toResponse()
+    throw new AppError("rate_limit:chat")
   }
 }
 
@@ -81,7 +81,7 @@ export async function checkIpRateLimit(
   const count = result.at(0)?.count ?? 0
 
   if (count > MAX_REQUESTS_PER_IP_WINDOW) {
-    throw new AppError("rate_limit:chat").toResponse()
+    throw new AppError("rate_limit:chat")
   }
 }
 

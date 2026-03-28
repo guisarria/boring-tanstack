@@ -1,14 +1,14 @@
 const models = [
   "google/gemini-2.0-flash-lite",
   "openai/gpt-4o-mini",
-  "minimax/minimax-m2.5:free",
+  "openai/gpt-oss-120b:free",
 ] as const
 
 export type AllowedModelId = (typeof models)[number]
 
 export const ALLOWED_MODEL_IDS = new Set<AllowedModelId>(models)
 
-export const DEFAULT_MODEL_ID: AllowedModelId = "minimax/minimax-m2.5:free"
+export const DEFAULT_MODEL_ID: AllowedModelId = "openai/gpt-oss-120b:free"
 
 export const ENTITLEMENTS_BY_USER_TYPE = {
   free: { maxMessagesPerHour: 10 },

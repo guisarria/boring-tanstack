@@ -172,6 +172,11 @@ export class AppError extends Error {
   }
 }
 
+export function toErrorResponse(error: unknown): Response {
+  if (error instanceof AppError) return error.toResponse()
+  return new AppError("internal_error:api").toResponse()
+}
+
 export function getErrorMessage(errorCode: ErrorCode): string {
   return ERROR_MESSAGES[errorCode] ?? DEFAULT_ERROR_MESSAGE
 }

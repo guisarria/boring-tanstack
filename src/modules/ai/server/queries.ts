@@ -6,7 +6,16 @@ import { AppError } from "@/lib/errors"
 import { chats, messages } from "../schema"
 import type { ChatMessagePart } from "../validation"
 
-export async function createChat({
+function withDbError<T>(cause: string, fn: () => Promise<T>): Promise<T> {
+  return fn().catch((error) => {
+    throw new AppError(
+      "internal_error:database",
+      error instanceof Error ? error.message : cause,
+    )
+  })
+}
+
+export function createChat({
   id,
   userId,
   title,
@@ -15,57 +24,45 @@ export async function createChat({
   userId: string
   title: string
 }) {
-  try {
-    return await db.insert(chats).values({
-      id,
-      createdAt: new Date(),
-      userId,
-      title,
-    })
-  } catch {
-    throw new AppError("internal_error:database", "Failed to create chat")
-  }
-}
-export async function getChatById({ id }: { id: string }) {
-  try {
-    return await db.query.chats.findFirst({
-      where: (chats, { eq }) => eq(chats.id, id),
-    })
-  } catch {
-    throw new AppError("internal_error:database", "Failed to get chat")
-  }
+  return withDbError("Failed to create chat", () =>
+    db.insert(chats).values({ id, createdAt: new Date(), userId, title }),
+  )
 }
 
-export async function getLatestChatByUserId({ userId }: { userId: string }) {
-  try {
-    return await db.query.chats.findFirst({
+export function getChatById({ id }: { id: string }) {
+  return withDbError("Failed to get chat", () =>
+    db.query.chats.findFirst({
+      where: (chats, { eq }) => eq(chats.id, id),
+    }),
+  )
+}
+
+export function getLatestChatByUserId({ userId }: { userId: string }) {
+  return withDbError("Failed to get latest chat", () =>
+    db.query.chats.findFirst({
       where: (chats, { eq }) => eq(chats.userId, userId),
       orderBy: (chats, { desc }) => [desc(chats.createdAt)],
-    })
-  } catch {
-    throw new AppError("internal_error:database", "Failed to get latest chat")
-  }
+    }),
+  )
 }
 
-export async function getChatsByUserId({
+export function getChatsByUserId({
   userId,
   limit = 25,
 }: {
   userId: string
   limit?: number
 }) {
-  try {
-    return await db.query.chats.findMany({
+  return withDbError("Failed to get chats", () =>
+    db.query.chats.findMany({
       where: (chats, { eq }) => eq(chats.userId, userId),
       orderBy: (chats, { desc }) => [desc(chats.createdAt)],
       limit,
-    })
-  } catch {
-    throw new AppError("internal_error:database", "Failed to get chats")
-  }
+    }),
+  )
 }
 
-export async function updateChatTitle({
+export function updateChatTitle({
   id,
   userId,
   title,
@@ -74,26 +71,18 @@ export async function updateChatTitle({
   userId: string
   title: string
 }) {
-  try {
+  return withDbError("Failed to update chat", async () => {
     const updated = await db
       .update(chats)
       .set({ title })
       .where(and(eq(chats.id, id), eq(chats.userId, userId)))
       .returning({ id: chats.id })
     return updated.at(0) ?? null
-  } catch {
-    throw new AppError("internal_error:database", "Failed to update chat")
-  }
+  })
 }
 
-export async function deleteChatById({
-  id,
-  userId,
-}: {
-  id: string
-  userId: string
-}) {
-  try {
+export function deleteChatById({ id, userId }: { id: string; userId: string }) {
+  return withDbError("Failed to delete chat", async () => {
     const existing = await db.query.chats.findFirst({
       where: (chats, { and, eq }) =>
         and(eq(chats.id, id), eq(chats.userId, userId)),
@@ -111,15 +100,11 @@ export async function deleteChatById({
     ])
 
     return deleted.at(0) ?? null
-  } catch (error) {
-    const cause =
-      error instanceof Error ? error.message : "Failed to delete chat"
-    throw new AppError("internal_error:database", cause)
-  }
+  })
 }
 
-export async function deleteAllChatsByUserId({ userId }: { userId: string }) {
-  try {
+export function deleteAllChatsByUserId({ userId }: { userId: string }) {
+  return withDbError("Failed to delete all chats", async () => {
     const userChats = await db.query.chats.findMany({
       where: (chats, { eq }) => eq(chats.userId, userId),
       columns: { id: true },
@@ -138,25 +123,19 @@ export async function deleteAllChatsByUserId({ userId }: { userId: string }) {
     ])
 
     return deleted.map((d) => d.id)
-  } catch (error) {
-    const cause =
-      error instanceof Error ? error.message : "Failed to delete all chats"
-    throw new AppError("internal_error:database", cause)
-  }
+  })
 }
 
-export async function getMessagesByChatId({ id }: { id: string }) {
-  try {
-    return await db.query.messages.findMany({
+export function getMessagesByChatId({ id }: { id: string }) {
+  return withDbError("Failed to get messages", () =>
+    db.query.messages.findMany({
       where: (messages, { eq }) => eq(messages.chatId, id),
       orderBy: (messages, { asc }) => [asc(messages.createdAt)],
-    })
-  } catch {
-    throw new AppError("internal_error:database", "Failed to get messages")
-  }
+    }),
+  )
 }
 
-export async function getMessageCountByUserId({
+export function getMessageCountByUserId({
   id,
   differenceInHours,
 }: {
@@ -165,7 +144,7 @@ export async function getMessageCountByUserId({
 }) {
   const cutoff = new Date(Date.now() - differenceInHours * 60 * 60 * 1000)
 
-  try {
+  return withDbError("Failed to count recent messages", async () => {
     const [result] = await db
       .select({ count: count() })
       .from(messages)
@@ -179,15 +158,10 @@ export async function getMessageCountByUserId({
       )
 
     return Number(result?.count ?? 0)
-  } catch {
-    throw new AppError(
-      "internal_error:database",
-      "Failed to count recent messages",
-    )
-  }
+  })
 }
 
-export async function saveMessage(message: {
+export function saveMessage(message: {
   id: string
   chatId: string
   role: "system" | "user" | "assistant"
@@ -195,17 +169,14 @@ export async function saveMessage(message: {
   attachments: Array<unknown>
   createdAt: Date
 }) {
-  try {
-    return await db.insert(messages).values({
+  return withDbError("Failed to save message", () =>
+    db.insert(messages).values({
       id: message.id,
       chatId: message.chatId,
       role: message.role,
       parts: message.parts,
       attachments: message.attachments,
       createdAt: message.createdAt,
-    })
-  } catch (e) {
-    console.error("saveMessage error:", e)
-    throw new AppError("internal_error:database", "Failed to save message")
-  }
+    }),
+  )
 }

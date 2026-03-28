@@ -1,7 +1,84 @@
 import type { UIMessage } from "ai"
+import { z } from "zod"
 
+import { AppError } from "@/lib/errors"
+
+import type { ChatMessagePart } from "../validation"
 import { toPersistedChatMessageParts } from "./message-transforms"
-import { createChat, getChatById, saveMessage } from "./queries"
+import {
+  createChat,
+  getChatById,
+  getLatestChatByUserId,
+  getMessagesByChatId,
+  saveMessage,
+} from "./queries"
+
+export type ChatHistoryPayload = {
+  chatId: string | null
+  messages: Array<{
+    id: string
+    chatId: string
+    role: "system" | "user" | "assistant"
+    parts: Array<ChatMessagePart>
+    attachments: {}[]
+    createdAt: string
+  }>
+}
+
+const uuidSchema = z.uuid()
+
+export function parseOptionalConversationId(value: unknown): string | null {
+  if (typeof value !== "string") return null
+
+  const result = uuidSchema.safeParse(value)
+  return result.success ? result.data : null
+}
+
+function serializePersistedMessages(
+  messages: Awaited<ReturnType<typeof getMessagesByChatId>>,
+) {
+  return messages.map((message) => ({
+    ...message,
+    attachments: message.attachments as {}[],
+    createdAt: message.createdAt.toISOString(),
+  }))
+}
+
+export async function getChatHistory(
+  userId: string,
+  conversationId: string | null,
+): Promise<ChatHistoryPayload> {
+  if (conversationId) {
+    const chat = await getChatById({ id: conversationId })
+
+    if (!chat) {
+      return { chatId: conversationId, messages: [] }
+    }
+
+    if (chat.userId !== userId) {
+      throw new AppError("forbidden:chat")
+    }
+
+    const messages = await getMessagesByChatId({ id: conversationId })
+    return {
+      chatId: conversationId,
+      messages: serializePersistedMessages(messages),
+    }
+  }
+
+  const latestChat = await getLatestChatByUserId({ userId })
+
+  if (!latestChat) {
+    return { chatId: null, messages: [] }
+  }
+
+  const messages = await getMessagesByChatId({ id: latestChat.id })
+
+  return {
+    chatId: latestChat.id,
+    messages: serializePersistedMessages(messages),
+  }
+}
 
 type TitleContext = {
   conversationId: string
@@ -14,7 +91,7 @@ export type ChatTurnResult = {
   titleContext: TitleContext | null
 }
 
-export async function prepareChatTurn({
+export async function prepareUserTurn({
   conversationId,
   userId,
   messages,
@@ -27,7 +104,7 @@ export async function prepareChatTurn({
 
   const existingChat = await getChatById({ id: conversationId })
   if (existingChat && existingChat.userId !== userId) {
-    throw new Error("forbidden")
+    throw new AppError("forbidden:chat")
   }
   if (!existingChat) {
     isNewChat = true
@@ -68,7 +145,7 @@ export async function prepareChatTurn({
   return { isNewChat, titleContext }
 }
 
-export async function persistAssistantMessage({
+export async function persistAssistantTurn({
   conversationId,
   message,
 }: {

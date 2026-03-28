@@ -7,17 +7,18 @@ import {
 import { z } from "zod"
 
 import { env } from "@/config/env/server"
-import { AppError } from "@/lib/errors"
+import { AppError, toErrorResponse } from "@/lib/errors"
+import { requireAuthenticatedUser } from "@/modules/auth/server/auth-service"
 
 import { DEFAULT_MODEL_ID, isAllowedModelId } from "../constants"
 import { chatStreamRequestSchema } from "../validation"
 import { getChatAgent, getChatModel } from "./chat-agent"
 import {
-  loadChatHistory,
+  getChatHistory,
   parseOptionalConversationId,
-  requireUser,
-} from "./chat-history"
-import { persistAssistantMessage, prepareChatTurn } from "./chat-session"
+  persistAssistantTurn,
+  prepareUserTurn,
+} from "./chat-service"
 import { updateChatTitle } from "./queries"
 import { checkBotId, checkIpRateLimit, checkRateLimit } from "./rate-limit"
 
@@ -56,6 +57,25 @@ async function generateChatTitle(userMessage: string): Promise<string> {
   }
 }
 
+function resolveConversationId(
+  body: z.infer<typeof chatStreamRequestSchema>,
+): string | null {
+  const raw = body.data?.conversationId ?? body.id ?? null
+  return typeof raw === "string" ? parseOptionalConversationId(raw) : null
+}
+
+function resolveSelectedModel(
+  body: z.infer<typeof chatStreamRequestSchema>,
+): string {
+  const raw =
+    body.data?.selectedChatModel ?? body.data?.model ?? body.model ?? null
+  return typeof raw === "string" ? raw : DEFAULT_MODEL_ID
+}
+
+function getClientIp(headers: Headers): string | undefined {
+  return headers.get("x-forwarded-for") || headers.get("x-real-ip") || undefined
+}
+
 export async function handleChatGet(request: Request): Promise<Response> {
   const url = new URL(request.url)
   const conversationId = parseOptionalConversationId(
@@ -67,24 +87,21 @@ export async function handleChatGet(request: Request): Promise<Response> {
   }
 
   try {
-    return Response.json(await loadChatHistory(request.headers, conversationId))
+    const user = await requireAuthenticatedUser(request.headers)
+    return Response.json(await getChatHistory(user.id, conversationId))
   } catch (error) {
-    return error instanceof Response
-      ? error
-      : new AppError("internal_error:api").toResponse()
+    return toErrorResponse(error)
   }
 }
 
 export async function handleChatPost(request: Request): Promise<Response> {
   const headers = request.headers
 
-  let user: Awaited<ReturnType<typeof requireUser>>
+  let user: Awaited<ReturnType<typeof requireAuthenticatedUser>>
   try {
-    user = await requireUser(headers)
+    user = await requireAuthenticatedUser(headers)
   } catch (error) {
-    return error instanceof Response
-      ? error
-      : new AppError("unauthorized:auth").toResponse()
+    return toErrorResponse(error)
   }
 
   if (!env.OPENROUTER_API_KEY) {
@@ -107,47 +124,34 @@ export async function handleChatPost(request: Request): Promise<Response> {
   }
   const body = parsed.data
 
-  const conversationId = body.data?.conversationId ?? body.id ?? null
-  const conversationUuid =
-    typeof conversationId === "string"
-      ? parseOptionalConversationId(conversationId)
-      : null
-
-  const selectedChatModelRaw =
-    body.data?.selectedChatModel ?? body.data?.model ?? body.model ?? null
-  const selectedChatModel =
-    typeof selectedChatModelRaw === "string"
-      ? selectedChatModelRaw
-      : DEFAULT_MODEL_ID
+  const conversationUuid = resolveConversationId(body)
+  const selectedChatModel = resolveSelectedModel(body)
 
   if (!isAllowedModelId(selectedChatModel)) {
     return new AppError("bad_request:api", "Invalid model").toResponse()
   }
 
-  const botResult = checkBotId(headers)
-  if (botResult.isBot) {
+  if (checkBotId(headers).isBot) {
     return new AppError("unauthorized:auth").toResponse()
   }
 
-  const ip = headers.get("x-forwarded-for") || headers.get("x-real-ip")
   try {
-    await checkIpRateLimit(ip ?? undefined)
+    await checkIpRateLimit(getClientIp(headers))
     await checkRateLimit({ userId: user.id, userRole: user.role })
   } catch (error) {
-    if (error instanceof Response) return error
-    return new AppError("rate_limit:api").toResponse()
+    return toErrorResponse(error)
   }
 
   const messages = body.messages as UIMessage[]
 
   let titleContext: Awaited<
-    ReturnType<typeof prepareChatTurn>
+    ReturnType<typeof prepareUserTurn>
   >["titleContext"] = null
   let titlePromise: Promise<string> | null = null
 
   if (conversationUuid) {
     try {
-      const turn = await prepareChatTurn({
+      const turn = await prepareUserTurn({
         conversationId: conversationUuid,
         userId: user.id,
         messages,
@@ -158,10 +162,7 @@ export async function handleChatPost(request: Request): Promise<Response> {
         titlePromise = generateChatTitle(titleContext.userText)
       }
     } catch (error) {
-      if (error instanceof Error && error.message === "forbidden") {
-        return new AppError("forbidden:chat").toResponse()
-      }
-      throw error
+      return toErrorResponse(error)
     }
   }
 
@@ -173,26 +174,13 @@ export async function handleChatPost(request: Request): Promise<Response> {
     abortSignal: request.signal,
     sendReasoning: true,
     onFinish: async ({ responseMessage }) => {
-      console.log(
-        "[onFinish] called with responseMessage:",
-        responseMessage.id,
-        responseMessage.role,
-      )
-      if (!conversationUuid) {
-        console.log("[onFinish] no conversationUuid, returning early")
-        return
-      }
+      if (!conversationUuid) return
 
       try {
-        console.log(
-          "[onFinish] persisting assistant message:",
-          responseMessage.id,
-        )
-        await persistAssistantMessage({
+        await persistAssistantTurn({
           conversationId: conversationUuid,
           message: responseMessage,
         })
-        console.log("[onFinish] assistant message persisted successfully")
 
         if (titleContext && titlePromise) {
           try {

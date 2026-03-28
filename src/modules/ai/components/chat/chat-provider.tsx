@@ -9,6 +9,7 @@ import {
   chatHistoryQueryOptions,
   chatQueryKeys,
 } from "@/modules/ai/query-options"
+import type { PersistedChatMessage } from "@/modules/ai/validation"
 
 const chatTransport = new DefaultChatTransport({
   api: "/api/chat",
@@ -23,14 +24,7 @@ const PENDING_ASSISTANT_MESSAGE: UIMessage = {
   parts: [{ type: "reasoning", text: "", state: "streaming" }],
 }
 
-type HistoryMessage = {
-  id: string
-  role: string
-  parts: Array<{ type: string; text?: string }>
-  createdAt: Date
-}
-
-function historyToUIMessages(history: HistoryMessage[]): UIMessage[] {
+function historyToUIMessages(history: PersistedChatMessage[]): UIMessage[] {
   return history.map((m) => ({
     id: m.id,
     role: m.role as UIMessage["role"],

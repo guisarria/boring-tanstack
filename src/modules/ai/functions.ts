@@ -2,10 +2,8 @@ import { createServerFn } from "@tanstack/react-start"
 import { getRequestHeaders } from "@tanstack/react-start/server"
 import { z } from "zod"
 
-import { AppError } from "@/lib/errors"
-
-import { getAuthenticatedUserId } from "../auth/server/auth-service"
-import { loadChatHistory } from "./server/chat-history"
+import { requireAuthenticatedUser } from "../auth/server/auth-service"
+import { getChatHistory } from "./server/chat-service"
 import {
   deleteAllChatsByUserId,
   deleteChatById,
@@ -24,13 +22,8 @@ const chatHistoryInputSchema = z.object({
 
 async function authenticatedUserId(): Promise<string> {
   const headers = getRequestHeaders()
-  const result = await getAuthenticatedUserId(headers, "unauthorized:chat")
-
-  if (result.isErr()) {
-    throw new AppError(result.error.code).toResponse()
-  }
-
-  return result.value
+  const user = await requireAuthenticatedUser(headers)
+  return user.id
 }
 
 export const listChats = createServerFn({ method: "GET" }).handler(async () => {
@@ -46,14 +39,14 @@ export const listChats = createServerFn({ method: "GET" }).handler(async () => {
   }
 })
 
-export const getChatHistory = createServerFn({ method: "POST" })
+export const getChatHistoryFn = createServerFn({ method: "POST" })
   .inputValidator((input: z.input<typeof chatHistoryInputSchema> | undefined) =>
     chatHistoryInputSchema.parse(input ?? {}),
   )
   .handler(async ({ data }) => {
-    const headers = getRequestHeaders()
+    const userId = await authenticatedUserId()
 
-    return loadChatHistory(headers, data.conversationId ?? null)
+    return getChatHistory(userId, data.conversationId ?? null)
   })
 
 export const renameChat = createServerFn({ method: "POST" })
@@ -68,7 +61,7 @@ export const renameChat = createServerFn({ method: "POST" })
     })
 
     if (!updated) {
-      throw new AppError("not_found:chat").toResponse()
+      throw new Error("Chat not found")
     }
 
     return { success: true }
@@ -85,7 +78,7 @@ export const deleteChat = createServerFn({ method: "POST" })
     })
 
     if (!deleted) {
-      throw new AppError("not_found:chat").toResponse()
+      throw new Error("Chat not found")
     }
 
     return { success: true }

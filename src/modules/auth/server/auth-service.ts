@@ -1,6 +1,6 @@
 import { errAsync, okAsync, ResultAsync } from "neverthrow"
 
-import { type ErrorCode } from "@/lib/errors"
+import { AppError, type ErrorCode } from "@/lib/errors"
 
 import type { Session, User } from "../schema"
 import { auth } from "./auth"
@@ -84,6 +84,18 @@ export function getAuthenticatedUserId(
 
     return okAsync(response.user.id)
   })
+}
+
+export async function requireAuthenticatedUser(
+  headers: Headers,
+): Promise<PublicUser> {
+  const result = await fetchSession(headers)
+
+  if (result.isErr() || !result.value?.user) {
+    throw new AppError("unauthorized:chat")
+  }
+
+  return toPublicUser(result.value.user)
 }
 
 export function listSessions(
