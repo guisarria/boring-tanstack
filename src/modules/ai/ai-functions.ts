@@ -2,6 +2,8 @@ import { createServerFn } from "@tanstack/react-start"
 import { getRequestHeaders } from "@tanstack/react-start/server"
 import { z } from "zod"
 
+import { unwrapOrThrow } from "@/lib/server-utils"
+
 import { requireAuthenticatedUser } from "../auth/server/auth-service"
 import { getChatHistory } from "./server/chat-service"
 import {
@@ -18,8 +20,9 @@ const chatHistoryInputSchema = z.object({
 
 async function authenticatedUserId(): Promise<string> {
   const headers = getRequestHeaders()
-  const user = await requireAuthenticatedUser(headers)
-  return user.id
+  return unwrapOrThrow(
+    await requireAuthenticatedUser(headers, "unauthorized:chat"),
+  ).id
 }
 
 export const listChats = createServerFn({ method: "GET" }).handler(async () => {

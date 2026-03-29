@@ -1,21 +1,27 @@
 import { errAsync, okAsync, ResultAsync } from "neverthrow"
 
-import { AppError, type ErrorCode } from "@/lib/errors"
+import type { ErrorCode } from "@/lib/errors"
 
 import type { Session, User } from "../schema"
 import { auth } from "./auth"
 
-export type PublicUser = Pick<
-  User,
-  "id" | "name" | "email" | "image" | "role" | "emailVerified"
->
+const PUBLIC_USER_KEYS = [
+  "id",
+  "name",
+  "email",
+  "image",
+  "role",
+  "emailVerified",
+] as const
+
+export type PublicUser = Pick<User, (typeof PUBLIC_USER_KEYS)[number]>
 
 export type SessionPayload = {
   user: PublicUser | null
 }
 
 export type SessionListPayload = {
-  sessionId: string | undefined
+  sessionId: string
   sessions: Awaited<ReturnType<typeof auth.api.listSessions>>
 }
 
@@ -23,6 +29,18 @@ export type AuthServiceError = {
   code: ErrorCode
   cause?: unknown
   message: string
+}
+
+const SESSION_COOKIE = "__Secure-better-auth.session_token"
+const SESSION_COOKIE_FALLBACK = "better-auth.session_token"
+
+export { SESSION_COOKIE, SESSION_COOKIE_FALLBACK }
+
+function authError(
+  code: ErrorCode,
+  message = "Unauthorized",
+): AuthServiceError {
+  return { code, message }
 }
 
 function toProviderFailure(cause: unknown): AuthServiceError {
@@ -57,55 +75,22 @@ export function getSession(headers: Headers) {
   }))
 }
 
-export function requireSession(headers: Headers) {
-  return fetchSession(headers).andThen((response) => {
-    if (!response) {
-      return errAsync<Session, AuthServiceError>({
-        code: "unauthorized:auth",
-        message: "Unauthorized",
-      })
-    }
-
-    return okAsync(response)
-  })
-}
-
-export function getAuthenticatedUserId(
+export function requireAuthenticatedUser(
   headers: Headers,
   errorCode: ErrorCode = "unauthorized:auth",
 ) {
   return fetchSession(headers).andThen((response) => {
     if (!response?.user) {
-      return errAsync<string, AuthServiceError>({
-        code: errorCode,
-        message: "Unauthorized",
-      })
+      return errAsync(authError(errorCode))
     }
 
-    return okAsync(response.user.id)
+    return okAsync(toPublicUser(response.user))
   })
 }
 
-export async function requireAuthenticatedUser(
-  headers: Headers,
-): Promise<PublicUser> {
-  const result = await fetchSession(headers)
-
-  if (result.isErr() || !result.value?.user) {
-    throw new AppError("unauthorized:chat")
-  }
-
-  return toPublicUser(result.value.user)
-}
-
-export function listSessions(
-  headers: Headers,
-  rawSessionToken: string | undefined,
-) {
-  const sessionId =
-    typeof rawSessionToken === "string" && rawSessionToken.includes(".")
-      ? rawSessionToken.split(".")[0]
-      : undefined
+// Token format is "<sessionId>.<signature>"; split to extract the ID prefix.
+export function listSessions(headers: Headers, rawSessionToken: string) {
+  const sessionId = rawSessionToken.split(".")[0]
 
   return ResultAsync.fromPromise(
     auth.api.listSessions({ headers }),

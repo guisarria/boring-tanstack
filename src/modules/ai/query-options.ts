@@ -1,4 +1,4 @@
-import { getChatHistoryFn, listChats } from "./functions"
+import { getChatHistoryFn, listChats } from "./ai-functions"
 import { chatHistoryResponseSchema } from "./validation"
 
 const CHAT_STALE_TIME = 30_000

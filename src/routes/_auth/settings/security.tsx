@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router"
 
 import { Container, Section } from "@/components/ui/design-system"
+import { getActiveSessions } from "@/modules/auth/auth-functions"
 import { AccountSessions } from "@/modules/auth/components/account-sessions"
-import { getActiveSessions } from "@/modules/auth/functions"
 
 export const Route = createFileRoute("/_auth/settings/security")({
   beforeLoad: async ({ context }) => {

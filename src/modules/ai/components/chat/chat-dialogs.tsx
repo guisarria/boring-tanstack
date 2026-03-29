@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 
-import { deleteAllChats, deleteChat, renameChat } from "../../functions"
+import { deleteAllChats, deleteChat, renameChat } from "../../ai-functions"
 import { chatListQueryOptions, chatQueryKeys } from "../../query-options"
 
 export type ChatTarget = { id: string; title: string }

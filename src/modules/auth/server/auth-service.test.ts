@@ -4,20 +4,25 @@ vi.mock("./auth", () => ({
   auth: {
     api: {
       getSession: vi.fn(),
+      listSessions: vi.fn(),
     },
   },
 }))
 
+import type { Session } from "../schema"
 import { auth } from "./auth"
 import {
-  getAuthenticatedUserId,
   getSession,
-  requireSession,
+  listSessions,
+  requireAuthenticatedUser,
 } from "./auth-service"
 
 const now = new Date()
 
-function createMockSession() {
+function createMockSession(): {
+  session: Session["session"]
+  user: Session["user"]
+} {
   return {
     session: {
       id: "s1",
@@ -63,15 +68,13 @@ describe("getSession", () => {
     })
   })
 
-  it("returns null session and user when provider returns null", async () => {
+  it("returns null user when provider returns null", async () => {
     vi.mocked(auth.api.getSession).mockResolvedValue(null)
 
     const result = await getSession(new Headers())
 
     expect(result.isOk()).toBe(true)
-    expect(result._unsafeUnwrap()).toEqual({
-      user: null,
-    })
+    expect(result._unsafeUnwrap()).toEqual({ user: null })
   })
 
   it("returns internal_error:auth when provider throws", async () => {
@@ -87,54 +90,28 @@ describe("getSession", () => {
   })
 })
 
-describe("requireSession", () => {
-  it("returns session when authenticated", async () => {
+describe("requireAuthenticatedUser", () => {
+  it("returns public user when authenticated", async () => {
     const mockSession = createMockSession()
     vi.mocked(auth.api.getSession).mockResolvedValue(mockSession)
 
-    const result = await requireSession(new Headers())
+    const result = await requireAuthenticatedUser(new Headers())
 
     expect(result.isOk()).toBe(true)
-    expect(result._unsafeUnwrap()).toEqual(mockSession)
-  })
-
-  it("returns unauthorized when session is null", async () => {
-    vi.mocked(auth.api.getSession).mockResolvedValue(null)
-
-    const result = await requireSession(new Headers())
-
-    expect(result.isErr()).toBe(true)
-    expect(result._unsafeUnwrapErr()).toMatchObject({
-      code: "unauthorized:auth",
-      message: "Unauthorized",
+    expect(result._unsafeUnwrap()).toEqual({
+      id: mockSession.user.id,
+      name: mockSession.user.name,
+      email: mockSession.user.email,
+      image: mockSession.user.image,
+      role: mockSession.user.role,
+      emailVerified: mockSession.user.emailVerified,
     })
   })
 
-  it("returns internal_error:auth when provider throws", async () => {
-    vi.mocked(auth.api.getSession).mockRejectedValue(new Error("fail"))
-
-    const result = await requireSession(new Headers())
-
-    expect(result.isErr()).toBe(true)
-    expect(result._unsafeUnwrapErr().code).toBe("internal_error:auth")
-  })
-})
-
-describe("getAuthenticatedUserId", () => {
-  it("returns user id when authenticated", async () => {
-    const mockSession = createMockSession()
-    vi.mocked(auth.api.getSession).mockResolvedValue(mockSession)
-
-    const result = await getAuthenticatedUserId(new Headers())
-
-    expect(result.isOk()).toBe(true)
-    expect(result._unsafeUnwrap()).toBe("u1")
-  })
-
-  it("returns unauthorized when session has no user", async () => {
+  it("returns unauthorized:auth when session is null", async () => {
     vi.mocked(auth.api.getSession).mockResolvedValue(null)
 
-    const result = await getAuthenticatedUserId(new Headers())
+    const result = await requireAuthenticatedUser(new Headers())
 
     expect(result.isErr()).toBe(true)
     expect(result._unsafeUnwrapErr()).toMatchObject({
@@ -146,7 +123,7 @@ describe("getAuthenticatedUserId", () => {
   it("uses custom error code when provided", async () => {
     vi.mocked(auth.api.getSession).mockResolvedValue(null)
 
-    const result = await getAuthenticatedUserId(
+    const result = await requireAuthenticatedUser(
       new Headers(),
       "unauthorized:chat",
     )
@@ -158,9 +135,44 @@ describe("getAuthenticatedUserId", () => {
   it("returns internal_error:auth when provider throws", async () => {
     vi.mocked(auth.api.getSession).mockRejectedValue(new Error("network"))
 
-    const result = await getAuthenticatedUserId(new Headers())
+    const result = await requireAuthenticatedUser(new Headers())
 
     expect(result.isErr()).toBe(true)
     expect(result._unsafeUnwrapErr().code).toBe("internal_error:auth")
+  })
+})
+
+describe("listSessions", () => {
+  it("returns sessions and extracts sessionId from token", async () => {
+    vi.mocked(auth.api.listSessions).mockResolvedValue([])
+
+    const result = await listSessions(new Headers(), "abc123.signature")
+
+    expect(result.isOk()).toBe(true)
+    expect(result._unsafeUnwrap()).toEqual({
+      sessions: [],
+      sessionId: "abc123",
+    })
+  })
+
+  it("returns the full token as sessionId when no dot is present", async () => {
+    vi.mocked(auth.api.listSessions).mockResolvedValue([])
+
+    const result = await listSessions(new Headers(), "nodottoken")
+
+    expect(result.isOk()).toBe(true)
+    expect(result._unsafeUnwrap().sessionId).toBe("nodottoken")
+  })
+
+  it("returns internal_error:auth when provider throws", async () => {
+    vi.mocked(auth.api.listSessions).mockRejectedValue(new Error("network"))
+
+    const result = await listSessions(new Headers(), "abc123.signature")
+
+    expect(result.isErr()).toBe(true)
+    expect(result._unsafeUnwrapErr()).toMatchObject({
+      code: "internal_error:auth",
+      message: "Auth provider request failed",
+    })
   })
 })

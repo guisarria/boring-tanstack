@@ -8,7 +8,11 @@ import { z } from "zod"
 
 import { env } from "@/config/env/server"
 import { AppError, toErrorResponse } from "@/lib/errors"
-import { requireAuthenticatedUser } from "@/modules/auth/server/auth-service"
+import { unwrapOrThrow } from "@/lib/server-utils"
+import {
+  type PublicUser,
+  requireAuthenticatedUser,
+} from "@/modules/auth/server/auth-service"
 
 import {
   chatStreamRequestSchema,
@@ -90,7 +94,9 @@ export async function handleChatGet(request: Request): Promise<Response> {
   }
 
   try {
-    const user = await requireAuthenticatedUser(request.headers)
+    const user = unwrapOrThrow(
+      await requireAuthenticatedUser(request.headers, "unauthorized:chat"),
+    )
     return Response.json(await getChatHistory(user.id, conversationId))
   } catch (error) {
     return toErrorResponse(error)
@@ -100,9 +106,11 @@ export async function handleChatGet(request: Request): Promise<Response> {
 export async function handleChatPost(request: Request): Promise<Response> {
   const headers = request.headers
 
-  let user: Awaited<ReturnType<typeof requireAuthenticatedUser>>
+  let user: PublicUser
   try {
-    user = await requireAuthenticatedUser(headers)
+    user = unwrapOrThrow(
+      await requireAuthenticatedUser(headers, "unauthorized:chat"),
+    )
   } catch (error) {
     return toErrorResponse(error)
   }

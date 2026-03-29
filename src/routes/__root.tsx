@@ -10,7 +10,7 @@ import { type AppRouterContext } from "@/components/providers/root-provider"
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { seo } from "@/config/seo"
-import { getSession } from "@/modules/auth/functions"
+import { getSession } from "@/modules/auth/auth-functions"
 
 import appCss from "../styles.css?url"
 

@@ -3,7 +3,7 @@ export {
   deleteScheduleEvent,
   listScheduleEvents,
   updateScheduleEvent,
-} from "./functions"
+} from "./schedule-functions"
 export { scheduleEventsQueryOptions, scheduleQueryKeys } from "./query-options"
 export { scheduleEvents, scheduleEventColorEnum } from "./schema"
 export type { ScheduleEvent } from "./schema"

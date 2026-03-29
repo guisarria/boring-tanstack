@@ -2,8 +2,9 @@ import { createServerFn } from "@tanstack/react-start"
 import { getRequestHeaders } from "@tanstack/react-start/server"
 
 import { AppError } from "@/lib/errors"
+import { unwrapOrThrow } from "@/lib/server-utils"
 
-import { getAuthenticatedUserId } from "../auth/server/auth-service"
+import { requireAuthenticatedUser } from "../auth/server/auth-service"
 import {
   createScheduleEvent as createScheduleEventRecord,
   deleteScheduleEventById,
@@ -20,13 +21,9 @@ import {
 
 async function authenticatedUserId(): Promise<string> {
   const headers = getRequestHeaders()
-  const result = await getAuthenticatedUserId(headers, "unauthorized:schedule")
-
-  if (result.isErr()) {
-    throw new AppError(result.error.code).toResponse()
-  }
-
-  return result.value
+  return unwrapOrThrow(
+    await requireAuthenticatedUser(headers, "unauthorized:schedule"),
+  ).id
 }
 
 function toScheduleEventDto(event: {

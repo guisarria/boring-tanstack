@@ -1,4 +1,4 @@
-import { listScheduleEvents } from "./functions"
+import { listScheduleEvents } from "./schedule-functions"
 import { scheduleEventsResponseSchema } from "./validation"
 
 const SCHEDULE_STALE_TIME = 30_000
